@@ -237,6 +237,49 @@ function renderPackages() {
     const container = document.getElementById('package-container');
     const pricing = PACKAGE_PRICING[selectedProgram];
     
+    // Build the HTML with proper formatting
+    let packagesHtml = '';
+    [4, 6, 8].forEach(lessons => {
+        const price = pricing[lessons];
+        const perLesson = Math.floor(price / lessons);
+        
+        let badge = '';
+        if (lessons === 6) {
+            badge = '<span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-full whitespace-nowrap">Most Popular</span>';
+        } else if (lessons === 8) {
+            badge = '<span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full whitespace-nowrap">Best Value</span>';
+        } else {
+            badge = '<div class="h-10">&nbsp;</div>';
+        }
+        
+        packagesHtml += `
+            <div class="package-card bg-white rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-xl" style="min-width: 300px;">
+                <div class="p-8">
+                    <div class="text-center">
+                        <!-- Package Size -->
+                        <h4 class="text-3xl font-bold text-gray-900 mb-4">${lessons} Lessons</h4>
+                        
+                        <!-- Badge -->
+                        ${badge}
+                        
+                        <!-- Price Section -->
+                        <div class="mt-6 mb-6">
+                            <div class="text-5xl font-black text-gray-900">$${price}</div>
+                            <div class="text-lg text-gray-500 mt-2">$${perLesson} per lesson</div>
+                        </div>
+                        
+                        <!-- Button -->
+                        <button class="purchase-btn w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all shadow-md hover:shadow-lg whitespace-nowrap"
+                                data-lessons="${lessons}" 
+                                data-price="${price}">
+                            Select Package
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
     container.innerHTML = `
         <div class="text-center mb-8">
             <h3 class="text-2xl font-bold">${selectedProgram} Packages</h3>
@@ -249,40 +292,14 @@ function renderPackages() {
                 <p class="text-gray-700 mb-3 text-lg">Want to try a single lesson first?</p>
                 <button onclick="startSingleLessonFlow()" 
                         class="text-blue-600 hover:text-blue-800 font-semibold underline text-lg">
-                    Book a Single Lesson (${pricing[1]})
+                    Book a Single Lesson ($${pricing[1]})
                 </button>
             </div>
         </div>
         
-        <!-- Package Options -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            ${[4, 6, 8].map(lessons => `
-                <div class="package-card bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all cursor-pointer transform hover:scale-105">
-                    <div class="text-center space-y-4">
-                        <div>
-                            <h4 class="text-2xl font-bold mb-3">${lessons} Lessons</h4>
-                            ${lessons === 6 ? 
-                              '<span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-full">Most Popular</span>' : 
-                              lessons === 8 ? 
-                              '<span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full">Best Value</span>' : 
-                              '<div class="h-8">&nbsp;</div>'
-                            }
-                        </div>
-                        
-                        <div class="py-4">
-                            <div class="text-4xl font-black text-gray-900 mb-2">${pricing[lessons]}</div>
-                            <div class="text-gray-500 text-base">${(pricing[lessons] / lessons).toFixed(0)} per lesson</div>
-                        </div>
-                        
-                        <div class="pt-2">
-                            <button class="purchase-btn w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-full text-lg transition shadow-md hover:shadow-lg"
-                                    data-lessons="${lessons}" data-price="${pricing[lessons]}">
-                                Select Package
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('')}
+        <!-- Package Options with proper spacing -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" style="max-width: 1200px; margin: 0 auto;">
+            ${packagesHtml}
         </div>
     `;
     
@@ -1217,7 +1234,7 @@ function proceedToSingleLessonCalendar() {
                 <h2 class="text-3xl font-bold mb-2">Select Your Lesson Time</h2>
                 <div class="flex items-center justify-center gap-4 text-sm">
                     <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">${singleLessonProgram}</span>
-                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - ${singleLessonPrice}</span>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - $${singleLessonPrice}</span>
                 </div>
             </div>
         `;
@@ -1261,7 +1278,7 @@ function showSingleLessonCheckout() {
             </p>
             <p class="text-center mt-2">
                 <strong>Program:</strong> ${singleLessonProgram}<br>
-                <strong>Price:</strong> ${singleLessonPrice}
+                <strong>Price:</strong> $${singleLessonPrice}
             </p>
         </div>
         
