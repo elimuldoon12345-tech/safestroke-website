@@ -257,8 +257,8 @@ function renderPackages() {
             <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-500 transition p-4">
                 <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
                 ${badgeHTML}
-                <div class="text-3xl font-bold mt-3 mb-1">${price}</div>
-                <div class="text-sm text-gray-500 mb-3">${perLesson}/lesson</div>
+                <div class="text-3xl font-bold mt-3 mb-1">$${price}</div>
+                <div class="text-sm text-gray-500 mb-3">$${perLesson}/lesson</div>
                 <button onclick="selectPackage(${lessons}, ${price})" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm">
                     Select
