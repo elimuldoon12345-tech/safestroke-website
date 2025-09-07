@@ -253,7 +253,7 @@ function renderPackages() {
         }
         
         packagesHtml += `
-            <div class="package-card bg-white rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-xl" style="min-width: 300px;">
+            <div class="package-card bg-white rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-xl">
                 <div class="p-8">
                     <div class="text-center">
                         <!-- Package Size -->
@@ -264,8 +264,8 @@ function renderPackages() {
                         
                         <!-- Price Section -->
                         <div class="mt-6 mb-6">
-                            <div class="text-5xl font-black text-gray-900">$${price}</div>
-                            <div class="text-lg text-gray-500 mt-2">$${perLesson} per lesson</div>
+                            <div class="text-5xl font-black text-gray-900">${price}</div>
+                            <div class="text-lg text-gray-500 mt-2">${perLesson} per lesson</div>
                         </div>
                         
                         <!-- Button -->
@@ -286,19 +286,8 @@ function renderPackages() {
             <p class="text-gray-600">${PROGRAM_INFO[selectedProgram].description}</p>
         </div>
         
-        <!-- Single Lesson CTA -->
-        <div class="mb-8 text-center">
-            <div class="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg inline-block max-w-md">
-                <p class="text-gray-700 mb-3 text-lg">Want to try a single lesson first?</p>
-                <button onclick="startSingleLessonFlow()" 
-                        class="text-blue-600 hover:text-blue-800 font-semibold underline text-lg">
-                    Book a Single Lesson ($${pricing[1]})
-                </button>
-            </div>
-        </div>
-        
-        <!-- Package Options with proper spacing -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" style="max-width: 1200px; margin: 0 auto;">
+        <!-- Package Options - Left-aligned with proper spacing -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-0">
             ${packagesHtml}
         </div>
     `;
