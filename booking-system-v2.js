@@ -1163,6 +1163,7 @@ function showSingleLessonCheckout() {
     
     // Create checkout form for single lesson
     const container = document.createElement('div');
+    container.id = 'single-lesson-checkout';
     container.className = 'max-w-lg mx-auto mt-12 bg-white p-8 rounded-xl shadow-lg border';
     container.innerHTML = `
         <h2 class="text-2xl font-bold text-center mb-6">Complete Your Booking</h2>
@@ -1216,13 +1217,21 @@ function showSingleLessonCheckout() {
                 <!-- Stripe payment will be mounted here -->
             </div>
             
+            <div id="payment-error" class="text-red-600 text-sm hidden"></div>
+            
             <div class="pt-4">
-                <button type="submit" class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-lg transition">
-                    Pay & Book Lesson
+                <button type="submit" id="single-lesson-submit" class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-lg transition">
+                    Continue to Payment
                 </button>
             </div>
         </form>
     `;
+    
+    // Remove any existing checkout container
+    const existing = document.getElementById('single-lesson-checkout');
+    if (existing) {
+        existing.remove();
+    }
     
     document.querySelector('main .container').appendChild(container);
     
@@ -1232,17 +1241,31 @@ function showSingleLessonCheckout() {
 
 async function initializeSingleLessonPayment() {
     const form = document.getElementById('single-lesson-form');
+    const submitButton = document.getElementById('single-lesson-submit');
+    const errorDiv = document.getElementById('payment-error');
+    
+    let singleLessonElements = null;
+    let singleLessonPaymentElement = null;
     
     form.onsubmit = async (e) => {
         e.preventDefault();
         
-        const submitButton = form.querySelector('button[type="submit"]');
+        // Get form data
+        const formData = new FormData(form);
+        
+        // Validate form
+        if (!formData.get('studentName') || !formData.get('parentName') || !formData.get('email') || !formData.get('phone')) {
+            errorDiv.textContent = 'Please fill in all required fields';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+        
         submitButton.disabled = true;
-        submitButton.textContent = 'Processing...';
+        submitButton.textContent = 'Initializing payment...';
+        errorDiv.classList.add('hidden');
         
         try {
-            // Create payment and booking in one step
-            const formData = new FormData(form);
+            // Step 1: Create payment intent and booking record
             const response = await fetch('/.netlify/functions/book-single-lesson', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1251,7 +1274,7 @@ async function initializeSingleLessonPayment() {
                     price: singleLessonPrice,
                     timeSlotId: selectedTimeSlot.id,
                     studentName: formData.get('studentName'),
-                    studentAge: formData.get('studentAge'),
+                    studentAge: formData.get('studentAge') || null,
                     customerName: formData.get('parentName'),
                     customerEmail: formData.get('email'),
                     customerPhone: formData.get('phone')
@@ -1259,33 +1282,124 @@ async function initializeSingleLessonPayment() {
             });
             
             if (!response.ok) {
-                throw new Error('Booking failed');
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to initialize payment');
             }
             
             const result = await response.json();
             
-            // Process payment with Stripe
-            if (result.clientSecret) {
-                const { error } = await stripe.confirmPayment({
-                    clientSecret: result.clientSecret,
-                    confirmParams: {
-                        return_url: window.location.href + '?success=true'
-                    },
-                    redirect: 'if_required'
+            // Step 2: Create Stripe Elements with the client secret
+            if (!singleLessonElements) {
+                singleLessonElements = stripe.elements({
+                    clientSecret: result.clientSecret
                 });
                 
-                if (error) {
-                    throw new Error(error.message);
-                }
+                // Create and mount payment element
+                singleLessonPaymentElement = singleLessonElements.create('payment');
+                singleLessonPaymentElement.mount('#payment-element-single');
+                
+                // Store the package code for later
+                window.tempSingleLessonPackageCode = result.packageCode;
+                
+                // Update button text
+                submitButton.textContent = 'Complete Payment';
+                submitButton.disabled = false;
+                
+                // Change form behavior for payment submission
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Processing payment...';
+                    
+                    try {
+                        // Step 3: Confirm payment with Stripe
+                        const { error: stripeError } = await stripe.confirmPayment({
+                            elements: singleLessonElements,
+                            confirmParams: {
+                                return_url: window.location.href
+                            },
+                            redirect: 'if_required'
+                        });
+                        
+                        if (stripeError) {
+                            throw new Error(stripeError.message);
+                        }
+                        
+                        // Step 4: Payment successful, now complete the booking
+                        await completeSingleLessonBooking();
+                        
+                    } catch (error) {
+                        errorDiv.textContent = 'Payment failed: ' + error.message;
+                        errorDiv.classList.remove('hidden');
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Complete Payment';
+                    }
+                };
             }
             
-            // Show success
-            showConfirmation(result);
-            
         } catch (error) {
-            alert('Booking failed: ' + error.message);
+            errorDiv.textContent = error.message;
+            errorDiv.classList.remove('hidden');
             submitButton.disabled = false;
-            submitButton.textContent = 'Pay & Book Lesson';
+            submitButton.textContent = 'Continue to Payment';
         }
     };
+}
+
+async function completeSingleLessonBooking() {
+    try {
+        // Use the package code to book the time slot
+        const packageCode = window.tempSingleLessonPackageCode;
+        
+        if (!packageCode) {
+            throw new Error('Package code not found');
+        }
+        
+        // Get the form data again
+        const form = document.getElementById('single-lesson-form');
+        const formData = new FormData(form);
+        
+        // Book the time slot using the existing booking endpoint
+        const response = await fetch('/.netlify/functions/book-time-slot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                packageCode: packageCode,
+                timeSlotId: selectedTimeSlot.id,
+                studentName: formData.get('studentName'),
+                studentAge: formData.get('studentAge') || null,
+                customerName: formData.get('parentName'),
+                customerEmail: formData.get('email'),
+                customerPhone: formData.get('phone'),
+                notes: 'Single lesson booking'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to complete booking');
+        }
+        
+        const result = await response.json();
+        
+        // Hide the checkout form
+        const checkoutContainer = document.getElementById('single-lesson-checkout');
+        if (checkoutContainer) {
+            checkoutContainer.remove();
+        }
+        
+        // Show success message
+        showConfirmation({
+            bookingId: result.bookingId,
+            lessonsRemaining: 0,
+            singleLesson: true
+        });
+        
+        // Clean up
+        delete window.tempSingleLessonPackageCode;
+        
+    } catch (error) {
+        console.error('Failed to complete booking:', error);
+        alert('Payment successful but booking failed. Please contact support with your payment confirmation.');
+    }
 }
