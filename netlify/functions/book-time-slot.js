@@ -50,18 +50,44 @@ exports.handler = async (event, context) => {
 
     // Start a transaction-like operation
     // 1. Verify package is valid and has remaining lessons
-    const { data: packageData, error: packageError } = await supabase
+    // For single lessons, we also accept 'pending' status if it's very recent (within 5 minutes)
+    let packageData = null;
+    
+    // First try to find a paid package
+    const { data: paidPackage, error: paidError } = await supabase
       .from('packages')
       .select('*')
       .eq('code', packageCode)
       .eq('status', 'paid')
       .single();
+    
+    if (paidPackage) {
+      packageData = paidPackage;
+    } else {
+      // Check for a pending single lesson package created recently
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+      const { data: pendingPackage, error: pendingError } = await supabase
+        .from('packages')
+        .select('*')
+        .eq('code', packageCode)
+        .eq('status', 'pending')
+        .eq('lessons_total', 1) // Only for single lessons
+        .gte('created_at', fiveMinutesAgo) // Created within last 5 minutes
+        .single();
+      
+      if (pendingPackage) {
+        // For single lessons with pending payment, allow booking
+        // The webhook will update the status to 'paid' shortly
+        packageData = pendingPackage;
+        console.log('Allowing booking for pending single lesson package:', packageCode);
+      }
+    }
 
-    if (packageError || !packageData) {
+    if (!packageData) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Invalid package code' }),
+        body: JSON.stringify({ error: 'Invalid package code or payment not yet confirmed. Please try again in a moment.' }),
       };
     }
 

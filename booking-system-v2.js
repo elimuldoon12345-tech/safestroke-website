@@ -1432,27 +1432,69 @@ async function completeSingleLessonBooking() {
         const form = document.getElementById('single-lesson-form');
         const formData = new FormData(form);
         
-        // Book the time slot using the existing booking endpoint
-        const response = await fetch('/.netlify/functions/book-time-slot', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                packageCode: packageCode,
-                timeSlotId: selectedTimeSlot.id,
-                studentName: formData.get('studentName'),
-                studentAge: formData.get('studentAge') || null,
-                customerName: formData.get('parentName'),
-                customerEmail: formData.get('email'),
-                customerPhone: formData.get('phone'),
-                notes: 'Single lesson booking'
-            })
-        });
+        // Show loading message
+        const submitButton = document.getElementById('single-lesson-submit');
+        submitButton.textContent = 'Finalizing booking...';
         
-        if (!response.ok) {
-            throw new Error('Failed to complete booking');
+        // Retry booking with exponential backoff to wait for webhook
+        let attempts = 0;
+        const maxAttempts = 5;
+        let bookingSuccessful = false;
+        let result = null;
+        
+        while (attempts < maxAttempts && !bookingSuccessful) {
+            attempts++;
+            
+            // Wait before retrying (except on first attempt)
+            if (attempts > 1) {
+                const waitTime = Math.min(2000 * Math.pow(1.5, attempts - 1), 10000); // Max 10 seconds
+                console.log(`Attempt ${attempts}: Waiting ${waitTime}ms for payment confirmation...`);
+                submitButton.textContent = `Confirming payment... (Attempt ${attempts}/${maxAttempts})`;
+                await new Promise(resolve => setTimeout(resolve, waitTime));
+            }
+            
+            try {
+                // Try to book the time slot
+                const response = await fetch('/.netlify/functions/book-time-slot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        packageCode: packageCode,
+                        timeSlotId: selectedTimeSlot.id,
+                        studentName: formData.get('studentName'),
+                        studentAge: formData.get('studentAge') || null,
+                        customerName: formData.get('parentName'),
+                        customerEmail: formData.get('email'),
+                        customerPhone: formData.get('phone'),
+                        notes: 'Single lesson booking'
+                    })
+                });
+                
+                if (response.ok) {
+                    result = await response.json();
+                    bookingSuccessful = true;
+                } else {
+                    const errorData = await response.json();
+                    console.log(`Attempt ${attempts} failed:`, errorData.error);
+                    
+                    // If it's not a "package not paid" error, stop retrying
+                    if (!errorData.error.includes('Invalid package code') && 
+                        !errorData.error.includes('package')) {
+                        throw new Error(errorData.error);
+                    }
+                }
+            } catch (fetchError) {
+                console.error(`Attempt ${attempts} error:`, fetchError);
+                // Continue retrying unless it's the last attempt
+                if (attempts === maxAttempts) {
+                    throw fetchError;
+                }
+            }
         }
         
-        const result = await response.json();
+        if (!bookingSuccessful) {
+            throw new Error('Unable to confirm booking after payment. The webhook may be delayed.');
+        }
         
         // Hide the checkout form
         const checkoutContainer = document.getElementById('single-lesson-checkout');
@@ -1472,6 +1514,9 @@ async function completeSingleLessonBooking() {
         
     } catch (error) {
         console.error('Failed to complete booking:', error);
-        alert('Payment successful but booking failed. Please contact support with your payment confirmation.');
+        
+        // Provide more helpful error message
+        const packageCode = window.tempSingleLessonPackageCode;
+        alert(`Payment successful but booking confirmation is delayed.\n\nYour package code is: ${packageCode}\n\nPlease save this code and try booking again in a few moments using the "Already have a package code?" option, or contact support if the issue persists.`);
     }
 }
