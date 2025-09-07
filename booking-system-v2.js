@@ -245,31 +245,33 @@ function renderPackages() {
         
         let badge = '';
         if (lessons === 6) {
-            badge = '<span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-full whitespace-nowrap">Most Popular</span>';
+            badge = '<span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">Most Popular</span>';
         } else if (lessons === 8) {
-            badge = '<span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full whitespace-nowrap">Best Value</span>';
+            badge = '<span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">Best Value</span>';
         } else {
-            badge = '<div class="h-10">&nbsp;</div>';
+            badge = '<div class="h-8">&nbsp;</div>';
         }
         
         packagesHtml += `
-            <div class="package-card bg-white rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-xl">
-                <div class="p-8">
+            <div class="package-card bg-white rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-xl w-full">
+                <div class="p-6">
                     <div class="text-center">
                         <!-- Package Size -->
-                        <h4 class="text-3xl font-bold text-gray-900 mb-4">${lessons} Lessons</h4>
+                        <h4 class="text-2xl font-bold text-gray-900 mb-3">${lessons} Lessons</h4>
                         
                         <!-- Badge -->
-                        ${badge}
+                        <div class="mb-4">
+                            ${badge}
+                        </div>
                         
                         <!-- Price Section -->
-                        <div class="mt-6 mb-6">
-                            <div class="text-5xl font-black text-gray-900">${price}</div>
-                            <div class="text-lg text-gray-500 mt-2">${perLesson} per lesson</div>
+                        <div class="mb-6">
+                            <div class="text-4xl font-black text-gray-900">${price}</div>
+                            <div class="text-sm text-gray-500 mt-1">${perLesson} per lesson</div>
                         </div>
                         
                         <!-- Button -->
-                        <button class="purchase-btn w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg transition-all shadow-md hover:shadow-lg whitespace-nowrap"
+                        <button class="purchase-btn w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-base transition-all shadow-md hover:shadow-lg"
                                 data-lessons="${lessons}" 
                                 data-price="${price}">
                             Select Package
@@ -281,13 +283,13 @@ function renderPackages() {
     });
     
     container.innerHTML = `
-        <div class="text-center mb-8">
-            <h3 class="text-2xl font-bold">${selectedProgram} Packages</h3>
+        <div class="text-center mb-6">
+            <h3 class="text-xl font-bold">${selectedProgram} Packages</h3>
             <p class="text-gray-600">${PROGRAM_INFO[selectedProgram].description}</p>
         </div>
         
-        <!-- Package Options - Left-aligned with proper spacing -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-0">
+        <!-- Package Options - Full width grid with proper spacing -->
+        <div class="w-full grid grid-cols-3 gap-4" style="min-width: 100%;">
             ${packagesHtml}
         </div>
     `;
