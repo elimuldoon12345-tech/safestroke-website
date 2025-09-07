@@ -53,6 +53,8 @@ let paymentElement = null;
 let currentCalendarMonth = new Date();
 let appliedPromoCode = null;
 let bookingMode = null; // 'package' or 'single'
+let singleLessonProgram = null;
+let singleLessonPrice = null;
 
 // --- Main Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -237,45 +239,24 @@ function renderPackages() {
     
     container.innerHTML = `
         <div class="text-center mb-8">
-            <h3 class="text-2xl font-bold">${selectedProgram} Options</h3>
+            <h3 class="text-2xl font-bold">${selectedProgram} Packages</h3>
             <p class="text-gray-600">${PROGRAM_INFO[selectedProgram].description}</p>
         </div>
         
-        <!-- Single Lesson Option -->
-        <div class="mb-8">
-            <div class="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-xl shadow-lg border-2 border-blue-200">
-                <div class="grid md:grid-cols-2 gap-6 items-center">
-                    <div>
-                        <h4 class="text-xl font-bold mb-2">Try a Single Lesson</h4>
-                        <p class="text-gray-600 mb-3">Perfect for first-timers or scheduling individual lessons</p>
-                        <div class="text-3xl font-bold mb-1">${pricing[1]}</div>
-                        <div class="text-sm text-gray-500">per lesson</div>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex gap-2">
-                            <input type="text" id="promo-code-input" 
-                                   placeholder="Enter promo code (e.g., FIRST-FREE)" 
-                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg">
-                            <button onclick="applyPromoCode()" 
-                                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold">
-                                Apply
-                            </button>
-                        </div>
-                        <div id="promo-message" class="text-sm hidden"></div>
-                        <button onclick="selectSingleLesson()" 
-                                class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full transition">
-                            Book Single Lesson
-                        </button>
-                    </div>
-                </div>
+        <!-- Single Lesson CTA -->
+        <div class="mb-6 text-center">
+            <div class="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg inline-block">
+                <p class="text-gray-700 mb-2">Want to try a single lesson first?</p>
+                <button onclick="startSingleLessonFlow()" 
+                        class="text-blue-600 hover:text-blue-800 font-semibold underline">
+                    Book a Single Lesson (${pricing[1]})
+                </button>
             </div>
         </div>
         
         <!-- Package Options -->
-        <div>
-            <h4 class="text-lg font-semibold mb-4 text-center">Or Choose a Package for Better Value</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                ${[4, 6, 8].map(lessons => `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            ${[4, 6, 8].map(lessons => `
                 <div class="package-card bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all cursor-pointer">
                     <div class="text-center">
                         <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
@@ -1002,3 +983,309 @@ window.bookAnotherLesson = function() {
         location.reload();
     }
 };
+
+// New functions for separated single lesson and package flows
+window.startSingleLessonFlow = function() {
+    // Hide the option selection
+    document.getElementById('new-customer-path').classList.add('hidden');
+    document.getElementById('existing-customer-path').classList.add('hidden');
+    
+    // Show single lesson flow
+    document.getElementById('single-lesson-flow').classList.remove('hidden');
+    bookingMode = 'single';
+};
+
+window.startPackageFlow = function() {
+    // Hide the option selection
+    document.getElementById('new-customer-path').classList.add('hidden');
+    document.getElementById('existing-customer-path').classList.add('hidden');
+    
+    // Show package flow
+    document.getElementById('package-flow').classList.remove('hidden');
+    bookingMode = 'package';
+};
+
+window.backToOptions = function() {
+    // Hide all flows
+    document.getElementById('single-lesson-flow').classList.add('hidden');
+    document.getElementById('package-flow').classList.add('hidden');
+    
+    // Show option selection
+    document.getElementById('new-customer-path').classList.remove('hidden');
+    document.getElementById('existing-customer-path').classList.remove('hidden');
+    
+    // Reset states
+    selectedProgram = null;
+    singleLessonProgram = null;
+    appliedPromoCode = null;
+    bookingMode = null;
+};
+
+window.selectSingleLessonProgram = function(program) {
+    singleLessonProgram = program;
+    singleLessonPrice = PACKAGE_PRICING[program][1];
+    
+    // Check if promo code is applied
+    if (appliedPromoCode && appliedPromoCode.type === 'single_lesson') {
+        singleLessonPrice = singleLessonPrice * (1 - appliedPromoCode.discount / 100);
+    }
+    
+    // If free lesson, create free package and go to calendar
+    if (singleLessonPrice === 0) {
+        handleFreeSingleLesson();
+    } else {
+        // Go to calendar for time selection
+        proceedToSingleLessonCalendar();
+    }
+};
+
+window.applySingleLessonPromo = function() {
+    const promoInput = document.getElementById('single-promo-input');
+    const promoMessage = document.getElementById('single-promo-message');
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        promoMessage.textContent = 'Please enter a promo code';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        return;
+    }
+    
+    const promo = PROMO_CODES[code];
+    
+    if (!promo) {
+        promoMessage.textContent = 'Invalid promo code';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        appliedPromoCode = null;
+        return;
+    }
+    
+    if (promo.type !== 'single_lesson') {
+        promoMessage.textContent = 'This code is only valid for packages, not single lessons';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        appliedPromoCode = null;
+        return;
+    }
+    
+    appliedPromoCode = { code, ...promo };
+    
+    if (promo.discount === 100) {
+        promoMessage.innerHTML = `✅ <strong>${promo.description}</strong> applied! Select a program to continue.`;
+        promoMessage.className = 'text-sm text-green-600 font-semibold';
+    } else {
+        promoMessage.innerHTML = `✅ <strong>${promo.discount}% off</strong> applied!`;
+        promoMessage.className = 'text-sm text-green-600 font-semibold';
+    }
+    
+    promoMessage.classList.remove('hidden');
+};
+
+async function handleFreeSingleLesson() {
+    try {
+        const response = await fetch('/.netlify/functions/create-free-package', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                program: singleLessonProgram,
+                promoCode: appliedPromoCode.code
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to create free lesson package');
+        }
+        
+        const { packageCode } = await response.json();
+        enteredPackageCode = packageCode;
+        selectedProgram = singleLessonProgram;
+        
+        // Hide single lesson flow and show calendar
+        document.getElementById('single-lesson-flow').classList.add('hidden');
+        showCalendarSection();
+        updateCalendarTitle(packageCode, {
+            program: singleLessonProgram,
+            lessons_remaining: 1
+        });
+        loadTimeSlots(singleLessonProgram);
+        
+    } catch (error) {
+        console.error('Failed to create free lesson:', error);
+        alert('Failed to process free lesson. Please try again.');
+    }
+}
+
+function proceedToSingleLessonCalendar() {
+    selectedProgram = singleLessonProgram;
+    
+    // Hide single lesson flow
+    document.getElementById('single-lesson-flow').classList.add('hidden');
+    
+    // Show calendar for time selection
+    document.getElementById('calendar-section').classList.remove('hidden');
+    document.getElementById('calendar-loading').classList.add('hidden');
+    
+    // Update title for single lesson
+    const titleEl = document.getElementById('calendar-title');
+    if (titleEl) {
+        titleEl.innerHTML = `
+            <div class="text-center">
+                <h2 class="text-3xl font-bold mb-2">Select Your Lesson Time</h2>
+                <div class="flex items-center justify-center gap-4 text-sm">
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">${singleLessonProgram}</span>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - ${singleLessonPrice}</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Load available times
+    loadTimeSlots(singleLessonProgram);
+}
+
+// Modify the existing selectTimeSlot function to handle single lesson checkout
+const originalSelectTimeSlot = window.selectTimeSlot;
+window.selectTimeSlot = function(slotId, date, time) {
+    selectedTimeSlot = { id: slotId, date: date, time: time };
+    
+    if (bookingMode === 'single' && !enteredPackageCode) {
+        // For single lessons without a package code (paid single lessons)
+        showSingleLessonCheckout();
+    } else {
+        // Original flow for packages or free single lessons
+        showBookingForm();
+    }
+};
+
+function showSingleLessonCheckout() {
+    document.getElementById('calendar-section').classList.add('hidden');
+    
+    // Create checkout form for single lesson
+    const container = document.createElement('div');
+    container.className = 'max-w-lg mx-auto mt-12 bg-white p-8 rounded-xl shadow-lg border';
+    container.innerHTML = `
+        <h2 class="text-2xl font-bold text-center mb-6">Complete Your Booking</h2>
+        
+        <div class="bg-blue-50 p-4 rounded-lg mb-6">
+            <p class="text-center">
+                <strong>Selected Time:</strong><br>
+                ${new Date(selectedTimeSlot.date + 'T' + selectedTimeSlot.time).toLocaleDateString('en-US', { 
+                    weekday: 'long', month: 'long', day: 'numeric' 
+                })}<br>
+                ${formatTime(selectedTimeSlot.time)}
+            </p>
+            <p class="text-center mt-2">
+                <strong>Program:</strong> ${singleLessonProgram}<br>
+                <strong>Price:</strong> ${singleLessonPrice}
+            </p>
+        </div>
+        
+        <form id="single-lesson-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Student Name *</label>
+                <input type="text" name="studentName" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Student Age</label>
+                <input type="number" name="studentAge" min="0" max="18"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Parent/Guardian Name *</label>
+                <input type="text" name="parentName" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input type="email" name="email" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                <input type="tel" name="phone" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div id="payment-element-single" class="mt-6">
+                <!-- Stripe payment will be mounted here -->
+            </div>
+            
+            <div class="pt-4">
+                <button type="submit" class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-lg transition">
+                    Pay & Book Lesson
+                </button>
+            </div>
+        </form>
+    `;
+    
+    document.querySelector('main .container').appendChild(container);
+    
+    // Initialize payment for single lesson
+    initializeSingleLessonPayment();
+}
+
+async function initializeSingleLessonPayment() {
+    const form = document.getElementById('single-lesson-form');
+    
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing...';
+        
+        try {
+            // Create payment and booking in one step
+            const formData = new FormData(form);
+            const response = await fetch('/.netlify/functions/book-single-lesson', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    program: singleLessonProgram,
+                    price: singleLessonPrice,
+                    timeSlotId: selectedTimeSlot.id,
+                    studentName: formData.get('studentName'),
+                    studentAge: formData.get('studentAge'),
+                    customerName: formData.get('parentName'),
+                    customerEmail: formData.get('email'),
+                    customerPhone: formData.get('phone')
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Booking failed');
+            }
+            
+            const result = await response.json();
+            
+            // Process payment with Stripe
+            if (result.clientSecret) {
+                const { error } = await stripe.confirmPayment({
+                    clientSecret: result.clientSecret,
+                    confirmParams: {
+                        return_url: window.location.href + '?success=true'
+                    },
+                    redirect: 'if_required'
+                });
+                
+                if (error) {
+                    throw new Error(error.message);
+                }
+            }
+            
+            // Show success
+            showConfirmation(result);
+            
+        } catch (error) {
+            alert('Booking failed: ' + error.message);
+            submitButton.disabled = false;
+            submitButton.textContent = 'Pay & Book Lesson';
+        }
+    };
+}
