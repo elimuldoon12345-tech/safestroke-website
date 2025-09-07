@@ -1,0 +1,10 @@
+{
+  "name": "safestroke-booking-functions",
+  "version": "1.0.0",
+  "description": "Netlify functions for SafeStroke booking system",
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "node-fetch": "^2.6.7"
+  }
+}
