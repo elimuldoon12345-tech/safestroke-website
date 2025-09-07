@@ -21,9 +21,9 @@ const PROGRAM_INFO = {
 };
 
 const PACKAGE_PRICING = {
-    'Droplet': { 1: 35, 4: 112, 6: 162, 8: 200 },
-    'Splashlet': { 1: 45, 4: 152, 6: 222, 8: 280 },
-    'Strokelet': { 1: 50, 4: 172, 6: 252, 8: 320 }
+    'Droplet': { 1: 30, 4: 112, 6: 162, 8: 200 },
+    'Splashlet': { 1: 40, 4: 152, 6: 222, 8: 280 },
+    'Strokelet': { 1: 45, 4: 172, 6: 252, 8: 320 }
 };
 
 // Promo codes configuration
@@ -1058,6 +1058,7 @@ window.applySingleLessonPromo = function() {
         promoMessage.className = 'text-sm text-red-600';
         promoMessage.classList.remove('hidden');
         appliedPromoCode = null;
+        resetPriceDisplays();
         return;
     }
     
@@ -1066,6 +1067,7 @@ window.applySingleLessonPromo = function() {
         promoMessage.className = 'text-sm text-red-600';
         promoMessage.classList.remove('hidden');
         appliedPromoCode = null;
+        resetPriceDisplays();
         return;
     }
     
@@ -1074,6 +1076,9 @@ window.applySingleLessonPromo = function() {
     if (promo.discount === 100) {
         promoMessage.innerHTML = `✅ <strong>${promo.description}</strong> applied! Select a program to continue.`;
         promoMessage.className = 'text-sm text-green-600 font-semibold';
+        
+        // Update all price displays to show FREE with crossed out original price
+        updatePriceDisplaysForFree();
     } else {
         promoMessage.innerHTML = `✅ <strong>${promo.discount}% off</strong> applied!`;
         promoMessage.className = 'text-sm text-green-600 font-semibold';
@@ -1081,6 +1086,73 @@ window.applySingleLessonPromo = function() {
     
     promoMessage.classList.remove('hidden');
 };
+
+function updatePriceDisplaysForFree() {
+    // Update Droplet price with crossed-out original price
+    const dropletPrice = document.getElementById('droplet-price');
+    if (dropletPrice) {
+        dropletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$30</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+    
+    // Update Splashlet price with crossed-out original price
+    const splashletPrice = document.getElementById('splashlet-price');
+    if (splashletPrice) {
+        splashletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$40</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+    
+    // Update Strokelet price with crossed-out original price
+    const strokeletPrice = document.getElementById('strokelet-price');
+    if (strokeletPrice) {
+        strokeletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$45</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+}
+
+function resetPriceDisplays() {
+    // Reset Droplet price
+    const dropletPrice = document.getElementById('droplet-price');
+    if (dropletPrice) {
+        dropletPrice.innerHTML = `
+            <p class="text-2xl font-bold brand-blue">$30</p>
+            <p class="text-sm text-gray-500">per lesson</p>
+        `;
+    }
+    
+    // Reset Splashlet price
+    const splashletPrice = document.getElementById('splashlet-price');
+    if (splashletPrice) {
+        splashletPrice.innerHTML = `
+            <p class="text-2xl font-bold brand-blue">$40</p>
+            <p class="text-sm text-gray-500">per lesson</p>
+        `;
+    }
+    
+    // Reset Strokelet price
+    const strokeletPrice = document.getElementById('strokelet-price');
+    if (strokeletPrice) {
+        strokeletPrice.innerHTML = `
+            <p class="text-2xl font-bold brand-blue">$45</p>
+            <p class="text-sm text-gray-500">per lesson</p>
+        `;
+    }
+}
 
 async function handleFreeSingleLesson() {
     try {
