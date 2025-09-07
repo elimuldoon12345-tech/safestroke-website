@@ -244,31 +244,42 @@ function renderPackages() {
         </div>
         
         <!-- Single Lesson CTA -->
-        <div class="mb-6 text-center">
-            <div class="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg inline-block">
-                <p class="text-gray-700 mb-2">Want to try a single lesson first?</p>
+        <div class="mb-8 text-center">
+            <div class="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg inline-block max-w-md">
+                <p class="text-gray-700 mb-3 text-lg">Want to try a single lesson first?</p>
                 <button onclick="startSingleLessonFlow()" 
-                        class="text-blue-600 hover:text-blue-800 font-semibold underline">
+                        class="text-blue-600 hover:text-blue-800 font-semibold underline text-lg">
                     Book a Single Lesson (${pricing[1]})
                 </button>
             </div>
         </div>
         
         <!-- Package Options -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             ${[4, 6, 8].map(lessons => `
-                <div class="package-card bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all cursor-pointer">
-                    <div class="text-center">
-                        <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
-                        ${lessons === 6 ? '<span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mb-3">Most Popular</span>' : 
-                          lessons === 8 ? '<span class="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full mb-3">Best Value</span>' : 
-                          '<div class="mb-3">&nbsp;</div>'}
-                        <div class="text-3xl font-bold mb-1">$${pricing[lessons]}</div>
-                        <div class="text-gray-500 text-sm mb-4">$${(pricing[lessons] / lessons).toFixed(0)} per lesson</div>
-                        <button class="purchase-btn w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full transition"
-                                data-lessons="${lessons}" data-price="${pricing[lessons]}">
-                            Select Package
-                        </button>
+                <div class="package-card bg-white p-8 rounded-xl shadow-lg border-2 border-gray-200 hover:border-blue-500 transition-all cursor-pointer transform hover:scale-105">
+                    <div class="text-center space-y-4">
+                        <div>
+                            <h4 class="text-2xl font-bold mb-3">${lessons} Lessons</h4>
+                            ${lessons === 6 ? 
+                              '<span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-full">Most Popular</span>' : 
+                              lessons === 8 ? 
+                              '<span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full">Best Value</span>' : 
+                              '<div class="h-8">&nbsp;</div>'
+                            }
+                        </div>
+                        
+                        <div class="py-4">
+                            <div class="text-4xl font-black text-gray-900 mb-2">${pricing[lessons]}</div>
+                            <div class="text-gray-500 text-base">${(pricing[lessons] / lessons).toFixed(0)} per lesson</div>
+                        </div>
+                        
+                        <div class="pt-2">
+                            <button class="purchase-btn w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-full text-lg transition shadow-md hover:shadow-lg"
+                                    data-lessons="${lessons}" data-price="${pricing[lessons]}">
+                                Select Package
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('')}
