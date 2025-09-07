@@ -427,6 +427,30 @@ async function loadTimeSlots(program) {
         }
         
         const timeSlots = await response.json();
+        
+        // Debug: Log the raw data received from API
+        console.log('=== Time Slots Loaded ===');
+        console.log(`Program: ${program}`);
+        console.log(`Total slots received: ${timeSlots.length}`);
+        
+        // Group by date for debugging
+        const slotsByDateDebug = {};
+        timeSlots.forEach(slot => {
+            const date = slot.date.split('T')[0];
+            if (!slotsByDateDebug[date]) {
+                slotsByDateDebug[date] = [];
+            }
+            slotsByDateDebug[date].push({
+                id: slot.id,
+                time: slot.start_time,
+                enrollment: slot.current_enrollment,
+                capacity: slot.max_capacity,
+                available: slot.max_capacity - slot.current_enrollment
+            });
+        });
+        
+        console.log('Slots grouped by date:', slotsByDateDebug);
+        
         renderCalendar(timeSlots);
         
     } catch (error) {
@@ -511,7 +535,26 @@ function generateCalendarDays(month, slotsByDate) {
         const date = new Date(month.getFullYear(), month.getMonth(), day);
         const dateStr = date.toISOString().split('T')[0];
         const slots = slotsByDate[dateStr] || [];
-        const hasAvailable = slots.some(s => s.current_enrollment < s.max_capacity);
+        
+        // FIXED: Count available slots for THIS SPECIFIC DATE only
+        const availableSlots = slots.filter(s => 
+            s.current_enrollment < s.max_capacity
+        );
+        const availableCount = availableSlots.length;
+        const hasAvailable = availableCount > 0;
+        
+        // Debug logging for October 5th and other Sundays
+        if (date.getDay() === 0) { // If it's a Sunday
+            console.log(`Sunday ${dateStr}: Total slots: ${slots.length}, Available: ${availableCount}`);
+            if (slots.length > 0) {
+                console.log('Slot details:', slots.map(s => ({
+                    id: s.id,
+                    enrollment: s.current_enrollment,
+                    capacity: s.max_capacity
+                })));
+            }
+        }
+        
         const dayOfWeek = date.getDay();
         const isClassDay = dayOfWeek === 0 || dayOfWeek === 1; // Sunday or Monday
         
@@ -532,9 +575,12 @@ function generateCalendarDays(month, slotsByDate) {
                 <div class="font-semibold text-sm">${day}</div>
                 ${isClassDay ? `
                     <div class="text-xs mt-1">
-                        ${hasAvailable ? `<span class="text-green-600">${slots.filter(s => s.current_enrollment < s.max_capacity).length} slots</span>` :
-                          slots.length > 0 ? '<span class="text-red-600">Full</span>' : 
-                          '<span class="text-gray-400">No class</span>'}
+                        ${hasAvailable ? 
+                            `<span class="text-green-600">${availableCount} slots</span>` :
+                            slots.length > 0 ? 
+                                '<span class="text-red-600">Full</span>' : 
+                                '<span class="text-gray-400">No class</span>'
+                        }
                     </div>
                 ` : ''}
             </div>
