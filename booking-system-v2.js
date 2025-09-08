@@ -732,7 +732,7 @@ function showBookingForm() {
             </div>
             
             <div class="pt-4">
-                <button type="submit" class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-lg transition">
+                <button type="submit" id="booking-submit-btn" class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-lg transition">
                     Confirm Booking
                 </button>
             </div>
@@ -740,6 +740,9 @@ function showBookingForm() {
     `;
     
     document.getElementById('booking-form').onsubmit = handleBookingSubmit;
+    
+    // Add birthday validation listener
+    setupBirthdayValidation();
 }
 
 async function handleBookingSubmit(event) {
@@ -747,6 +750,20 @@ async function handleBookingSubmit(event) {
     
     const form = event.target;
     const submitButton = form.querySelector('button[type="submit"]');
+    
+    // Validate birthday first
+    const birthdayInput = document.getElementById('child-birthday');
+    if (!birthdayInput || !birthdayInput.value) {
+        alert('Please enter your child\'s birthday to verify age requirements.');
+        return;
+    }
+    
+    // Check if age validation passed
+    if (!validateChildAge(birthdayInput.value, selectedProgram)) {
+        alert('Please ensure your child meets the age requirements for the selected program.');
+        return;
+    }
+    
     submitButton.disabled = true;
     submitButton.textContent = 'Booking...';
     
@@ -759,7 +776,8 @@ async function handleBookingSubmit(event) {
         customerName: formData.get('parentName'),
         customerEmail: formData.get('email'),
         customerPhone: formData.get('phone'),
-        notes: formData.get('notes')
+        notes: formData.get('notes'),
+        childBirthday: birthdayInput.value // Include birthday in booking data
     };
     
     try {
@@ -819,6 +837,170 @@ function showConfirmation(bookingResult) {
         </div>
     `;
 }
+
+// --- Age Verification Functions ---
+function setupBirthdayValidation() {
+    const birthdayInput = document.getElementById('child-birthday');
+    const verificationResult = document.getElementById('age-verification-result');
+    const submitButton = document.getElementById('booking-submit-btn');
+    
+    if (birthdayInput) {
+        birthdayInput.addEventListener('change', function() {
+            validateChildAge(this.value, selectedProgram);
+        });
+    }
+}
+
+function validateChildAge(birthDateString, program) {
+    const verificationResult = document.getElementById('age-verification-result');
+    const submitButton = document.getElementById('booking-submit-btn');
+    
+    if (!birthDateString) {
+        verificationResult.classList.add('hidden');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Please enter child\'s birthday';
+            submitButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.remove('brand-blue-bg', 'hover:bg-blue-600');
+        }
+        return false;
+    }
+    
+    const birthDate = new Date(birthDateString);
+    const today = new Date();
+    
+    // Calculate age in months
+    const ageInMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + 
+                       (today.getMonth() - birthDate.getMonth());
+    
+    // Calculate age in years for display
+    const ageInYears = Math.floor(ageInMonths / 12);
+    const remainingMonths = ageInMonths % 12;
+    
+    // Define age requirements for each program
+    const ageRequirements = {
+        'Droplet': { minMonths: 3, maxMonths: 24 },
+        'Splashlet': { minMonths: 24, maxMonths: 48 }, // 2-4 years
+        'Strokelet': { minMonths: 36, maxMonths: 144 }  // 3-12 years
+    };
+    
+    const requirement = ageRequirements[program];
+    const isAgeAppropriate = ageInMonths >= requirement.minMonths && ageInMonths <= requirement.maxMonths;
+    
+    // Format age display
+    let ageDisplay = '';
+    if (ageInYears > 0) {
+        ageDisplay = `${ageInYears} year${ageInYears > 1 ? 's' : ''}`;
+        if (remainingMonths > 0) {
+            ageDisplay += ` and ${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
+        }
+    } else {
+        ageDisplay = `${ageInMonths} month${ageInMonths > 1 ? 's' : ''}`;
+    }
+    
+    verificationResult.classList.remove('hidden');
+    
+    if (isAgeAppropriate) {
+        // Age is appropriate
+        verificationResult.innerHTML = `
+            <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                    <div>
+                        <p class="text-sm font-medium text-green-800">Age verified: ${ageDisplay} old</p>
+                        <p class="text-xs text-green-600">Perfect fit for ${program} program!</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Enable submit button
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Confirm Booking';
+            submitButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.add('brand-blue-bg', 'hover:bg-blue-600');
+        }
+        
+        return true;
+    } else {
+        // Age is not appropriate
+        const suggestedProgram = getSuggestedProgram(ageInMonths);
+        
+        verificationResult.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                    <div>
+                        <p class="text-sm font-medium text-red-800">Age verification failed</p>
+                        <p class="text-xs text-red-600 mb-2">Your child is ${ageDisplay} old, but ${program} is for ${getProgramAgeRange(program)}.</p>
+                        ${suggestedProgram ? `
+                            <p class="text-xs text-red-600">
+                                <strong>Recommended:</strong> ${suggestedProgram} program would be perfect for your child's age.
+                            </p>
+                            <button type="button" onclick="switchToSuggestedProgram('${suggestedProgram}')" 
+                                    class="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-full font-semibold">
+                                Switch to ${suggestedProgram}
+                            </button>
+                        ` : `
+                            <p class="text-xs text-red-600">Please contact us to discuss appropriate program options.</p>
+                        `}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Disable submit button
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Age verification required';
+            submitButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.remove('brand-blue-bg', 'hover:bg-blue-600');
+        }
+        
+        return false;
+    }
+}
+
+function getSuggestedProgram(ageInMonths) {
+    if (ageInMonths >= 3 && ageInMonths <= 24) {
+        return 'Droplet';
+    } else if (ageInMonths >= 24 && ageInMonths <= 48) {
+        return 'Splashlet';
+    } else if (ageInMonths >= 36 && ageInMonths <= 144) {
+        return 'Strokelet';
+    }
+    return null;
+}
+
+function getProgramAgeRange(program) {
+    const ranges = {
+        'Droplet': '3-24 months',
+        'Splashlet': '2-3 years',
+        'Strokelet': '3-12 years'
+    };
+    return ranges[program] || 'unknown age range';
+}
+
+window.switchToSuggestedProgram = function(suggestedProgram) {
+    // Update the selected program
+    selectedProgram = suggestedProgram;
+    
+    // Re-validate with the new program
+    const birthdayInput = document.getElementById('child-birthday');
+    if (birthdayInput && birthdayInput.value) {
+        validateChildAge(birthdayInput.value, selectedProgram);
+    }
+    
+    // Update any display elements that show the selected program
+    const titleEl = document.getElementById('calendar-title');
+    if (titleEl && enteredPackageCode) {
+        // If we came from a package code, we need to validate the package supports this program
+        alert(`Switched to ${suggestedProgram} program. Please note: you may need a different package code if your current package is not valid for this program.`);
+    }
+};
 
 // --- Helper Functions ---
 function formatTime(timeStr) {
