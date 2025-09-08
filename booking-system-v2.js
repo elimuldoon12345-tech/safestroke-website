@@ -1518,3 +1518,95 @@ async function completeSingleLessonBooking() {
         alert(`Payment successful but booking confirmation is delayed.\n\nYour package code is: ${packageCode}\n\nPlease save this code and try booking again in a few moments using the "Already have a package code?" option, or contact support if the issue persists.`);
     }
 }
+
+// --- Remove Age Requirements Warning ---
+// This code removes any age requirements warning that might appear on the page
+function removeAgeRequirementsWarning() {
+    // Try multiple selectors to find and remove the warning
+    const selectors = [
+        // Look for elements containing the specific text
+        '//*[contains(text(), "Important: Age Requirements")]',
+        '//*[contains(text(), "verify your child\'s age")]',
+        '//*[contains(text(), "birthday to confirm eligibility")]',
+        // Look for common warning/alert classes
+        '.alert-warning',
+        '.warning-message',
+        '.age-warning',
+        // Look for yellow/warning colored boxes
+        '[style*="background-color: rgb(254, 249, 195)"]',
+        '[style*="background-color: #fef9c3"]',
+        '[style*="background: rgb(254, 249, 195)"]',
+        '[style*="background: #fef9c3"]'
+    ];
+    
+    // Try XPath selectors first
+    const xpathSelectors = selectors.slice(0, 3);
+    xpathSelectors.forEach(xpath => {
+        try {
+            const result = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            for (let i = 0; i < result.snapshotLength; i++) {
+                const element = result.snapshotItem(i);
+                // Go up to find the container element and remove it
+                let container = element;
+                while (container && container.parentElement) {
+                    if (container.className && container.className.includes('alert') || 
+                        container.className && container.className.includes('warning') ||
+                        container.style.backgroundColor === 'rgb(254, 249, 195)' ||
+                        container.style.backgroundColor === '#fef9c3') {
+                        container.remove();
+                        console.log('Removed age requirements warning');
+                        return;
+                    }
+                    container = container.parentElement;
+                }
+                element.remove();
+            }
+        } catch (e) {
+            // XPath might not work in all browsers, continue with CSS selectors
+        }
+    });
+    
+    // Try CSS selectors
+    const cssSelectors = selectors.slice(3);
+    cssSelectors.forEach(selector => {
+        try {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                if (el.textContent && 
+                    (el.textContent.includes('Age Requirements') || 
+                     el.textContent.includes('verify your child') ||
+                     el.textContent.includes('birthday to confirm'))) {
+                    el.remove();
+                    console.log('Removed age requirements warning');
+                }
+            });
+        } catch (e) {
+            // Continue if selector fails
+        }
+    });
+}
+
+// Run the removal function when the page loads and when content changes
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeAgeRequirementsWarning);
+} else {
+    removeAgeRequirementsWarning();
+}
+
+// Also run when content is dynamically updated
+const observer = new MutationObserver(() => {
+    removeAgeRequirementsWarning();
+});
+
+// Start observing the document for changes
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// Also remove it when steps change
+const originalShowStep = showStep;
+showStep = function(stepNumber) {
+    originalShowStep(stepNumber);
+    setTimeout(removeAgeRequirementsWarning, 100);
+};
