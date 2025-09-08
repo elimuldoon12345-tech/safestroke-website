@@ -701,8 +701,8 @@ function showBookingForm() {
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Student Age</label>
-                <input type="number" name="studentAge" min="0" max="18"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Student Birthdate</label>
+                <input type="date" name="studentBirthdate" 
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             </div>
             
@@ -772,7 +772,7 @@ async function handleBookingSubmit(event) {
         packageCode: enteredPackageCode,
         timeSlotId: selectedTimeSlot.id,
         studentName: formData.get('studentName'),
-        studentAge: formData.get('studentAge'),
+        studentBirthdate: formData.get('studentBirthdate'),
         customerName: formData.get('parentName'),
         customerEmail: formData.get('email'),
         customerPhone: formData.get('phone'),
@@ -1442,8 +1442,8 @@ function showSingleLessonCheckout() {
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Student Age</label>
-                <input type="number" name="studentAge" min="0" max="18"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Student Birthdate</label>
+                <input type="date" name="studentBirthdate" 
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
             
@@ -1526,7 +1526,7 @@ async function initializeSingleLessonPayment() {
                     price: singleLessonPrice,
                     timeSlotId: selectedTimeSlot.id,
                     studentName: formData.get('studentName'),
-                    studentAge: formData.get('studentAge') || null,
+                    studentBirthdate: formData.get('studentBirthdate') || null,
                     customerName: formData.get('parentName'),
                     customerEmail: formData.get('email'),
                     customerPhone: formData.get('phone')
@@ -1642,7 +1642,7 @@ async function completeSingleLessonBooking() {
                         packageCode: packageCode,
                         timeSlotId: selectedTimeSlot.id,
                         studentName: formData.get('studentName'),
-                        studentAge: formData.get('studentAge') || null,
+                        studentBirthdate: formData.get('studentBirthdate') || null,
                         customerName: formData.get('parentName'),
                         customerEmail: formData.get('email'),
                         customerPhone: formData.get('phone'),
