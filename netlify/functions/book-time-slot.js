@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
+const { sendBookingConfirmation } = require('./email-service');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -196,8 +197,13 @@ exports.handler = async (event, context) => {
       // Non-critical, continue
     }
 
-    // 7. Send confirmation email (you can implement this with a service like SendGrid)
-    // await sendConfirmationEmail(booking, slotData);
+    // 7. Send confirmation emails to customer and business
+    try {
+      await sendBookingConfirmation(booking, slotData);
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError);
+      // Continue even if email fails
+    }
 
     return {
       statusCode: 200,
