@@ -283,6 +283,11 @@ window.selectPackage = function(lessons, price) {
     bookingMode = 'package';
     console.log('Package selected:', selectedPackage);
     
+    // ✅ FIXED: Track package selection for Meta Pixel
+    if (typeof window.trackPackageSelection === 'function') {
+        window.trackPackageSelection(selectedProgram, lessons, price);
+    }
+    
     // Show email collection step instead of going directly to payment
     showEmailCollectionStep();
 }
@@ -538,6 +543,11 @@ async function handlePaymentSubmit(event) {
         // Payment successful
         showStep(4);
         document.getElementById('package-code-display').textContent = window.recentPackageCode;
+        
+        // ✅ FIXED: Track successful purchase for Meta Pixel
+        if (typeof window.trackPurchase === 'function') {
+            window.trackPurchase(selectedPackage.program, selectedPackage, selectedPackage.price);
+        }
         
         // Update success message to mention email
         const successSection = document.getElementById('success-section');
@@ -1432,6 +1442,11 @@ window.selectSingleLessonProgram = function(program) {
         singleLessonPrice = singleLessonPrice * (1 - appliedPromoCode.discount / 100);
     }
     
+    // ✅ FIXED: Track single lesson selection for Meta Pixel
+    if (typeof window.trackSingleLessonSelection === 'function') {
+        window.trackSingleLessonSelection(program, singleLessonPrice);
+    }
+    
     // If free lesson, create free package and go to calendar
     if (singleLessonPrice === 0) {
         handleFreeSingleLesson();
@@ -1474,6 +1489,11 @@ window.applySingleLessonPromo = function() {
     }
     
     appliedPromoCode = { code, ...promo };
+    
+    // ✅ FIXED: Track promo code application for Meta Pixel
+    if (typeof window.trackPromoCode === 'function') {
+        window.trackPromoCode(code, 'single_lesson');
+    }
     
     if (promo.discount === 100) {
         promoMessage.innerHTML = `✅ <strong>${promo.description}</strong> applied! Select a program to continue.`;
@@ -1902,6 +1922,11 @@ async function completeSingleLessonBooking() {
         const checkoutContainer = document.getElementById('single-lesson-checkout');
         if (checkoutContainer) {
             checkoutContainer.remove();
+        }
+        
+        // ✅ FIXED: Track single lesson purchase for Meta Pixel
+        if (typeof window.trackPurchase === 'function') {
+            window.trackPurchase(singleLessonProgram, { lessons: 1 }, singleLessonPrice);
         }
         
         // Show success message
