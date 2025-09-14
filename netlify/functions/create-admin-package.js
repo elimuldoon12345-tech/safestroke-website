@@ -129,24 +129,28 @@ exports.handler = async (event, context) => {
     // Generate a unique package code
     const packageCode = generateAdminPackageCode(program, lessonsNum);
 
+    // Build the package object with only the fields that exist
+    const packageObject = {
+      code: packageCode,
+      program: program,
+      lessons_total: lessonsNum,
+      lessons_remaining: lessonsNum,
+      amount_paid: 0, // Free package
+      payment_intent_id: `admin_${Date.now()}`, // Unique identifier for admin packages
+      status: 'paid', // Mark as paid immediately
+      customer_email: customerEmail || null,
+      created_at: new Date().toISOString(),
+    };
+    
+    // Try to add optional fields - these will be ignored if columns don't exist
+    // Comment out these lines if they cause errors:
+    // packageObject.customer_name = customerName || null;
+    // packageObject.notes = `Created with admin code: ${adminCode} - ${ADMIN_CODES[adminCode].description}`;
+    
     // Store the package in database
     const { data: packageData, error: dbError } = await supabase
       .from('packages')
-      .insert([
-        {
-          code: packageCode,
-          program: program,
-          lessons_total: lessonsNum,
-          lessons_remaining: lessonsNum,
-          amount_paid: 0, // Free package
-          payment_intent_id: `admin_${Date.now()}`, // Unique identifier for admin packages
-          status: 'paid', // Mark as paid immediately
-          customer_email: customerEmail || null,
-          customer_name: customerName || null,
-          notes: `Created with admin code: ${adminCode} - ${ADMIN_CODES[adminCode].description}`,
-          created_at: new Date().toISOString(),
-        }
-      ])
+      .insert([packageObject])
       .select()
       .single();
 
