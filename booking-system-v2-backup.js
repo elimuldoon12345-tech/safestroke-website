@@ -42,6 +42,13 @@ const PROMO_CODES = {
     }
 };
 
+// Admin codes configuration
+const ADMIN_CODES = {
+    'ADMIN2025': { valid: true, description: 'Master admin code' },
+    'SWIMFREE': { valid: true, description: 'Free swim lessons admin code' },
+    'TESTBOOK': { valid: true, description: 'Test booking admin code' }
+};
+
 // --- Global State ---
 let selectedProgram = null;
 let selectedPackage = null;
@@ -50,7 +57,7 @@ let selectedTimeSlot = null;
 let stripe = null;
 let elements = null;
 let paymentElement = null;
-let currentCalendarMonth = new Date();
+let currentCalendarMonth = new Date(2025, 9, 1); // Default to October 2025
 let appliedPromoCode = null;
 let bookingMode = null; // 'package' or 'single'
 let singleLessonProgram = null;
@@ -64,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeBookingFlow();
     initializeStripe();
     
-    // Set current month to October 2025 for demo (adjust as needed)
-    currentCalendarMonth = new Date('2025-10-01');
+    // Set default month to October 2025 (when classes start)
+    currentCalendarMonth = new Date(2025, 9, 1); // Month is 0-indexed, so 9 = October
 });
 
 // --- Initialization Functions ---
@@ -139,7 +146,7 @@ function handleProgramSelection(event) {
 
 async function handleScheduleWithCode() {
     const codeInput = document.getElementById('package-code-input');
-    const code = codeInput.value.trim();
+    const code = codeInput.value.trim().toUpperCase(); // Convert to uppercase for admin codes
     const errorMsg = document.getElementById('code-error-message');
     
     if (!code) {
@@ -148,6 +155,13 @@ async function handleScheduleWithCode() {
     }
     
     hideError(errorMsg);
+    
+    // Check if it's an admin code
+    if (ADMIN_CODES[code]?.valid) {
+        showQuickAdminDialog(code);
+        return;
+    }
+    
     showCalendarSection();
     
     try {
@@ -198,7 +212,7 @@ async function handleScheduleWithCode() {
 
 // --- UI Rendering Functions ---
 function showStep(stepNumber) {
-    // Hide all steps
+    // Hide all steps including email step
     ['step-1', 'step-2', 'email-step', 'payment-section', 'success-section'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
@@ -207,7 +221,7 @@ function showStep(stepNumber) {
     // Show requested step
     const stepId = stepNumber === 1 ? 'step-1' : 
                    stepNumber === 2 ? 'step-2' : 
-                   stepNumber === 2.5 ? 'email-step' : // New email step
+                   stepNumber === 2.5 ? 'email-step' : // Email collection step
                    stepNumber === 3 ? 'payment-section' : 
                    'success-section';
     
@@ -239,10 +253,37 @@ function renderPackages() {
     const container = document.getElementById('package-container');
     const pricing = PACKAGE_PRICING[selectedProgram];
     
-    // Build all three cards as a single HTML string
-    let html = '';
+    // Create wrapper div for grid layout
+    let wrapperHTML = '<div class="w-full">';
     
-    [4, 6, 8].forEach(lessons => {
+    // Add admin/promo code section above packages with fixed layout
+    let html = `
+        <div class="col-span-full bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                🎟️ Have an Admin or Promo Code?
+            </label>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input 
+                    type="text" 
+                    id="package-promo-code" 
+                    placeholder="Enter code (e.g., ADMIN2025, TESTBOOK)"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 uppercase text-sm"
+                    onkeyup="this.value = this.value.toUpperCase()"
+                    style="min-width: 0;"
+                >
+                <button 
+                    onclick="applyPackagePromoCode()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg whitespace-nowrap"
+                >
+                    Apply
+                </button>
+            </div>
+            <div id="package-promo-message" class="mt-2 text-sm hidden"></div>
+        </div>
+    `;
+    
+    // Build all three cards as a single HTML string
+    [4, 6, 8].forEach((lessons, index) => {
         const price = pricing[lessons];
         const perLesson = Math.floor(price / lessons);
         
@@ -256,11 +297,11 @@ function renderPackages() {
         }
         
         html += `
-            <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-500 transition p-4">
+            <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-500 transition p-4 animate-fade-in" style="animation-delay: ${index * 0.1}s">
                 <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
                 ${badgeHTML}
-                <div class="text-3xl font-bold mt-3 mb-1">$${price}</div>
-                <div class="text-sm text-gray-500 mb-3">$${perLesson}/lesson</div>
+                <div class="text-3xl font-bold mt-3 mb-1">${price}</div>
+                <div class="text-sm text-gray-500 mb-3">${perLesson}/lesson</div>
                 <button onclick="selectPackage(${lessons}, ${price})" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm">
                     Select
@@ -269,8 +310,9 @@ function renderPackages() {
         `;
     });
     
-    // Set the complete HTML at once
-    container.innerHTML = html;
+    // Close wrapper and set the complete HTML at once
+    wrapperHTML += html + '</div>';
+    container.innerHTML = wrapperHTML;
 }
 
 // Make selectPackage available globally - Modified to go to email step first
@@ -282,6 +324,11 @@ window.selectPackage = function(lessons, price) {
     };
     bookingMode = 'package';
     console.log('Package selected:', selectedPackage);
+    
+    // ✅ FIXED: Track package selection for Meta Pixel
+    if (typeof window.trackPackageSelection === 'function') {
+        window.trackPackageSelection(selectedProgram, lessons, price);
+    }
     
     // Show email collection step instead of going directly to payment
     showEmailCollectionStep();
@@ -298,10 +345,11 @@ function showEmailCollectionStep() {
         emailStep.id = 'email-step';
         emailStep.className = 'hidden';
         
-        // Insert it after step-2
+        // Insert it in the package-flow div after step-2
+        const packageFlow = document.getElementById('package-flow');
         const step2 = document.getElementById('step-2');
-        if (step2 && step2.parentElement) {
-            step2.parentElement.insertBefore(emailStep, step2.nextSibling);
+        if (packageFlow && step2) {
+            packageFlow.insertBefore(emailStep, step2.nextSibling);
         }
     }
     
@@ -538,22 +586,29 @@ async function handlePaymentSubmit(event) {
         showStep(4);
         document.getElementById('package-code-display').textContent = window.recentPackageCode;
         
+        // ✅ FIXED: Track successful purchase for Meta Pixel
+        if (typeof window.trackPurchase === 'function') {
+            window.trackPurchase(selectedPackage.program, selectedPackage, selectedPackage.price);
+        }
+        
         // Update success message to mention email
         const successSection = document.getElementById('success-section');
-        if (successSection) {
-            const existingContent = successSection.innerHTML;
-            // Add email notification
-            const emailNotice = `
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 max-w-md mx-auto">
+        if (successSection && customerEmail) {
+            // Add email notification below the package code display
+            const codeDisplay = document.getElementById('package-code-display').parentElement;
+            if (codeDisplay && !document.getElementById('email-notice')) {
+                const emailNotice = document.createElement('div');
+                emailNotice.id = 'email-notice';
+                emailNotice.className = 'bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4';
+                emailNotice.innerHTML = `
                     <p class="text-blue-800 text-sm">
                         <strong>📧 Check your email!</strong><br>
                         We've sent your package code to <strong>${customerEmail}</strong><br>
                         <span class="text-xs">Be sure to check your spam folder if you don't see it.</span>
                     </p>
-                </div>
-            `;
-            // Insert after the package code display
-            successSection.innerHTML = existingContent.replace('</div>', '</div>' + emailNotice);
+                `;
+                codeDisplay.parentElement.insertBefore(emailNotice, codeDisplay.nextSibling);
+            }
         }
         
     } catch (error) {
@@ -788,6 +843,33 @@ window.showDateSlots = async function(dateStr) {
     const container = document.getElementById('selected-date-slots');
     const date = new Date(dateStr + 'T00:00:00');
     
+    // Remove previous selection highlight
+    document.querySelectorAll('.calendar-day-selected').forEach(el => {
+        el.classList.remove('calendar-day-selected');
+    });
+    
+    // Add selection highlight to clicked date
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('calendar-day-selected');
+    }
+    
+    // Show loading spinner
+    container.innerHTML = `
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+            <div class="loading-spinner"></div>
+            <p class="text-gray-600 mt-4">Loading available times...</p>
+        </div>
+    `;
+    
+    // Smooth scroll to loading indicator
+    setTimeout(() => {
+        container.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest' 
+        });
+    }, 100);
+    
     try {
         const response = await fetch(`/.netlify/functions/get-time-slots?program=${selectedProgram}&date=${dateStr}`);
         const slots = await response.json();
@@ -796,28 +878,83 @@ window.showDateSlots = async function(dateStr) {
         
         container.innerHTML = `
             <div class="bg-white rounded-lg shadow-lg p-6">
-                <h4 class="text-lg font-bold mb-4">
-                    Available times for ${date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                </h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    ${availableSlots.map(slot => `
-                        <button onclick="selectTimeSlot('${slot.id}', '${slot.date}', '${slot.start_time}')" 
-                                class="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left">
-                            <div class="font-semibold">
-                                ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">
-                                Group ${slot.group_number} • ${slot.max_capacity - slot.current_enrollment} spots left
-                            </div>
-                        </button>
-                    `).join('')}
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="text-lg font-bold">
+                        Available times for ${date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                    </h4>
+                    <button onclick="clearDateSelection()" 
+                            class="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition">
+                        ← Back to calendar
+                    </button>
                 </div>
+                
+                ${availableSlots.length > 0 ? `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${availableSlots.map(slot => `
+                            <button onclick="selectTimeSlot('${slot.id}', '${slot.date}', '${slot.start_time}')" 
+                                    class="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left">
+                                <div class="font-semibold">
+                                    ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}
+                                </div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    Group ${slot.group_number} • ${slot.max_capacity - slot.current_enrollment} spots left
+                                </div>
+                            </button>
+                        `).join('')}
+                    </div>
+                ` : `
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">No available time slots for this date.</p>
+                        <p class="text-sm text-gray-400 mt-2">Please select another date.</p>
+                    </div>
+                `}
             </div>
         `;
         
+        // Smooth scroll to the loaded time slots
+        setTimeout(() => {
+            container.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',
+                inline: 'nearest' 
+            });
+        }, 100);
+        
     } catch (error) {
         console.error('Failed to load slots for date:', error);
-        container.innerHTML = '<div class="text-red-600 text-center p-4">Failed to load time slots</div>';
+        container.innerHTML = `
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="text-red-600 text-center p-4">
+                    <p class="font-semibold">Failed to load time slots</p>
+                    <p class="text-sm mt-2">Please try again or select another date.</p>
+                    <button onclick="clearDateSelection()" 
+                            class="mt-4 bg-red-100 hover:bg-red-200 text-red-800 px-4 py-2 rounded-full text-sm transition">
+                        Back to calendar
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+};
+
+// Helper function to clear date selection
+window.clearDateSelection = function() {
+    // Remove selection highlight
+    document.querySelectorAll('.calendar-day-selected').forEach(el => {
+        el.classList.remove('calendar-day-selected');
+    });
+    
+    // Clear the time slots display
+    const container = document.getElementById('selected-date-slots');
+    container.innerHTML = '';
+    
+    // Scroll back to calendar
+    const calendarContainer = document.getElementById('calendar-container');
+    if (calendarContainer) {
+        calendarContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start'
+        });
     }
 };
 
@@ -1177,7 +1314,115 @@ function resetToInitialState() {
     customerEmail = null;
 }
 
-// New function for applying promo codes
+// Helper function to update package prices with promo
+function updatePackagePricesWithPromo(promo) {
+    // Re-render packages with discount applied
+    const container = document.getElementById('package-container');
+    const pricing = PACKAGE_PRICING[selectedProgram];
+    
+    // Keep the promo code section
+    const promoSection = container.querySelector('.bg-yellow-50');
+    const promoHTML = promoSection ? promoSection.outerHTML : '';
+    
+    let html = promoHTML;
+    
+    [4, 6, 8].forEach((lessons, index) => {
+        const originalPrice = pricing[lessons];
+        let finalPrice = originalPrice;
+        
+        // Apply discount
+        if (promo.type === 'percentage') {
+            finalPrice = Math.round(originalPrice * (1 - promo.discount / 100));
+        } else if (promo.type === 'single_lesson' && lessons === 1) {
+            finalPrice = originalPrice * (1 - promo.discount / 100);
+        }
+        
+        const perLesson = Math.floor(finalPrice / lessons);
+        
+        let badgeHTML = '';
+        if (lessons === 6) {
+            badgeHTML = '<div class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full inline-block">Most Popular</div>';
+        } else if (lessons === 8) {
+            badgeHTML = '<div class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full inline-block">Best Value</div>';
+        } else {
+            badgeHTML = '<div style="height: 24px"></div>';
+        }
+        
+        // Show original price crossed out if there's a discount
+        const priceHTML = finalPrice < originalPrice ? 
+            `<div class="text-3xl font-bold mt-3 mb-1">
+                <span class="line-through text-gray-400 text-2xl">${originalPrice}</span>
+                <span class="text-green-600">${finalPrice}</span>
+            </div>` :
+            `<div class="text-3xl font-bold mt-3 mb-1">${finalPrice}</div>`;
+        
+        html += `
+            <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-500 transition p-4 animate-fade-in" style="animation-delay: ${index * 0.1}s">
+                <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
+                ${badgeHTML}
+                ${priceHTML}
+                <div class="text-sm text-gray-500 mb-3">${perLesson}/lesson</div>
+                <button onclick="selectPackage(${lessons}, ${finalPrice})" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm">
+                    Select
+                </button>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// Function for applying promo/admin codes in package selection
+window.applyPackagePromoCode = function() {
+    const codeInput = document.getElementById('package-promo-code');
+    const messageDiv = document.getElementById('package-promo-message');
+    const code = codeInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        messageDiv.innerHTML = '<span class="text-red-600">Please enter a code</span>';
+        messageDiv.classList.remove('hidden');
+        return;
+    }
+    
+    // Check if it's an admin code
+    if (ADMIN_CODES[code]?.valid) {
+        // It's an admin code - create free package
+        messageDiv.innerHTML = '<span class="text-green-600 font-bold">✓ Admin code recognized! Creating free package...</span>';
+        messageDiv.classList.remove('hidden');
+        
+        // Show admin dialog for this program
+        setTimeout(() => {
+            showQuickAdminDialogForProgram(code, selectedProgram);
+        }, 500);
+        return;
+    }
+    
+    // Check if it's a promo code
+    const promo = PROMO_CODES[code];
+    if (promo) {
+        if (!promo.validPrograms.includes(selectedProgram)) {
+            messageDiv.innerHTML = `<span class="text-red-600">This code is not valid for ${selectedProgram} lessons</span>`;
+            messageDiv.classList.remove('hidden');
+            return;
+        }
+        
+        // Apply promo discount
+        appliedPromoCode = { code, ...promo };
+        messageDiv.innerHTML = `<span class="text-green-600 font-bold">✓ ${promo.description} applied! Select a package below.</span>`;
+        messageDiv.classList.remove('hidden');
+        
+        // Update package prices with discount
+        updatePackagePricesWithPromo(promo);
+        return;
+    }
+    
+    // Invalid code
+    messageDiv.innerHTML = '<span class="text-red-600">Invalid code. Try: ADMIN2025, SWIMFREE, or TESTBOOK</span>';
+    messageDiv.classList.remove('hidden');
+}
+
+// New function for applying promo codes in single lesson flow
 window.applyPromoCode = function() {
     const promoInput = document.getElementById('promo-code-input');
     const promoMessage = document.getElementById('promo-message');
@@ -1347,6 +1592,11 @@ window.selectSingleLessonProgram = function(program) {
         singleLessonPrice = singleLessonPrice * (1 - appliedPromoCode.discount / 100);
     }
     
+    // ✅ FIXED: Track single lesson selection for Meta Pixel
+    if (typeof window.trackSingleLessonSelection === 'function') {
+        window.trackSingleLessonSelection(program, singleLessonPrice);
+    }
+    
     // If free lesson, create free package and go to calendar
     if (singleLessonPrice === 0) {
         handleFreeSingleLesson();
@@ -1389,6 +1639,11 @@ window.applySingleLessonPromo = function() {
     }
     
     appliedPromoCode = { code, ...promo };
+    
+    // ✅ FIXED: Track promo code application for Meta Pixel
+    if (typeof window.trackPromoCode === 'function') {
+        window.trackPromoCode(code, 'single_lesson');
+    }
     
     if (promo.discount === 100) {
         promoMessage.innerHTML = `✅ <strong>${promo.description}</strong> applied! Select a program to continue.`;
@@ -1819,6 +2074,11 @@ async function completeSingleLessonBooking() {
             checkoutContainer.remove();
         }
         
+        // ✅ FIXED: Track single lesson purchase for Meta Pixel
+        if (typeof window.trackPurchase === 'function') {
+            window.trackPurchase(singleLessonProgram, { lessons: 1 }, singleLessonPrice);
+        }
+        
         // Show success message
         showConfirmation({
             bookingId: result.bookingId,
@@ -1835,6 +2095,255 @@ async function completeSingleLessonBooking() {
         // Provide more helpful error message
         const packageCode = window.tempSingleLessonPackageCode;
         alert(`Payment successful but booking confirmation is delayed.\n\nYour package code is: ${packageCode}\n\nPlease save this code and try booking again in a few moments using the "Already have a package code?" option, or contact support if the issue persists.`);
+    }
+}
+
+// --- Admin Code Functions ---
+function showQuickAdminDialog(adminCode) {
+    // Hide existing elements
+    document.getElementById('existing-customer-path').classList.add('hidden');
+    
+    // Create a simple dialog
+    const dialog = document.createElement('div');
+    dialog.id = 'quick-admin-dialog';
+    dialog.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+    dialog.innerHTML = `
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-4">🔑 Admin Mode - Create Free Package</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Program:</label>
+                    <select id="admin-program" class="w-full p-2 border rounded">
+                        <option value="Droplet">Droplet (3-24 months)</option>
+                        <option value="Splashlet">Splashlet (2-3 years)</option>
+                        <option value="Strokelet">Strokelet (3-12 years)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Lessons:</label>
+                    <select id="admin-lessons" class="w-full p-2 border rounded">
+                        <option value="1">1 Lesson</option>
+                        <option value="4">4 Lessons</option>
+                        <option value="6" selected>6 Lessons</option>
+                        <option value="8">8 Lessons</option>
+                        <option value="12">12 Lessons</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Email (optional):</label>
+                    <input type="email" id="admin-email" class="w-full p-2 border rounded" 
+                           placeholder="customer@email.com">
+                </div>
+                
+                <div class="flex gap-2 pt-4">
+                    <button onclick="closeAdminDialog()" 
+                            class="flex-1 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded">
+                        Cancel
+                    </button>
+                    <button onclick="createAdminPackage('${adminCode}')" 
+                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
+                        Create Package
+                    </button>
+                </div>
+            </div>
+            
+            <div id="admin-status" class="mt-4 text-sm hidden"></div>
+        </div>
+    `;
+    
+    document.body.appendChild(dialog);
+}
+
+window.createAdminPackage = async function(adminCode) {
+    const program = document.getElementById('admin-program').value;
+    const lessons = document.getElementById('admin-lessons').value;
+    const email = document.getElementById('admin-email').value;
+    const statusDiv = document.getElementById('admin-status');
+    
+    statusDiv.innerHTML = '<span class="text-blue-600">Creating package...</span>';
+    statusDiv.classList.remove('hidden');
+    
+    try {
+        const response = await fetch('/.netlify/functions/create-admin-package', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                adminCode: adminCode,
+                program: program,
+                lessons: parseInt(lessons),
+                customerEmail: email || null
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            statusDiv.innerHTML = `
+                <div class="bg-green-100 p-3 rounded">
+                    <strong class="text-green-800">✓ Package Created!</strong><br>
+                    <span class="font-mono text-lg">${result.packageCode}</span><br>
+                    <small>Redirecting to calendar...</small>
+                </div>
+            `;
+            
+            // Auto-proceed to calendar after 2 seconds
+            setTimeout(() => {
+                closeAdminDialog();
+                
+                // Set the package code and proceed
+                enteredPackageCode = result.packageCode;
+                selectedProgram = result.program;
+                
+                showCalendarSection();
+                updateCalendarTitle(result.packageCode, {
+                    program: result.program,
+                    lessons_remaining: result.lessons
+                });
+                loadTimeSlots(result.program);
+            }, 2000);
+            
+        } else {
+            throw new Error(result.error || 'Failed to create package');
+        }
+        
+    } catch (error) {
+        statusDiv.innerHTML = `<span class="text-red-600">Error: ${error.message}</span>`;
+    }
+}
+
+window.closeAdminDialog = function() {
+    const dialog = document.getElementById('quick-admin-dialog');
+    if (dialog) {
+        dialog.remove();
+    }
+    // Show the original options
+    document.getElementById('existing-customer-path').classList.remove('hidden');
+}
+
+// Modified admin dialog for package selection flow
+function showQuickAdminDialogForProgram(adminCode, preselectedProgram) {
+    // Remove any existing dialog
+    const existingDialog = document.getElementById('quick-admin-dialog');
+    if (existingDialog) {
+        existingDialog.remove();
+    }
+    
+    // Create a simple dialog
+    const dialog = document.createElement('div');
+    dialog.id = 'quick-admin-dialog';
+    dialog.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+    dialog.innerHTML = `
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-4">🔑 Admin Mode - Create Free ${preselectedProgram} Package</h3>
+            
+            <div class="bg-green-50 border border-green-200 rounded p-3 mb-4">
+                <p class="text-sm text-green-800">
+                    <strong>Program:</strong> ${preselectedProgram}<br>
+                    <strong>Price:</strong> FREE (Admin Code: ${adminCode})
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Number of Lessons:</label>
+                    <select id="admin-lessons" class="w-full p-2 border rounded">
+                        <option value="1">1 Lesson</option>
+                        <option value="4">4 Lessons</option>
+                        <option value="6" selected>6 Lessons</option>
+                        <option value="8">8 Lessons</option>
+                        <option value="12">12 Lessons</option>
+                        <option value="20">20 Lessons</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Customer Email (optional):</label>
+                    <input type="email" id="admin-email" class="w-full p-2 border rounded" 
+                           placeholder="customer@email.com">
+                </div>
+                
+                <div class="flex gap-2 pt-4">
+                    <button onclick="closeAdminDialog()" 
+                            class="flex-1 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded">
+                        Cancel
+                    </button>
+                    <button onclick="createAdminPackageForProgram('${adminCode}', '${preselectedProgram}')" 
+                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
+                        Create Free Package
+                    </button>
+                </div>
+            </div>
+            
+            <div id="admin-status" class="mt-4 text-sm hidden"></div>
+        </div>
+    `;
+    
+    document.body.appendChild(dialog);
+}
+
+window.createAdminPackageForProgram = async function(adminCode, program) {
+    const lessons = document.getElementById('admin-lessons').value;
+    const email = document.getElementById('admin-email').value;
+    const statusDiv = document.getElementById('admin-status');
+    
+    statusDiv.innerHTML = '<span class="text-blue-600">Creating package...</span>';
+    statusDiv.classList.remove('hidden');
+    
+    try {
+        const response = await fetch('/.netlify/functions/create-admin-package', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                adminCode: adminCode,
+                program: program,
+                lessons: parseInt(lessons),
+                customerEmail: email || null
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            statusDiv.innerHTML = `
+                <div class="bg-green-100 p-3 rounded">
+                    <strong class="text-green-800">✓ Package Created!</strong><br>
+                    <span class="font-mono text-lg">${result.packageCode}</span><br>
+                    <small>Redirecting to calendar...</small>
+                </div>
+            `;
+            
+            // Store the email if provided
+            if (email) {
+                customerEmail = email;
+            }
+            
+            // Auto-proceed to calendar after 2 seconds
+            setTimeout(() => {
+                closeAdminDialog();
+                
+                // Set the package code and proceed
+                enteredPackageCode = result.packageCode;
+                selectedProgram = result.program;
+                
+                // Hide step 2 and show calendar
+                document.getElementById('step-2').classList.add('hidden');
+                showCalendarSection();
+                updateCalendarTitle(result.packageCode, {
+                    program: result.program,
+                    lessons_remaining: result.lessons
+                });
+                loadTimeSlots(result.program);
+            }, 2000);
+            
+        } else {
+            throw new Error(result.error || 'Failed to create package');
+        }
+        
+    } catch (error) {
+        statusDiv.innerHTML = `<span class="text-red-600">Error: ${error.message}</span>`;
     }
 }
 

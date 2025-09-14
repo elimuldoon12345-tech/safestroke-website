@@ -1,4 +1,4 @@
-// SafeStroke Complete Booking System
+// SafeStroke Complete Booking System - FIXED VERSION
 // This replaces the existing booking-logic.js with full functionality
 
 // --- Configuration ---
@@ -253,33 +253,31 @@ function renderPackages() {
     const container = document.getElementById('package-container');
     const pricing = PACKAGE_PRICING[selectedProgram];
     
-    // Add admin/promo code section above packages
+    // Add admin/promo code section above packages with fixed layout
     let html = `
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <div class="flex items-center justify-between">
-                <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        🎟️ Have an Admin or Promo Code?
-                    </label>
-                    <div class="flex gap-2">
-                        <input 
-                            type="text" 
-                            id="package-promo-code" 
-                            placeholder="Enter code (e.g., ADMIN2025, TESTBOOK)"
-                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 uppercase"
-                            onkeyup="this.value = this.value.toUpperCase()"
-                        >
-                        <button 
-                            onclick="applyPackagePromoCode()" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg"
-                        >
-                            Apply
-                        </button>
-                    </div>
-                    <div id="package-promo-message" class="mt-2 text-sm hidden"></div>
-                </div>
+        <div class="col-span-full bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                🎟️ Have an Admin or Promo Code?
+            </label>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input 
+                    type="text" 
+                    id="package-promo-code" 
+                    placeholder="Enter code (e.g., ADMIN2025, TESTBOOK)"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 uppercase text-sm"
+                    onkeyup="this.value = this.value.toUpperCase()"
+                    style="min-width: 0;"
+                >
+                <button 
+                    onclick="applyPackagePromoCode()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg whitespace-nowrap"
+                >
+                    Apply
+                </button>
             </div>
+            <div id="package-promo-message" class="mt-2 text-sm hidden"></div>
         </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     `;
     
     // Build all three cards as a single HTML string
@@ -300,8 +298,8 @@ function renderPackages() {
             <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-500 transition p-4 animate-fade-in" style="animation-delay: ${index * 0.1}s">
                 <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
                 ${badgeHTML}
-                <div class="text-3xl font-bold mt-3 mb-1">${price}</div>
-                <div class="text-sm text-gray-500 mb-3">${perLesson}/lesson</div>
+                <div class="text-3xl font-bold mt-3 mb-1">$${price}</div>
+                <div class="text-sm text-gray-500 mb-3">$${perLesson}/lesson</div>
                 <button onclick="selectPackage(${lessons}, ${price})" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm">
                     Select
@@ -309,6 +307,8 @@ function renderPackages() {
             </div>
         `;
     });
+    
+    html += '</div>'; // Close grid
     
     // Set the complete HTML at once
     container.innerHTML = html;
@@ -1350,17 +1350,17 @@ function updatePackagePricesWithPromo(promo) {
         // Show original price crossed out if there's a discount
         const priceHTML = finalPrice < originalPrice ? 
             `<div class="text-3xl font-bold mt-3 mb-1">
-                <span class="line-through text-gray-400 text-2xl">${originalPrice}</span>
-                <span class="text-green-600">${finalPrice}</span>
+                <span class="line-through text-gray-400 text-2xl">$${originalPrice}</span>
+                <span class="text-green-600">$${finalPrice}</span>
             </div>` :
-            `<div class="text-3xl font-bold mt-3 mb-1">${finalPrice}</div>`;
+            `<div class="text-3xl font-bold mt-3 mb-1">$${finalPrice}</div>`;
         
         html += `
             <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-500 transition p-4 animate-fade-in" style="animation-delay: ${index * 0.1}s">
                 <h4 class="text-xl font-bold mb-2">${lessons} Lessons</h4>
                 ${badgeHTML}
                 ${priceHTML}
-                <div class="text-sm text-gray-500 mb-3">${perLesson}/lesson</div>
+                <div class="text-sm text-gray-500 mb-3">$${perLesson}/lesson</div>
                 <button onclick="selectPackage(${lessons}, ${finalPrice})" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm">
                     Select
