@@ -157,8 +157,9 @@ function initializeStripe() {
 // --- Event Handlers ---
 function handleProgramSelection(event) {
     // Update both local and global selectedProgram
-    selectedProgram = event.currentTarget.dataset.programName;
-    window.selectedProgram = selectedProgram;
+    const programName = event.currentTarget.dataset.programName;
+    selectedProgram = programName;
+    window.selectedProgram = programName;
     console.log('Program selected:', selectedProgram);
     showStep(2);
     renderPackages();
@@ -208,7 +209,9 @@ async function handleScheduleWithCode() {
         }
         
         enteredPackageCode = code;
+        window.enteredPackageCode = code;
         selectedProgram = packageData.program;
+        window.selectedProgram = packageData.program;  // Update global too
         
         // Display package info
         updateCalendarTitle(code, packageData);
@@ -1125,7 +1128,9 @@ function generateCalendarDays(month, slotsByDate) {
 
 window.changeMonth = function(direction) {
     currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + direction);
-    loadTimeSlots(selectedProgram);
+    // FIX: Use the correct program variable
+    const currentProgram = window.selectedProgram || window.singleLessonProgram || selectedProgram || 'Splashlet';
+    loadTimeSlots(currentProgram);
 };
 
 window.showDateSlots = async function(dateStr) {
@@ -1160,7 +1165,21 @@ window.showDateSlots = async function(dateStr) {
     }, 100);
     
     try {
-        const response = await fetch(`/.netlify/functions/get-time-slots?program=${selectedProgram}&date=${dateStr}`);
+        // FIX: Use the correct program variable - check all possible sources
+        const currentProgram = window.selectedProgram || window.singleLessonProgram || selectedProgram || 'Splashlet';
+        
+        console.log('showDateSlots - Program detection:', {
+            windowSelectedProgram: window.selectedProgram,
+            windowSingleLessonProgram: window.singleLessonProgram,
+            localSelectedProgram: selectedProgram,
+            finalProgram: currentProgram
+        });
+        
+        if (!currentProgram) {
+            throw new Error('No program selected');
+        }
+        
+        const response = await fetch(`/.netlify/functions/get-time-slots?program=${currentProgram}&date=${dateStr}`);
         const slots = await response.json();
         
         const availableSlots = slots.filter(s => s.current_enrollment < s.max_capacity);

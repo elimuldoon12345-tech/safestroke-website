@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeStroke - Time Slot Debugger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold text-red-600 mb-8">🚨 Time Slot Emergency Debugger</h1>
+        
+        <!-- Emergency Fix Button -->
+        <div class="bg-red-50 border-2 border-red-500 rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Quick Fix: Initialize All October 2025 Slots</h2>
+            <button id="emergencyInit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded text-lg">
+                🚨 INITIALIZE TIME SLOTS NOW
+            </button>
+            <div id="initStatus" class="mt-4 hidden"></div>
+        </div>
+
+        <!-- Detailed Check -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Detailed Time Slot Check</h2>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Program:</label>
+                    <select id="testProgram" class="w-full border rounded px-3 py-2">
+                        <option value="Droplet">Droplet</option>
+                        <option value="Splashlet" selected>Splashlet</option>
+                        <option value="Strokelet">Strokelet</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Month:</label>
+                    <input type="month" id="testMonth" value="2025-10" class="w-full border rounded px-3 py-2">
+                </div>
+            </div>
+            <button id="detailedCheck" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+                Run Detailed Check
+            </button>
+            <div id="detailedResults" class="mt-4 hidden"></div>
+        </div>
+
+        <!-- Test Specific Date -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Test Specific Date (What User Sees)</h2>
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <select id="dateProgram" class="border rounded px-3 py-2">
+                    <option value="Droplet">Droplet</option>
+                    <option value="Splashlet" selected>Splashlet</option>
+                    <option value="Strokelet">Strokelet</option>
+                </select>
+                <input type="date" id="specificDate" value="2025-10-05" class="border rounded px-3 py-2">
+                <button id="testDate" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Test This Date
+                </button>
+            </div>
+            <div id="dateResults" class="hidden"></div>
+        </div>
+
+        <!-- Console -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Debug Console</h2>
+            <div id="console" class="bg-gray-900 text-green-400 font-mono text-xs p-4 rounded h-64 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const consoleDiv = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? 'text-red-400' : 
+                         type === 'success' ? 'text-green-400' : 
+                         type === 'warning' ? 'text-yellow-400' : 'text-gray-300';
+            consoleDiv.innerHTML += `<div class="${color}">[${timestamp}] ${message}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(`[${type}] ${message}`);
+        }
+
+        // Emergency Initialize
+        document.getElementById('emergencyInit').addEventListener('click', async () => {
+            const button = document.getElementById('emergencyInit');
+            const status = document.getElementById('initStatus');
+            
+            button.disabled = true;
+            button.textContent = 'Initializing...';
+            status.classList.remove('hidden');
+            status.innerHTML = '<div class="text-blue-600">Creating time slots for October 2025...</div>';
+            
+            log('Starting emergency initialization...', 'warning');
+            
+            try {
+                const response = await fetch('/.netlify/functions/init-october-slots', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    status.innerHTML = `
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                            ✅ SUCCESS! Created ${data.slotsCreated || 'multiple'} time slots
+                            <br>Dates: ${data.dates ? data.dates.slice(0, 5).join(', ') + '...' : 'October 2025'}
+                        </div>
+                    `;
+                    log(`Success: ${data.message}`, 'success');
+                } else {
+                    status.innerHTML = `
+                        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+                            ${data.message || 'Slots may already exist'}
+                        </div>
+                    `;
+                    log(data.message, 'warning');
+                }
+            } catch (error) {
+                status.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+                log(`Error: ${error.message}`, 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = '🚨 INITIALIZE TIME SLOTS NOW';
+            }
+        });
+
+        // Detailed Check
+        document.getElementById('detailedCheck').addEventListener('click', async () => {
+            const program = document.getElementById('testProgram').value;
+            const month = document.getElementById('testMonth').value;
+            const results = document.getElementById('detailedResults');
+            
+            log(`Checking ${program} for ${month}...`, 'info');
+            results.classList.remove('hidden');
+            results.innerHTML = '<div class="text-gray-600">Loading...</div>';
+            
+            try {
+                // Get all slots for the month
+                const response = await fetch(`/.netlify/functions/get-time-slots?program=${program}&month=${month}-01`);
+                const slots = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(slots.error || 'Failed to fetch slots');
+                }
+                
+                // Group by date
+                const byDate = {};
+                slots.forEach(slot => {
+                    const date = slot.date.split('T')[0];
+                    if (!byDate[date]) byDate[date] = [];
+                    byDate[date].push(slot);
+                });
+                
+                // Create detailed report
+                let html = `
+                    <div class="bg-blue-50 border border-blue-200 rounded p-4">
+                        <p class="font-bold mb-2">Results for ${program} in ${month}:</p>
+                        <p>Total slots: ${slots.length}</p>
+                        <p>Unique dates: ${Object.keys(byDate).length}</p>
+                `;
+                
+                if (Object.keys(byDate).length > 0) {
+                    html += '<p class="mt-2 font-semibold">Dates with slots:</p><ul class="text-sm">';
+                    Object.keys(byDate).sort().forEach(date => {
+                        const dateSlots = byDate[date];
+                        const available = dateSlots.filter(s => s.current_enrollment < s.max_capacity).length;
+                        html += `<li>• ${date}: ${available}/${dateSlots.length} available</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<p class="text-red-600 font-bold mt-2">NO SLOTS FOUND!</p>';
+                }
+                
+                html += '</div>';
+                results.innerHTML = html;
+                
+                log(`Found ${slots.length} total slots across ${Object.keys(byDate).length} dates`, 
+                    slots.length > 0 ? 'success' : 'error');
+                
+            } catch (error) {
+                results.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        Error: ${error.message}
+                    </div>
+                `;
+                log(`Check failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Test Specific Date
+        document.getElementById('testDate').addEventListener('click', async () => {
+            const program = document.getElementById('dateProgram').value;
+            const date = document.getElementById('specificDate').value;
+            const results = document.getElementById('dateResults');
+            
+            log(`Testing ${program} on ${date}...`, 'info');
+            results.classList.remove('hidden');
+            results.innerHTML = '<div class="text-gray-600">Loading...</div>';
+            
+            try {
+                const response = await fetch(`/.netlify/functions/get-time-slots?program=${program}&date=${date}`);
+                const slots = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(slots.error || 'Failed to fetch slots');
+                }
+                
+                const available = slots.filter(s => s.current_enrollment < s.max_capacity);
+                
+                let html = `
+                    <div class="${available.length > 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border rounded p-4">
+                        <p class="font-bold mb-2">${date} - ${program}:</p>
+                        <p>Total slots: ${slots.length}</p>
+                        <p>Available slots: ${available.length}</p>
+                `;
+                
+                if (available.length > 0) {
+                    html += '<p class="mt-2 font-semibold">Available times:</p><div class="grid grid-cols-2 gap-2 mt-2">';
+                    available.forEach(slot => {
+                        const spaces = slot.max_capacity - slot.current_enrollment;
+                        html += `
+                            <div class="bg-white p-2 rounded border text-sm">
+                                ${slot.start_time} - ${slot.end_time}
+                                <span class="text-green-600">(${spaces} spaces)</span>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                } else if (slots.length > 0) {
+                    html += '<p class="text-red-600 font-bold mt-2">All slots are FULL</p>';
+                } else {
+                    html += '<p class="text-red-600 font-bold mt-2">NO SLOTS EXIST for this date!</p>';
+                }
+                
+                html += '</div>';
+                results.innerHTML = html;
+                
+                log(`Date ${date}: ${available.length}/${slots.length} available`, 
+                    available.length > 0 ? 'success' : 'warning');
+                
+            } catch (error) {
+                results.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        Error: ${error.message}
+                    </div>
+                `;
+                log(`Test failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Initial log
+        log('Time Slot Debugger Ready', 'success');
+        log('Click "INITIALIZE TIME SLOTS NOW" if you haven\'t already!', 'warning');
+    </script>
+</body>
+</html>
