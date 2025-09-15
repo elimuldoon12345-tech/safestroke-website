@@ -248,6 +248,7 @@ window.showStep = function showStep(stepNumber) {
 
 // Make this function globally available
 window.updateStepIndicators = function updateStepIndicators(activeStep) {
+    // Try both methods - IDs first (for future compatibility), then classes
     for (let i = 1; i <= 4; i++) {
         const indicator = document.getElementById(`step-${i}-indicator`);
         if (indicator) {
@@ -262,6 +263,50 @@ window.updateStepIndicators = function updateStepIndicators(activeStep) {
             }
         }
     }
+    
+    // Also update using class-based selectors for current HTML structure
+    const stepperItems = document.querySelectorAll('.stepper-item');
+    stepperItems.forEach((item, index) => {
+        const stepNum = index + 1;
+        const numberDiv = item.querySelector('.stepper-number');
+        
+        // Remove all state classes
+        item.classList.remove('active', 'completed');
+        if (numberDiv) {
+            numberDiv.classList.remove('bg-blue-500', 'bg-green-500', 'bg-gray-200', 'text-white', 'text-gray-600');
+        }
+        
+        // Add appropriate classes based on step position
+        if (stepNum < Math.floor(activeStep)) {
+            item.classList.add('completed');
+            if (numberDiv) {
+                numberDiv.classList.add('bg-green-500', 'text-white');
+                // Clear number and add checkmark
+                if (!numberDiv.querySelector('.checkmark')) {
+                    const originalContent = numberDiv.textContent;
+                    numberDiv.innerHTML = '<span class="checkmark">✓</span>';
+                    numberDiv.dataset.originalNumber = originalContent;
+                }
+            }
+        } else if (stepNum === Math.floor(activeStep)) {
+            item.classList.add('active');
+            if (numberDiv) {
+                numberDiv.classList.add('bg-blue-500', 'text-white');
+                // Restore original number if it was a checkmark
+                if (numberDiv.dataset.originalNumber && numberDiv.querySelector('.checkmark')) {
+                    numberDiv.textContent = numberDiv.dataset.originalNumber;
+                }
+            }
+        } else {
+            if (numberDiv) {
+                numberDiv.classList.add('bg-gray-200', 'text-gray-600');
+                // Restore original number if it was a checkmark
+                if (numberDiv.dataset.originalNumber && numberDiv.querySelector('.checkmark')) {
+                    numberDiv.textContent = numberDiv.dataset.originalNumber;
+                }
+            }
+        }
+    });
 }
 
 // Make this function globally available
@@ -803,15 +848,53 @@ window.showCalendarSection = function showCalendarSection() {
 }
 
 window.updateCalendarLoading = function updateCalendarLoading(message) {
-    const loadingDiv = document.getElementById('calendar-loading');
+    let loadingDiv = document.getElementById('calendar-loading');
+    
+    // Create loading div if it doesn't exist (for single lesson flow)
+    if (!loadingDiv) {
+        const calendarSection = document.getElementById('calendar-section');
+        if (calendarSection) {
+            loadingDiv = document.createElement('div');
+            loadingDiv.id = 'calendar-loading';
+            loadingDiv.className = 'text-center py-8';
+            loadingDiv.innerHTML = `
+                <div class="spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading...</p>
+            `;
+            // Insert at the beginning of calendar section
+            calendarSection.insertBefore(loadingDiv, calendarSection.firstChild);
+        }
+    }
+    
     if (loadingDiv) {
-        loadingDiv.innerHTML = `<p class="text-lg text-gray-600">${message}</p>`;
+        loadingDiv.innerHTML = `
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-lg text-gray-600">${message}</p>
+        `;
         loadingDiv.classList.remove('hidden');
     }
 }
 
 window.updateCalendarTitle = function updateCalendarTitle(code, packageData) {
-    const titleEl = document.getElementById('calendar-title');
+    let titleEl = document.getElementById('calendar-title');
+    
+    // Create title element if it doesn't exist (for single lesson flow)
+    if (!titleEl) {
+        const calendarSection = document.getElementById('calendar-section');
+        if (calendarSection) {
+            titleEl = document.createElement('div');
+            titleEl.id = 'calendar-title';
+            titleEl.className = 'mb-6';
+            // Insert after loading div or at the beginning
+            const loadingDiv = document.getElementById('calendar-loading');
+            if (loadingDiv && loadingDiv.nextSibling) {
+                calendarSection.insertBefore(titleEl, loadingDiv.nextSibling);
+            } else {
+                calendarSection.insertBefore(titleEl, calendarSection.firstChild);
+            }
+        }
+    }
+    
     if (titleEl) {
         titleEl.innerHTML = `
             <div class="text-center">
@@ -864,21 +947,54 @@ window.loadTimeSlots = async function loadTimeSlots(program) {
         
     } catch (error) {
         console.error('Failed to load time slots:', error);
-        document.getElementById('calendar-container').innerHTML = `
-            <div class="text-center text-red-600 p-8">
-                <p>Failed to load available times. Please try again.</p>
-            </div>
-        `;
-        document.getElementById('calendar-container').classList.remove('hidden');
-        document.getElementById('calendar-loading').classList.add('hidden');
+        
+        // Create or get calendar container
+        let container = document.getElementById('calendar-container');
+        if (!container) {
+            const calendarSection = document.getElementById('calendar-section');
+            if (calendarSection) {
+                container = document.createElement('div');
+                container.id = 'calendar-container';
+                calendarSection.appendChild(container);
+            }
+        }
+        
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center text-red-600 p-8">
+                    <p>Failed to load available times. Please try again.</p>
+                </div>
+            `;
+            container.classList.remove('hidden');
+        }
+        
+        // Hide loading div if it exists
+        const loadingDiv = document.getElementById('calendar-loading');
+        if (loadingDiv) {
+            loadingDiv.classList.add('hidden');
+        }
     }
 }
 
 function renderCalendar(timeSlots) {
-    const container = document.getElementById('calendar-container');
-    const loadingDiv = document.getElementById('calendar-loading');
+    let container = document.getElementById('calendar-container');
+    let loadingDiv = document.getElementById('calendar-loading');
     
-    loadingDiv.classList.add('hidden');
+    // Create calendar container if it doesn't exist (for single lesson flow)
+    if (!container) {
+        const calendarSection = document.getElementById('calendar-section');
+        if (calendarSection) {
+            container = document.createElement('div');
+            container.id = 'calendar-container';
+            container.className = 'hidden';
+            calendarSection.appendChild(container);
+        }
+    }
+    
+    // Hide loading div if it exists
+    if (loadingDiv) {
+        loadingDiv.classList.add('hidden');
+    }
     
     // Group time slots by date
     const slotsByDate = {};
@@ -1875,7 +1991,20 @@ window.proceedToSingleLessonCalendar = function proceedToSingleLessonCalendar() 
     }
     
     // Update title for single lesson
-    const titleEl = document.getElementById('calendar-title');
+    let titleEl = document.getElementById('calendar-title');
+    
+    // Create title element if it doesn't exist
+    if (!titleEl) {
+        const calendarSection = document.getElementById('calendar-section');
+        if (calendarSection) {
+            titleEl = document.createElement('div');
+            titleEl.id = 'calendar-title';
+            titleEl.className = 'mb-6';
+            // Insert at the beginning of calendar section
+            calendarSection.insertBefore(titleEl, calendarSection.firstChild);
+        }
+    }
+    
     if (titleEl) {
         titleEl.innerHTML = `
             <div class="text-center">
