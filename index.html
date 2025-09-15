@@ -710,34 +710,41 @@
                                 <img src="safestroke-images/strokelet-shield.png" alt="Strokelet Shield" class="w-12 h-12 object-contain flex-shrink-0">
                             </div>
                             
-                            <!-- Deep Water Safety Note -->
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                                <div class="flex items-start gap-2">
-                                    <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <!-- Deep Water Safety Note (Elevated as bordered callout) -->
+                            <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-4 mb-4 shadow-sm">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-6 h-6 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                                     </svg>
-                                    <p class="text-xs text-blue-800">
-                                        <strong>Deep Water Safety:</strong> Both levels include jump-turn-swim skills and floating techniques essential for unexpected deep water situations.
-                                    </p>
+                                    <div>
+                                        <p class="text-sm font-bold text-blue-900 mb-1">Deep Water Safety Focus</p>
+                                        <p class="text-xs text-blue-800">
+                                            Both levels include jump-turn-swim skills and floating techniques essential for unexpected deep water situations.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <!-- Level Tabs -->
-                            <div role="tablist" class="flex border-b border-gray-200 mb-4">
+                            <!-- Level Tabs (Accessible) -->
+                            <div role="tablist" class="flex border-b border-gray-200 mb-4" aria-label="Strokelet levels">
                                 <button role="tab" 
                                         aria-selected="true" 
                                         aria-controls="level1-panel"
                                         id="level1-tab"
+                                        tabindex="0"
                                         class="level-tab px-4 py-2 text-sm font-medium text-[#2284B8] border-b-2 border-[#2284B8] focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                                        onclick="switchLevel('level1')">
+                                        onclick="switchLevel('level1')" 
+                                        onkeydown="handleTabKeydown(event, 'level1')">
                                     Level 1
                                 </button>
                                 <button role="tab" 
                                         aria-selected="false" 
                                         aria-controls="level2-panel"
                                         id="level2-tab"
+                                        tabindex="-1"
                                         class="level-tab px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                                        onclick="switchLevel('level2')">
+                                        onclick="switchLevel('level2')"
+                                        onkeydown="handleTabKeydown(event, 'level2')">
                                     Level 2
                                 </button>
                             </div>
@@ -1364,6 +1371,51 @@
                 });
             });
         })();
+        </script>
+        
+        <!-- Tab switching for Programs section -->
+        <script>
+        // Programs Strokelet Level Switcher with Accessibility
+        function switchLevel(level) {
+            const level1Panel = document.getElementById('level1-panel');
+            const level2Panel = document.getElementById('level2-panel');
+            const level1Tab = document.getElementById('level1-tab');
+            const level2Tab = document.getElementById('level2-tab');
+            
+            if (level === 'level1') {
+                level1Panel.classList.remove('hidden');
+                level2Panel.classList.add('hidden');
+                level1Tab.classList.add('text-[#2284B8]', 'border-[#2284B8]', 'border-b-2');
+                level1Tab.classList.remove('text-gray-600');
+                level1Tab.setAttribute('aria-selected', 'true');
+                level1Tab.setAttribute('tabindex', '0');
+                level2Tab.classList.remove('text-[#2284B8]', 'border-[#2284B8]', 'border-b-2');
+                level2Tab.classList.add('text-gray-600');
+                level2Tab.setAttribute('aria-selected', 'false');
+                level2Tab.setAttribute('tabindex', '-1');
+            } else {
+                level2Panel.classList.remove('hidden');
+                level1Panel.classList.add('hidden');
+                level2Tab.classList.add('text-[#2284B8]', 'border-[#2284B8]', 'border-b-2');
+                level2Tab.classList.remove('text-gray-600');
+                level2Tab.setAttribute('aria-selected', 'true');
+                level2Tab.setAttribute('tabindex', '0');
+                level1Tab.classList.remove('text-[#2284B8]', 'border-[#2284B8]', 'border-b-2');
+                level1Tab.classList.add('text-gray-600');
+                level1Tab.setAttribute('aria-selected', 'false');
+                level1Tab.setAttribute('tabindex', '-1');
+            }
+        }
+        
+        // Keyboard navigation for tabs
+        function handleTabKeydown(event, currentLevel) {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                const newLevel = currentLevel === 'level1' ? 'level2' : 'level1';
+                switchLevel(newLevel);
+                document.getElementById(newLevel + '-tab').focus();
+            }
+        }
         </script>
     </main>
 
