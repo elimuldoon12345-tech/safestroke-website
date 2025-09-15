@@ -632,47 +632,170 @@
         </section>
 
         <!-- Reviews Section -->
-        <section class="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 py-24 text-white relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
-                <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
+        <section class="dark-section py-24 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20">
+                <div class="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl"></div>
+                <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl"></div>
             </div>
-            <div class="container mx-auto px-6 text-center relative z-10">
-                <h2 class="text-4xl font-black mb-4">Real Parents. Real Results.</h2>
-                <div class="flex justify-center items-center gap-4 mb-12">
-                    <div class="flex">
-                        <span class="text-yellow-400 text-2xl">★★★★★</span>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-black mb-4 text-white">Real Parents. Real Results.</h2>
+                    <div class="flex justify-center items-center gap-4">
+                        <div class="flex">
+                            <span class="text-yellow-400 text-2xl">★★★★★</span>
+                        </div>
+                        <p class="text-lg text-white">5.0 Average • 134+ Reviews</p>
+                        <a href="https://g.page/r/safestroke/review" class="text-blue-300 hover:text-blue-200 underline text-sm">View on Google</a>
                     </div>
-                    <p class="text-lg">5.0 Average</p>
-                    <a href="https://g.page/r/safestroke/review" class="text-white/80 hover:text-white underline text-sm">View on Google</a>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <!-- Review 1 -->
-                    <div class="review-card p-8 text-left">
-                        <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
-                        <p class="mb-6 italic opacity-95">"I've used other swim instructors and these guys are by far the best. The progress we saw and methods they used blew the others out of the water. Our toddlers thrived with their swimming capabilities after just one lesson. I couldn't recommend them more. 10/10"</p>
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-white/30 to-white/10 rounded-full"></div>
-                            <div>
-                                <p class="font-bold">Jamie B.</p>
-                                <p class="text-sm opacity-80">Parent of 2 • Verified</p>
+                
+                <!-- Reviews Carousel Container -->
+                <div class="relative max-w-6xl mx-auto">
+                    <!-- Navigation Buttons -->
+                    <button id="prevReview" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full p-3 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <button id="nextReview" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white rounded-full p-3 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    
+                    <!-- Reviews Wrapper -->
+                    <div class="overflow-hidden">
+                        <div id="reviewsContainer" class="flex transition-transform duration-500 ease-in-out">
+                            <!-- Review 1 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"I've used other swim instructors and these guys are by far the best. The progress we saw and methods they used blew the others out of the water. Our toddlers thrived with their swimming capabilities after just one lesson. I couldn't recommend them more. 10/10"</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">JB</div>
+                                        <div>
+                                            <p class="font-bold text-white">Jamie B.</p>
+                                            <p class="text-sm text-white/70">Parent of 2 • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 2 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"My 6yo made more progress in a few sessions than months at another swim school. Dave is professional and an excellent teacher. The small group size made all the difference!"</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">DW</div>
+                                        <div>
+                                            <p class="font-bold text-white">Daniella W.</p>
+                                            <p class="text-sm text-white/70">Parent • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 3 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"Dave and his team are amazing! My daughter went from being terrified of the water to swimming independently in just 8 lessons. The patience and expertise they show is incredible."</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">SR</div>
+                                        <div>
+                                            <p class="font-bold text-white">Sarah R.</p>
+                                            <p class="text-sm text-white/70">Parent • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 4 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"Best swim school in North Jersey! The instructors are patient, knowledgeable, and truly care about each child's progress. My son looks forward to every lesson!"</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">MK</div>
+                                        <div>
+                                            <p class="font-bold text-white">Michael K.</p>
+                                            <p class="text-sm text-white/70">Parent • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 5 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"We tried 3 other swim schools before finding SafeStroke. The difference is night and day! Small classes, amazing instructors, and real results. Worth every penny!"</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">LP</div>
+                                        <div>
+                                            <p class="font-bold text-white">Lisa P.</p>
+                                            <p class="text-sm text-white/70">Parent of 3 • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 6 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"My toddler absolutely loves swim class! The Droplet program is perfect for little ones. The instructors make it fun while teaching important water safety skills."</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">AM</div>
+                                        <div>
+                                            <p class="font-bold text-white">Amanda M.</p>
+                                            <p class="text-sm text-white/70">Parent • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 7 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"Professional, patient, and passionate about teaching kids to swim. Our daughter went from crying at the pool to jumping in with confidence. Thank you SafeStroke!"</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">JT</div>
+                                        <div>
+                                            <p class="font-bold text-white">Jennifer T.</p>
+                                            <p class="text-sm text-white/70">Parent • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Review 8 -->
+                            <div class="w-full md:w-1/2 flex-shrink-0 px-4">
+                                <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full">
+                                    <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
+                                    <p class="mb-6 italic text-white/90">"The 12-lesson program really works! My son graduated being truly water-safe. The structured approach and small class sizes make all the difference."</p>
+                                    <div class="flex items-center gap-3 mt-auto">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center text-white font-bold">RG</div>
+                                        <div>
+                                            <p class="font-bold text-white">Robert G.</p>
+                                            <p class="text-sm text-white/70">Parent • Verified</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Review 2 -->
-                    <div class="review-card p-8 text-left">
-                        <p class="text-yellow-400 text-2xl mb-4">★★★★★</p>
-                        <p class="mb-6 italic opacity-95">"My 6yo made more progress in a few sessions than months at another swim school. Dave is professional and an excellent teacher. The small group size made all the difference!"</p>
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-white/30 to-white/10 rounded-full"></div>
-                            <div>
-                                <p class="font-bold">Daniella W.</p>
-                                <p class="text-sm opacity-80">Parent • Verified</p>
-                            </div>
-                        </div>
+                    
+                    <!-- Dots Indicator -->
+                    <div class="flex justify-center gap-2 mt-8">
+                        <button class="review-dot w-2 h-2 rounded-full bg-white/50 transition-all" data-slide="0"></button>
+                        <button class="review-dot w-2 h-2 rounded-full bg-white/20 transition-all" data-slide="1"></button>
+                        <button class="review-dot w-2 h-2 rounded-full bg-white/20 transition-all" data-slide="2"></button>
+                        <button class="review-dot w-2 h-2 rounded-full bg-white/20 transition-all" data-slide="3"></button>
                     </div>
                 </div>
-                <a href="safestroke-reviews.html" class="mt-12 inline-block bg-white text-blue-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105">Read All Reviews →</a>
+                
+                <div class="text-center mt-12">
+                    <a href="safestroke-reviews.html" class="inline-block bg-white text-[#00253D] hover:bg-blue-50 font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105">Read All Reviews →</a>
+                </div>
             </div>
         </section>
         
@@ -793,6 +916,150 @@
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
+        
+        // Reviews Carousel Functionality
+        (function() {
+            const reviewsContainer = document.getElementById('reviewsContainer');
+            const prevButton = document.getElementById('prevReview');
+            const nextButton = document.getElementById('nextReview');
+            const dots = document.querySelectorAll('.review-dot');
+            
+            let currentSlide = 0;
+            const totalReviews = 8;
+            const reviewsPerView = window.innerWidth >= 768 ? 2 : 1; // Show 2 on desktop, 1 on mobile
+            const totalSlides = Math.ceil(totalReviews / reviewsPerView);
+            
+            function updateCarousel() {
+                const slideWidth = reviewsPerView === 2 ? 50 : 100;
+                const translateX = -currentSlide * slideWidth;
+                reviewsContainer.style.transform = `translateX(${translateX}%)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    if (index < totalSlides) {
+                        dot.style.display = 'block';
+                        if (index === currentSlide) {
+                            dot.classList.remove('bg-white/20');
+                            dot.classList.add('bg-white/50', 'w-8');
+                        } else {
+                            dot.classList.remove('bg-white/50', 'w-8');
+                            dot.classList.add('bg-white/20');
+                        }
+                    } else {
+                        dot.style.display = 'none';
+                    }
+                });
+                
+                // Update button states
+                prevButton.style.opacity = currentSlide === 0 ? '0.5' : '1';
+                nextButton.style.opacity = currentSlide === totalSlides - 1 ? '0.5' : '1';
+            }
+            
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    updateCarousel();
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateCarousel();
+                }
+            }
+            
+            function goToSlide(slideIndex) {
+                currentSlide = slideIndex;
+                updateCarousel();
+            }
+            
+            // Event listeners
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', prevSlide);
+                nextButton.addEventListener('click', nextSlide);
+            }
+            
+            // Dot navigation
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    if (index < totalSlides) {
+                        goToSlide(index);
+                    }
+                });
+            });
+            
+            // Auto-play carousel
+            let autoPlayInterval = setInterval(() => {
+                if (currentSlide < totalSlides - 1) {
+                    nextSlide();
+                } else {
+                    currentSlide = 0;
+                    updateCarousel();
+                }
+            }, 5000); // Change slide every 5 seconds
+            
+            // Pause auto-play on hover
+            const carouselContainer = reviewsContainer.parentElement.parentElement;
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', () => {
+                    clearInterval(autoPlayInterval);
+                });
+                
+                carouselContainer.addEventListener('mouseleave', () => {
+                    autoPlayInterval = setInterval(() => {
+                        if (currentSlide < totalSlides - 1) {
+                            nextSlide();
+                        } else {
+                            currentSlide = 0;
+                            updateCarousel();
+                        }
+                    }, 5000);
+                });
+            }
+            
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const newReviewsPerView = window.innerWidth >= 768 ? 2 : 1;
+                    if (newReviewsPerView !== reviewsPerView) {
+                        location.reload(); // Simple reload for responsive change
+                    }
+                }, 250);
+            });
+            
+            // Initialize
+            updateCarousel();
+        })();
+        
+        // Smooth scroll for mobile reviews on touch
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        if (reviewsContainer && 'ontouchstart' in window) {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            reviewsContainer.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            reviewsContainer.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    // Swipe left - next slide
+                    document.getElementById('nextReview').click();
+                }
+                if (touchEndX > touchStartX + 50) {
+                    // Swipe right - previous slide  
+                    document.getElementById('prevReview').click();
+                }
+            }
+        }
         
         // Meta Pixel Event Tracking
         // Track Book Now button clicks
