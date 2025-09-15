@@ -1565,7 +1565,9 @@ window.bookAnotherLesson = function() {
     }
 };
 
-// New functions for separated single lesson and package flows
+// COMMENTED OUT - These functions are now properly defined in booking-functions-fix.js
+// The functions below were causing conflicts by looking for elements that don't exist
+/*
 window.startSingleLessonFlow = function() {
     // Hide the option selection
     document.getElementById('new-customer-path').classList.add('hidden');
@@ -1601,7 +1603,10 @@ window.backToOptions = function() {
     appliedPromoCode = null;
     bookingMode = null;
 };
+*/
 
+// COMMENTED OUT - These functions are defined in booking-functions-fix.js
+/*
 window.selectSingleLessonProgram = function(program) {
     singleLessonProgram = program;
     singleLessonPrice = PACKAGE_PRICING[program][1];
@@ -1611,7 +1616,7 @@ window.selectSingleLessonProgram = function(program) {
         singleLessonPrice = singleLessonPrice * (1 - appliedPromoCode.discount / 100);
     }
     
-    // ✅ FIXED: Track single lesson selection for Meta Pixel
+    // Track single lesson selection for Meta Pixel
     if (typeof window.trackSingleLessonSelection === 'function') {
         window.trackSingleLessonSelection(program, singleLessonPrice);
     }
@@ -1659,7 +1664,7 @@ window.applySingleLessonPromo = function() {
     
     appliedPromoCode = { code, ...promo };
     
-    // ✅ FIXED: Track promo code application for Meta Pixel
+    // Track promo code application for Meta Pixel
     if (typeof window.trackPromoCode === 'function') {
         window.trackPromoCode(code, 'single_lesson');
     }
@@ -1677,6 +1682,7 @@ window.applySingleLessonPromo = function() {
     
     promoMessage.classList.remove('hidden');
 };
+*/
 
 function updatePriceDisplaysForFree() {
     // Update Droplet price with crossed-out original price
