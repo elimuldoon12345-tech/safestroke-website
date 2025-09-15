@@ -502,22 +502,278 @@ window.selectSingleLessonProgram = function(program) {
         window.trackSingleLessonSelection(program, price);
     }
     
-    // If free lesson, create free package and go to calendar
-    if (price === 0) {
-        console.log('Free lesson detected, creating free package...');
-        if (typeof handleFreeSingleLesson === 'function') {
-            handleFreeSingleLesson();
-        } else {
-            // Call the function directly if it exists in the global scope
-            console.log('Calling handleFreeSingleLesson directly');
-            window.handleFreeSingleLesson();
+    // Set the selected program globally for calendar
+    window.selectedProgram = program;
+    
+    // Always go to calendar for time selection (whether free or paid)
+    console.log(`Proceeding to calendar with ${price === 0 ? 'FREE' : '
+};
+
+window.applySingleLessonPromo = function() {
+    const promoInput = document.getElementById('single-promo-input');
+    const promoMessage = document.getElementById('single-promo-message');
+    
+    if (!promoInput || !promoMessage) return;
+    
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        promoMessage.textContent = 'Please enter a promo code';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        return;
+    }
+    
+    // Define PROMO_CODES locally if not available
+    const PROMO_CODES = window.PROMO_CODES || {
+        'FIRST-FREE': {
+            type: 'single_lesson',
+            discount: 100,
+            description: 'First lesson free',
+            validPrograms: ['Droplet', 'Splashlet', 'Strokelet']
+        }
+    };
+    
+    const promo = PROMO_CODES[code];
+    
+    if (!promo) {
+        promoMessage.textContent = 'Invalid promo code';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        window.appliedPromoCode = null;
+        if (typeof resetPriceDisplays === 'function') resetPriceDisplays();
+        return;
+    }
+    
+    if (promo.type !== 'single_lesson') {
+        promoMessage.textContent = 'This code is only valid for packages, not single lessons';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        window.appliedPromoCode = null;
+        if (typeof resetPriceDisplays === 'function') resetPriceDisplays();
+        return;
+    }
+    
+    // Set the promo code globally so it's accessible everywhere
+    window.appliedPromoCode = { code, ...promo };
+    console.log('Promo code applied:', window.appliedPromoCode);
+    
+    // Track promo code application
+    if (typeof window.trackPromoCode === 'function') {
+        window.trackPromoCode(code, 'single_lesson');
+    }
+    
+    if (promo.discount === 100) {
+        promoMessage.innerHTML = `✅ <strong>${promo.description}</strong> applied! Select a program to continue.`;
+        promoMessage.className = 'text-sm text-green-600 font-semibold';
+        
+        // Update all price displays to show FREE
+        if (typeof updatePriceDisplaysForFree === 'function') {
+            updatePriceDisplaysForFree();
+        } else if (typeof window.updatePriceDisplaysForFree === 'function') {
+            window.updatePriceDisplaysForFree();
         }
     } else {
-        // Go to calendar for time selection
-        if (typeof proceedToSingleLessonCalendar === 'function') {
-            proceedToSingleLessonCalendar();
-        } else {
-            console.log('proceedToSingleLessonCalendar not found');
+        promoMessage.innerHTML = `✅ <strong>${promo.discount}% off</strong> applied!`;
+        promoMessage.className = 'text-sm text-green-600 font-semibold';
+    }
+    
+    promoMessage.classList.remove('hidden');
+};
+
+// Ensure this function is available globally
+window.updatePriceDisplaysForFree = function updatePriceDisplaysForFree() {
+    // Update Droplet price
+    const dropletPrice = document.getElementById('droplet-price');
+    if (dropletPrice) {
+        dropletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$30</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+    
+    // Update Splashlet price
+    const splashletPrice = document.getElementById('splashlet-price');
+    if (splashletPrice) {
+        splashletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$40</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+    
+    // Update Strokelet price
+    const strokeletPrice = document.getElementById('strokelet-price');
+    if (strokeletPrice) {
+        strokeletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$45</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+}
+
+console.log('Booking functions fix loaded - all functions ready');
+ + price} lesson`);
+    
+    if (typeof window.proceedToSingleLessonCalendar === 'function') {
+        window.proceedToSingleLessonCalendar();
+    } else {
+        // Fallback: directly show calendar
+        const singleLessonFlow = document.getElementById('single-lesson-flow');
+        if (singleLessonFlow) {
+            singleLessonFlow.classList.add('hidden');
+        }
+        
+        const calendarSection = document.getElementById('calendar-section');
+        if (calendarSection) {
+            calendarSection.classList.remove('hidden');
+            
+            // Update title
+            let titleEl = document.getElementById('calendar-title');
+            if (!titleEl) {
+                titleEl = document.createElement('div');
+                titleEl.id = 'calendar-title';
+                titleEl.className = 'mb-6';
+                calendarSection.insertBefore(titleEl, calendarSection.firstChild);
+            }
+            
+            titleEl.innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold mb-2">Select Your Lesson Time</h2>
+                    <div class="flex items-center justify-center gap-4 text-sm">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">${program}</span>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - ${price === 0 ? 'FREE' : '
+};
+
+window.applySingleLessonPromo = function() {
+    const promoInput = document.getElementById('single-promo-input');
+    const promoMessage = document.getElementById('single-promo-message');
+    
+    if (!promoInput || !promoMessage) return;
+    
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        promoMessage.textContent = 'Please enter a promo code';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        return;
+    }
+    
+    // Define PROMO_CODES locally if not available
+    const PROMO_CODES = window.PROMO_CODES || {
+        'FIRST-FREE': {
+            type: 'single_lesson',
+            discount: 100,
+            description: 'First lesson free',
+            validPrograms: ['Droplet', 'Splashlet', 'Strokelet']
+        }
+    };
+    
+    const promo = PROMO_CODES[code];
+    
+    if (!promo) {
+        promoMessage.textContent = 'Invalid promo code';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        window.appliedPromoCode = null;
+        if (typeof resetPriceDisplays === 'function') resetPriceDisplays();
+        return;
+    }
+    
+    if (promo.type !== 'single_lesson') {
+        promoMessage.textContent = 'This code is only valid for packages, not single lessons';
+        promoMessage.className = 'text-sm text-red-600';
+        promoMessage.classList.remove('hidden');
+        window.appliedPromoCode = null;
+        if (typeof resetPriceDisplays === 'function') resetPriceDisplays();
+        return;
+    }
+    
+    // Set the promo code globally so it's accessible everywhere
+    window.appliedPromoCode = { code, ...promo };
+    console.log('Promo code applied:', window.appliedPromoCode);
+    
+    // Track promo code application
+    if (typeof window.trackPromoCode === 'function') {
+        window.trackPromoCode(code, 'single_lesson');
+    }
+    
+    if (promo.discount === 100) {
+        promoMessage.innerHTML = `✅ <strong>${promo.description}</strong> applied! Select a program to continue.`;
+        promoMessage.className = 'text-sm text-green-600 font-semibold';
+        
+        // Update all price displays to show FREE
+        if (typeof updatePriceDisplaysForFree === 'function') {
+            updatePriceDisplaysForFree();
+        } else if (typeof window.updatePriceDisplaysForFree === 'function') {
+            window.updatePriceDisplaysForFree();
+        }
+    } else {
+        promoMessage.innerHTML = `✅ <strong>${promo.discount}% off</strong> applied!`;
+        promoMessage.className = 'text-sm text-green-600 font-semibold';
+    }
+    
+    promoMessage.classList.remove('hidden');
+};
+
+// Ensure this function is available globally
+window.updatePriceDisplaysForFree = function updatePriceDisplaysForFree() {
+    // Update Droplet price
+    const dropletPrice = document.getElementById('droplet-price');
+    if (dropletPrice) {
+        dropletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$30</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+    
+    // Update Splashlet price
+    const splashletPrice = document.getElementById('splashlet-price');
+    if (splashletPrice) {
+        splashletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$40</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+    
+    // Update Strokelet price
+    const strokeletPrice = document.getElementById('strokelet-price');
+    if (strokeletPrice) {
+        strokeletPrice.innerHTML = `
+            <p class="text-2xl font-bold">
+                <span class="line-through text-gray-400">$45</span>
+                <span class="text-green-600 ml-2">FREE</span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold">First lesson free!</p>
+        `;
+    }
+}
+
+console.log('Booking functions fix loaded - all functions ready');
+ + price}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Load time slots
+            if (typeof window.loadTimeSlots === 'function') {
+                window.loadTimeSlots(program);
+            }
         }
     }
 };

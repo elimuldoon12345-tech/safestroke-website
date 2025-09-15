@@ -1330,6 +1330,50 @@ async function handleBookingSubmit(event) {
     submitButton.textContent = 'Booking...';
     
     const formData = new FormData(form);
+    
+    // For free single lessons, we need to handle differently
+    if (bookingMode === 'single' && window.singleLessonPrice === 0 && !enteredPackageCode) {
+        // Free single lesson - book directly without package
+        const bookingData = {
+            program: window.singleLessonProgram,
+            price: 0,
+            timeSlotId: selectedTimeSlot.id,
+            studentName: formData.get('studentName'),
+            studentBirthdate: formData.get('studentBirthdate'),
+            customerName: formData.get('parentName'),
+            customerEmail: formData.get('email'),
+            customerPhone: formData.get('phone'),
+            notes: formData.get('notes') || 'Free single lesson (FIRST-FREE)',
+            promoCode: window.appliedPromoCode?.code || 'FIRST-FREE'
+        };
+        
+        try {
+            // Book the free single lesson directly
+            const response = await fetch('/.netlify/functions/book-single-lesson', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData)
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Booking failed');
+            }
+            
+            const result = await response.json();
+            showConfirmation(result);
+            
+        } catch (error) {
+            console.error('Booking failed:', error);
+            alert('Booking failed: ' + error.message);
+            submitButton.disabled = false;
+            submitButton.textContent = 'Confirm Booking';
+        }
+        
+        return;
+    }
+    
+    // Original flow for packages or paid lessons
     const bookingData = {
         packageCode: enteredPackageCode,
         timeSlotId: selectedTimeSlot.id,
@@ -2075,12 +2119,13 @@ window.proceedToSingleLessonCalendar = function proceedToSingleLessonCalendar() 
     }
     
     if (titleEl) {
+        const priceDisplay = window.singleLessonPrice === 0 ? 'FREE' : `${window.singleLessonPrice}`;
         titleEl.innerHTML = `
             <div class="text-center">
                 <h2 class="text-3xl font-bold mb-2">Select Your Lesson Time</h2>
                 <div class="flex items-center justify-center gap-4 text-sm">
                     <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">${window.singleLessonProgram}</span>
-                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - ${window.singleLessonPrice}</span>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - ${priceDisplay}</span>
                 </div>
             </div>
         `;
@@ -2100,12 +2145,19 @@ window.proceedToSingleLessonCalendar = function proceedToSingleLessonCalendar() 
 const originalSelectTimeSlot = window.selectTimeSlot;
 window.selectTimeSlot = function(slotId, date, time) {
     selectedTimeSlot = { id: slotId, date: date, time: time };
+    window.selectedTimeSlot = selectedTimeSlot;
     
     if (bookingMode === 'single' && !enteredPackageCode) {
-        // For single lessons without a package code (paid single lessons)
-        showSingleLessonCheckout();
+        // For single lessons - check if it's free or paid
+        if (window.singleLessonPrice === 0) {
+            // Free lesson - go straight to booking form (no payment needed)
+            showBookingForm();
+        } else {
+            // Paid single lesson - show checkout with payment
+            showSingleLessonCheckout();
+        }
     } else {
-        // Original flow for packages or free single lessons
+        // Original flow for packages
         showBookingForm();
     }
 };
