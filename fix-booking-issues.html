@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeStroke - Fix Booking Issues</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold text-blue-600 mb-2">🔧 SafeStroke Booking System Repair Tool</h1>
+        <p class="text-gray-600 mb-8">This tool will diagnose and fix your booking system issues.</p>
+
+        <!-- Issue #1: Initialize Time Slots -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold">Step 1: Initialize October 2025 Time Slots</h2>
+                <span id="step1-status" class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-gray-700">Not Started</span>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                <p class="text-sm"><strong>This fixes:</strong> "No available time slots" when clicking on calendar dates</p>
+            </div>
+            
+            <p class="text-gray-600 mb-4">This will create time slots for all Sundays and Mondays in October 2025 for all programs.</p>
+            
+            <button id="initSlots" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+                Initialize October 2025 Slots
+            </button>
+            
+            <div id="initResult" class="mt-4 hidden"></div>
+        </div>
+
+        <!-- Issue #2: Test Free Package Creation -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold">Step 2: Fix Free Package Creation</h2>
+                <span id="step2-status" class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-gray-700">Not Started</span>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                <p class="text-sm"><strong>This fixes:</strong> "Database error creating package" when using FIRST-FREE promo code</p>
+            </div>
+            
+            <p class="text-gray-600 mb-4">Test creating a free package with the simplified function:</p>
+            
+            <div class="flex gap-4 mb-4">
+                <select id="testProgram" class="border rounded px-4 py-2">
+                    <option value="Droplet">Droplet</option>
+                    <option value="Splashlet">Splashlet</option>
+                    <option value="Strokelet">Strokelet</option>
+                </select>
+                <button id="testFreePackage" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg">
+                    Test Free Package Creation
+                </button>
+            </div>
+            
+            <div id="freePackageResult" class="hidden"></div>
+        </div>
+
+        <!-- Quick Check: Verify Current Slots -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">Step 3: Verify Time Slots</h2>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
+                <p class="text-sm">Check if time slots exist and are available for booking</p>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <select id="checkProgram" class="border rounded px-4 py-2">
+                    <option value="Droplet">Droplet</option>
+                    <option value="Splashlet">Splashlet</option>
+                    <option value="Strokelet">Strokelet</option>
+                </select>
+                <input type="date" id="checkDate" class="border rounded px-4 py-2" value="2025-10-05">
+                <button id="checkSlots" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg">
+                    Check Availability
+                </button>
+            </div>
+            
+            <div id="slotsCheckResult" class="hidden"></div>
+        </div>
+
+        <!-- November Slots Creation (Future Expansion) -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">Optional: Initialize November 2025</h2>
+            
+            <p class="text-gray-600 mb-4">Create time slots for November 2025 as well:</p>
+            
+            <button id="initNovember" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg">
+                Initialize November 2025 Slots
+            </button>
+            
+            <div id="novemberResult" class="mt-4 hidden"></div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Debug Console</h2>
+            <div id="console" class="bg-gray-900 text-green-400 font-mono text-xs p-4 rounded h-64 overflow-y-auto">
+                <div>System ready. Click the buttons above to fix issues.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Console logging
+        function log(message, type = 'info') {
+            const consoleDiv = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                error: 'text-red-400',
+                success: 'text-green-400',
+                warning: 'text-yellow-400',
+                info: 'text-gray-300'
+            };
+            const color = colors[type] || colors.info;
+            consoleDiv.innerHTML += `<div class="${color}">[${timestamp}] ${message}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(`[${type}]`, message);
+        }
+
+        // Update status badges
+        function updateStatus(stepId, status) {
+            const statusEl = document.getElementById(stepId);
+            const statusClasses = {
+                'success': 'bg-green-100 text-green-800',
+                'error': 'bg-red-100 text-red-800',
+                'working': 'bg-blue-100 text-blue-800',
+                'waiting': 'bg-gray-200 text-gray-700'
+            };
+            
+            statusEl.className = `px-3 py-1 rounded-full text-sm font-semibold ${statusClasses[status] || statusClasses.waiting}`;
+            
+            const statusText = {
+                'success': '✓ Complete',
+                'error': '✗ Failed',
+                'working': '⟳ Working...',
+                'waiting': 'Not Started'
+            };
+            
+            statusEl.textContent = statusText[status] || 'Not Started';
+        }
+
+        // Step 1: Initialize October Slots
+        document.getElementById('initSlots').addEventListener('click', async () => {
+            const button = document.getElementById('initSlots');
+            const resultDiv = document.getElementById('initResult');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="inline-block animate-spin mr-2">⟳</span> Initializing...';
+            resultDiv.classList.add('hidden');
+            updateStatus('step1-status', 'working');
+            
+            log('Initializing October 2025 time slots...');
+            
+            try {
+                const response = await fetch('/.netlify/functions/init-october-slots', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.success) {
+                        resultDiv.innerHTML = `
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-4">
+                                <strong>✓ Success!</strong> ${data.message}
+                                <br>Created ${data.slotsCreated || 0} time slots.
+                            </div>
+                        `;
+                        log(`Success: ${data.message}`, 'success');
+                        updateStatus('step1-status', 'success');
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mt-4">
+                                <strong>Note:</strong> ${data.message}
+                            </div>
+                        `;
+                        log(data.message, 'warning');
+                        updateStatus('step1-status', 'success');
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to initialize slots');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-4">
+                        <strong>Error:</strong> ${error.message}
+                        <br><small>Check Netlify function logs for details</small>
+                    </div>
+                `;
+                log(`Error: ${error.message}`, 'error');
+                updateStatus('step1-status', 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Initialize October 2025 Slots';
+                resultDiv.classList.remove('hidden');
+            }
+        });
+
+        // Step 2: Test Free Package Creation
+        document.getElementById('testFreePackage').addEventListener('click', async () => {
+            const program = document.getElementById('testProgram').value;
+            const button = document.getElementById('testFreePackage');
+            const resultDiv = document.getElementById('freePackageResult');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="inline-block animate-spin mr-2">⟳</span> Testing...';
+            resultDiv.classList.add('hidden');
+            updateStatus('step2-status', 'working');
+            
+            log(`Testing free package creation for ${program}...`);
+            
+            try {
+                // First try the v2 function if it exists
+                let response = await fetch('/.netlify/functions/create-free-package-v2', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        program: program,
+                        promoCode: 'FIRST-FREE'
+                    })
+                });
+                
+                // If v2 doesn't exist, fall back to original
+                if (response.status === 404) {
+                    log('Using original create-free-package function...', 'info');
+                    response = await fetch('/.netlify/functions/create-free-package', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            program: program,
+                            promoCode: 'FIRST-FREE'
+                        })
+                    });
+                }
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-4">
+                            <strong>✓ Success!</strong> Free package created
+                            <br><strong>Package Code:</strong> 
+                            <code class="bg-white px-2 py-1 rounded font-mono">${data.packageCode}</code>
+                            <br><small>Use this code to test booking a lesson</small>
+                        </div>
+                    `;
+                    log(`Success: Package created - ${data.packageCode}`, 'success');
+                    updateStatus('step2-status', 'success');
+                } else {
+                    throw new Error(data.error || data.details || 'Failed to create package');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-4">
+                        <strong>Database Issue Detected:</strong> ${error.message}
+                        <br><br>
+                        <strong>Solution:</strong> The packages table may be missing columns. 
+                        <br>Run this SQL in your Supabase dashboard:
+                        <pre class="bg-gray-900 text-gray-100 p-2 rounded mt-2 text-xs overflow-x-auto">
+-- Check if columns exist first
+ALTER TABLE packages 
+ADD COLUMN IF NOT EXISTS customer_email TEXT,
+ADD COLUMN IF NOT EXISTS promo_code TEXT;</pre>
+                    </div>
+                `;
+                log(`Error: ${error.message}`, 'error');
+                updateStatus('step2-status', 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Test Free Package Creation';
+                resultDiv.classList.remove('hidden');
+            }
+        });
+
+        // Step 3: Check Slots
+        document.getElementById('checkSlots').addEventListener('click', async () => {
+            const program = document.getElementById('checkProgram').value;
+            const date = document.getElementById('checkDate').value;
+            const button = document.getElementById('checkSlots');
+            const resultDiv = document.getElementById('slotsCheckResult');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="inline-block animate-spin mr-2">⟳</span> Checking...';
+            
+            log(`Checking slots for ${program} on ${date}...`);
+            
+            try {
+                const response = await fetch(`/.netlify/functions/get-time-slots?program=${program}&date=${date}`);
+                const slots = await response.json();
+                
+                if (response.ok) {
+                    if (slots.length > 0) {
+                        let html = `
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                                <strong>✓ Found ${slots.length} available slots:</strong>
+                                <div class="grid grid-cols-3 gap-2 mt-2">
+                        `;
+                        
+                        slots.forEach(slot => {
+                            const startTime = slot.start_time.substring(0, 5);
+                            const endTime = slot.end_time.substring(0, 5);
+                            const available = slot.max_capacity - slot.current_enrollment;
+                            html += `
+                                <div class="bg-white px-2 py-1 rounded text-sm">
+                                    ${startTime}-${endTime} (${available} spots)
+                                </div>
+                            `;
+                        });
+                        
+                        html += '</div></div>';
+                        resultDiv.innerHTML = html;
+                        log(`Found ${slots.length} available slots`, 'success');
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+                                <strong>⚠ No slots found for ${date}</strong>
+                                <br>Try initializing October 2025 slots first (Step 1)
+                            </div>
+                        `;
+                        log('No slots found - run Step 1 first', 'warning');
+                    }
+                } else {
+                    throw new Error(slots.error || 'Failed to fetch slots');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+                log(`Error: ${error.message}`, 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Check Availability';
+                resultDiv.classList.remove('hidden');
+            }
+        });
+
+        // Initialize November slots
+        document.getElementById('initNovember').addEventListener('click', async () => {
+            const button = document.getElementById('initNovember');
+            const resultDiv = document.getElementById('novemberResult');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="inline-block animate-spin mr-2">⟳</span> Initializing...';
+            
+            log('Creating November 2025 slots...');
+            
+            // For now, just show a message since we'd need a separate function
+            setTimeout(() => {
+                resultDiv.innerHTML = `
+                    <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
+                        <strong>Note:</strong> To add November slots, create a similar function to init-october-slots.js
+                        <br>Or modify the existing one to accept a month parameter.
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+                button.disabled = false;
+                button.textContent = 'Initialize November 2025 Slots';
+                log('November initialization would require a separate function', 'info');
+            }, 1000);
+        });
+
+        // Set default date
+        document.getElementById('checkDate').value = '2025-10-05';
+        
+        log('Repair tool loaded. Follow the steps above to fix your booking system.', 'success');
+        
+        // Auto-check for common issues
+        setTimeout(() => {
+            log('Tip: Start with Step 1 to initialize time slots, then test Step 2 for free packages.', 'info');
+        }, 2000);
+    </script>
+</body>
+</html>

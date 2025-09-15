@@ -1943,10 +1943,27 @@ window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
             })
         });
         
-        const responseData = await response.json();
+        let responseData = await response.json();
         console.log('Response:', response.status, responseData);
         
-        if (!response.ok) {
+        // If the first attempt fails, try the v2 endpoint as fallback
+        if (!response.ok && responseData.error && responseData.error.includes('Database')) {
+            console.log('First attempt failed, trying v2 endpoint...');
+            const response2 = await fetch('/.netlify/functions/create-free-package-v2', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    program: window.singleLessonProgram,
+                    promoCode: promoCode
+                })
+            });
+            responseData = await response2.json();
+            console.log('V2 Response:', response2.status, responseData);
+            
+            if (!response2.ok) {
+                throw new Error(responseData.error || responseData.details || 'Failed to create free lesson package');
+            }
+        } else if (!response.ok) {
             throw new Error(responseData.error || responseData.details || 'Failed to create free lesson package');
         }
         
