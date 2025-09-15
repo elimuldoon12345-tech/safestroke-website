@@ -1268,8 +1268,270 @@ window.clearDateSelection = function() {
 
 window.selectTimeSlot = function(slotId, date, time) {
     selectedTimeSlot = { id: slotId, date: date, time: time };
-    showBookingForm();
+    window.selectedTimeSlot = selectedTimeSlot;
+    
+    // Check if this is a single lesson booking (paid or free)
+    if (window.bookingMode === 'single' && !window.enteredPackageCode) {
+        // For single lessons without a package code
+        if (window.singleLessonPrice === 0) {
+            // Free lesson - go straight to booking form
+            showBookingForm();
+        } else {
+            // Paid single lesson - need to handle payment flow
+            showSingleLessonPaymentForm();
+        }
+    } else {
+        // Regular package flow or already has package code
+        showBookingForm();
+    }
 };
+
+// New function to handle paid single lesson payment
+function showSingleLessonPaymentForm() {
+    document.getElementById('calendar-section').classList.add('hidden');
+    document.getElementById('form-section').classList.remove('hidden');
+    
+    const container = document.getElementById('form-container');
+    const dateTime = new Date(`${selectedTimeSlot.date}T${selectedTimeSlot.time}`);
+    
+    container.innerHTML = `
+        <form id="booking-form" class="space-y-4">
+            <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <p class="text-center">
+                    <strong>Selected Time:</strong><br>
+                    ${dateTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}<br>
+                    ${formatTime(selectedTimeSlot.time)}
+                </p>
+                <p class="text-center mt-2">
+                    <strong>Program:</strong> ${window.singleLessonProgram}<br>
+                    <strong>Price:</strong> ${window.singleLessonPrice}
+                </p>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Student Name *</label>
+                <input type="text" name="studentName" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Student Birthdate</label>
+                <input type="date" name="studentBirthdate" 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Parent/Guardian Name *</label>
+                <input type="text" name="parentName" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <input type="email" name="email" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                <input type="tel" name="phone" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Special Notes (optional)</label>
+                <textarea name="notes" rows="3"
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Any special requirements, medical conditions, etc."></textarea>
+            </div>
+            
+            <div id="payment-element-container" class="mt-6">
+                <!-- Stripe payment element will be mounted here -->
+            </div>
+            
+            <div class="pt-4">
+                <button type="submit" id="booking-submit-btn" class="w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-lg transition">
+                    Continue to Payment
+                </button>
+            </div>
+        </form>
+    `;
+    
+    document.getElementById('booking-form').onsubmit = handlePaidSingleLessonSubmit;
+}
+
+// Handle paid single lesson form submission
+async function handlePaidSingleLessonSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    
+    // Store form data for later use
+    window.tempBookingData = {
+        studentName: formData.get('studentName'),
+        studentBirthdate: formData.get('studentBirthdate'),
+        customerName: formData.get('parentName'),
+        customerEmail: formData.get('email'),
+        customerPhone: formData.get('phone'),
+        notes: formData.get('notes')
+    };
+    
+    submitButton.disabled = true;
+    submitButton.textContent = 'Initializing payment...';
+    
+    try {
+        // Create payment intent for single lesson
+        const response = await fetch('/.netlify/functions/create-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                amount: window.singleLessonPrice * 100,
+                program: window.singleLessonProgram,
+                lessons: 1,
+                customerEmail: window.tempBookingData.customerEmail
+            })
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Payment initialization failed');
+        }
+        
+        const { clientSecret, packageCode } = await response.json();
+        window.tempPackageCode = packageCode;
+        
+        // Create Stripe Elements
+        const elements = stripe.elements({ 
+            clientSecret,
+            appearance: { theme: 'stripe' }
+        });
+        
+        // Create and mount payment element
+        const paymentElement = elements.create('payment', {
+            defaultValues: {
+                billingDetails: {
+                    email: window.tempBookingData.customerEmail
+                }
+            }
+        });
+        
+        const paymentContainer = document.getElementById('payment-element-container');
+        paymentContainer.innerHTML = '';
+        paymentElement.mount('#payment-element-container');
+        
+        submitButton.textContent = 'Complete Payment';
+        submitButton.disabled = false;
+        
+        // Update form submission to handle payment
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processing payment...';
+            
+            try {
+                const result = await stripe.confirmPayment({
+                    elements,
+                    confirmParams: {
+                        return_url: window.location.href,
+                        receipt_email: window.tempBookingData.customerEmail
+                    },
+                    redirect: 'if_required'
+                });
+                
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+                
+                // Payment successful, now book the slot
+                await bookPaidSingleLesson();
+                
+            } catch (error) {
+                console.error('Payment failed:', error);
+                alert('Payment failed: ' + error.message);
+                submitButton.disabled = false;
+                submitButton.textContent = 'Complete Payment';
+            }
+        };
+        
+    } catch (error) {
+        console.error('Failed to initialize payment:', error);
+        alert('Failed to initialize payment: ' + error.message);
+        submitButton.disabled = false;
+        submitButton.textContent = 'Continue to Payment';
+    }
+}
+
+// Book the paid single lesson after payment
+async function bookPaidSingleLesson() {
+    const submitButton = document.getElementById('booking-submit-btn');
+    submitButton.textContent = 'Confirming booking...';
+    
+    // Retry booking with the package code
+    let attempts = 0;
+    const maxAttempts = 5;
+    let bookingSuccessful = false;
+    let result = null;
+    
+    while (attempts < maxAttempts && !bookingSuccessful) {
+        attempts++;
+        
+        if (attempts > 1) {
+            const waitTime = Math.min(2000 * Math.pow(1.5, attempts - 1), 10000);
+            submitButton.textContent = `Confirming payment... (Attempt ${attempts}/${maxAttempts})`;
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+        
+        try {
+            const response = await fetch('/.netlify/functions/book-time-slot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    packageCode: window.tempPackageCode,
+                    timeSlotId: selectedTimeSlot.id,
+                    studentName: window.tempBookingData.studentName,
+                    studentBirthdate: window.tempBookingData.studentBirthdate,
+                    customerName: window.tempBookingData.customerName,
+                    customerEmail: window.tempBookingData.customerEmail,
+                    customerPhone: window.tempBookingData.customerPhone,
+                    notes: window.tempBookingData.notes || 'Single lesson booking'
+                })
+            });
+            
+            if (response.ok) {
+                result = await response.json();
+                bookingSuccessful = true;
+            } else {
+                const errorData = await response.json();
+                console.log(`Attempt ${attempts} failed:`, errorData.error);
+                
+                if (!errorData.error.includes('Invalid package code') && 
+                    !errorData.error.includes('package')) {
+                    throw new Error(errorData.error);
+                }
+            }
+        } catch (fetchError) {
+            console.error(`Attempt ${attempts} error:`, fetchError);
+            if (attempts === maxAttempts) {
+                throw fetchError;
+            }
+        }
+    }
+    
+    if (!bookingSuccessful) {
+        alert(`Payment successful but booking is delayed. Your package code is: ${window.tempPackageCode}\n\nPlease save this code and try booking again in a few moments.`);
+        return;
+    }
+    
+    // Show success
+    showConfirmation(result);
+    
+    // Clean up temp data
+    delete window.tempBookingData;
+    delete window.tempPackageCode;
+}
 
 function showBookingForm() {
     document.getElementById('calendar-section').classList.add('hidden');
