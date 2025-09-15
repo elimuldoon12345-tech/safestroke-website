@@ -240,7 +240,8 @@ function showStep(stepNumber) {
     updateStepIndicators(stepNumber);
 }
 
-function updateStepIndicators(activeStep) {
+// Make this function globally available
+window.updateStepIndicators = function updateStepIndicators(activeStep) {
     for (let i = 1; i <= 4; i++) {
         const indicator = document.getElementById(`step-${i}-indicator`);
         if (indicator) {
@@ -257,7 +258,8 @@ function updateStepIndicators(activeStep) {
     }
 }
 
-function renderPackages() {
+// Make this function globally available
+window.renderPackages = function renderPackages() {
     const container = document.getElementById('package-container');
     const pricing = PACKAGE_PRICING[selectedProgram];
     
@@ -1815,12 +1817,23 @@ window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
 window.proceedToSingleLessonCalendar = function proceedToSingleLessonCalendar() {
     window.selectedProgram = window.singleLessonProgram;
     
-    // Hide single lesson flow
-    document.getElementById('single-lesson-flow').classList.add('hidden');
+    // Hide single lesson flow - check if element exists first
+    const singleLessonFlow = document.getElementById('single-lesson-flow');
+    if (singleLessonFlow) {
+        singleLessonFlow.classList.add('hidden');
+    }
     
-    // Show calendar for time selection
-    document.getElementById('calendar-section').classList.remove('hidden');
-    document.getElementById('calendar-loading').classList.add('hidden');
+    // Show calendar for time selection - check if element exists first
+    const calendarSection = document.getElementById('calendar-section');
+    if (calendarSection) {
+        calendarSection.classList.remove('hidden');
+    }
+    
+    // Hide loading if it exists
+    const calendarLoading = document.getElementById('calendar-loading');
+    if (calendarLoading) {
+        calendarLoading.classList.add('hidden');
+    }
     
     // Update title for single lesson
     const titleEl = document.getElementById('calendar-title');

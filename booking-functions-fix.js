@@ -106,10 +106,8 @@ window.startSingleLessonFlow = function() {
         `;
     }
     
-    // Set booking mode
-    if (typeof bookingMode !== 'undefined') {
-        bookingMode = 'single';
-    }
+    // Set booking mode globally
+    window.bookingMode = 'single';
 };
 
 window.startPackageFlow = function() {
@@ -278,18 +276,23 @@ window.startPackageFlow = function() {
                 </div>
             `;
             
-            // Initialize program selection
-            initializeProgramSelection();
+            // Initialize program selection with a slight delay to ensure DOM is ready
+            setTimeout(() => {
+                initializeProgramSelection();
+                console.log('Package flow initialized');
+            }, 100);
         }
         
         // Update stepper to show step 1 as active
-        updateStepIndicators(1);
+        if (typeof window.updateStepIndicators === 'function') {
+            window.updateStepIndicators(1);
+        } else {
+            updateStepIndicators(1);
+        }
     }
     
-    // Set booking mode
-    if (typeof bookingMode !== 'undefined') {
-        bookingMode = 'package';
-    }
+    // Set booking mode globally
+    window.bookingMode = 'package';
 };
 
 window.backToOptions = function() {
@@ -306,32 +309,51 @@ window.backToOptions = function() {
     const choiceCards = document.querySelectorAll('.choice-card');
     choiceCards.forEach(card => card.parentElement.style.display = '');
     
-    // Reset states if they exist
-    if (typeof selectedProgram !== 'undefined') selectedProgram = null;
-    if (typeof singleLessonProgram !== 'undefined') singleLessonProgram = null;
-    if (typeof appliedPromoCode !== 'undefined') appliedPromoCode = null;
-    if (typeof bookingMode !== 'undefined') bookingMode = null;
+    // Reset all global states
+    window.selectedProgram = null;
+    window.singleLessonProgram = null;
+    window.appliedPromoCode = null;
+    window.bookingMode = null;
+    window.selectedPackage = null;
+    window.singleLessonPrice = null;
 };
 
-// Helper function to select a program in package flow
+// Helper function to select a program in package flow - MAKE GLOBALLY AVAILABLE
 window.selectProgram = function(program) {
-    console.log('Program selected:', program);
+    console.log('Program selected in package flow:', program);
     
     // Store the selected program globally
-    if (typeof selectedProgram !== 'undefined' || window.selectedProgram !== undefined) {
+    window.selectedProgram = program;
+    
+    // Update the window-level variable references used by booking-system-v2.js
+    if (window.selectedProgram !== program) {
         window.selectedProgram = program;
     }
     
-    // Update stepper
-    updateStepIndicators(2);
-    
-    // Hide step 1, show step 2
-    document.getElementById('step-1').classList.add('hidden');
-    document.getElementById('step-2').classList.remove('hidden');
+    // Call showStep(2) from booking-system-v2.js if available
+    if (typeof window.showStep === 'function') {
+        window.showStep(2);
+    } else {
+        // Fallback: manually show step 2
+        // Hide all steps first
+        ['step-1', 'step-2', 'email-step', 'payment-section', 'success-section'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        });
+        
+        // Show step 2
+        const step2 = document.getElementById('step-2');
+        if (step2) step2.classList.remove('hidden');
+        
+        // Update stepper
+        if (typeof window.updateStepIndicators === 'function') {
+            window.updateStepIndicators(2);
+        }
+    }
     
     // Render packages for the selected program
-    if (typeof renderPackages === 'function') {
-        renderPackages();
+    if (typeof window.renderPackages === 'function') {
+        window.renderPackages();
     } else {
         // Fallback rendering if main function not available
         renderPackagesFallback(program);
@@ -419,13 +441,34 @@ window.showStep = function(stepNumber) {
 
 // Initialize program selection event handlers
 function initializeProgramSelection() {
-    document.querySelectorAll('#step-1 .step-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const program = this.dataset.programName;
-            if (program) {
-                selectProgram(program);
+    // Use event delegation for better reliability
+    const step1Container = document.getElementById('step-1');
+    if (step1Container) {
+        // Remove any existing listeners first
+        step1Container.replaceWith(step1Container.cloneNode(true));
+        const newStep1 = document.getElementById('step-1');
+        
+        // Add click listener to the container
+        newStep1.addEventListener('click', function(e) {
+            // Find the closest step-card parent
+            const card = e.target.closest('.step-card');
+            if (card && card.dataset.programName) {
+                const program = card.dataset.programName;
+                console.log('Card clicked, program:', program);
+                window.selectProgram(program);
             }
         });
+    }
+    
+    // Also ensure the onclick attributes work
+    document.querySelectorAll('#step-1 .step-card').forEach(card => {
+        const program = card.dataset.programName;
+        if (program && !card.onclick) {
+            card.onclick = function() {
+                console.log('Direct onclick, program:', program);
+                window.selectProgram(program);
+            };
+        }
     });
 }
 
