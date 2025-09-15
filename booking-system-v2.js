@@ -20,14 +20,16 @@ const PROGRAM_INFO = {
     }
 };
 
-const PACKAGE_PRICING = {
+// Make these available globally for other scripts
+window.PACKAGE_PRICING = {
     'Droplet': { 1: 30, 4: 112, 6: 162, 8: 200 },
     'Splashlet': { 1: 40, 4: 152, 6: 222, 8: 280 },
     'Strokelet': { 1: 45, 4: 172, 6: 252, 8: 320 }
 };
+const PACKAGE_PRICING = window.PACKAGE_PRICING;
 
 // Promo codes configuration
-const PROMO_CODES = {
+window.PROMO_CODES = {
     'FIRST-FREE': {
         type: 'single_lesson',
         discount: 100, // 100% off
@@ -41,6 +43,7 @@ const PROMO_CODES = {
         validPrograms: ['Droplet', 'Splashlet', 'Strokelet']
     }
 };
+const PROMO_CODES = window.PROMO_CODES;
 
 // --- Global State - Make these available globally via window object ---
 window.selectedProgram = null;
@@ -153,7 +156,9 @@ function initializeStripe() {
 
 // --- Event Handlers ---
 function handleProgramSelection(event) {
+    // Update both local and global selectedProgram
     selectedProgram = event.currentTarget.dataset.programName;
+    window.selectedProgram = selectedProgram;
     console.log('Program selected:', selectedProgram);
     showStep(2);
     renderPackages();
@@ -219,7 +224,8 @@ async function handleScheduleWithCode() {
 }
 
 // --- UI Rendering Functions ---
-function showStep(stepNumber) {
+// Make showStep globally available
+window.showStep = function showStep(stepNumber) {
     // Hide all steps including email step
     ['step-1', 'step-2', 'email-step', 'payment-section', 'success-section'].forEach(id => {
         const el = document.getElementById(id);
@@ -261,7 +267,15 @@ window.updateStepIndicators = function updateStepIndicators(activeStep) {
 // Make this function globally available
 window.renderPackages = function renderPackages() {
     const container = document.getElementById('package-container');
-    const pricing = PACKAGE_PRICING[selectedProgram];
+    // Use window.selectedProgram to ensure we get the current value
+    const currentProgram = window.selectedProgram || selectedProgram;
+    
+    if (!currentProgram) {
+        console.error('No program selected for renderPackages');
+        return;
+    }
+    
+    const pricing = PACKAGE_PRICING[currentProgram];
     
     // Add info about loyalty discount if no promo code is active
     const showLoyaltyInfo = !appliedPromoCode;
@@ -319,26 +333,37 @@ window.renderPackages = function renderPackages() {
 
 // Make selectPackage available globally - Modified to go to email step first
 window.selectPackage = function(lessons, price) {
+    // Use window.selectedProgram to ensure we get the current value
+    const currentProgram = window.selectedProgram || selectedProgram;
+    
+    if (!currentProgram) {
+        console.error('No program selected for selectPackage');
+        return;
+    }
+    
     // Check if a promo code is already applied
     if (appliedPromoCode) {
         // If promo code exists, don't allow loyalty discount
         selectedPackage = {
-            program: selectedProgram,
+            program: currentProgram,
             lessons: lessons,
             price: price,
             hasPromoCode: true
         };
+        window.selectedPackage = selectedPackage;
     } else {
         // No promo code, loyalty discount can be applied
         selectedPackage = {
-            program: selectedProgram,
+            program: currentProgram,
             lessons: lessons,
             price: price,
             hasPromoCode: false
         };
+        window.selectedPackage = selectedPackage;
     }
     
     bookingMode = 'package';
+    window.bookingMode = bookingMode;
     console.log('Package selected:', selectedPackage);
     
     // ✅ FIXED: Track package selection for Meta Pixel
@@ -769,14 +794,15 @@ async function handlePaymentSubmit(event) {
 // (All the calendar functions, time slot functions, etc. remain unchanged)
 
 // --- Calendar Functions ---
-function showCalendarSection() {
+// Make showCalendarSection globally available
+window.showCalendarSection = function showCalendarSection() {
     document.getElementById('existing-customer-path').classList.add('hidden');
     document.getElementById('new-customer-path').classList.add('hidden');
     document.getElementById('calendar-section').classList.remove('hidden');
     updateCalendarLoading('Loading available times...');
 }
 
-function updateCalendarLoading(message) {
+window.updateCalendarLoading = function updateCalendarLoading(message) {
     const loadingDiv = document.getElementById('calendar-loading');
     if (loadingDiv) {
         loadingDiv.innerHTML = `<p class="text-lg text-gray-600">${message}</p>`;
@@ -784,7 +810,7 @@ function updateCalendarLoading(message) {
     }
 }
 
-function updateCalendarTitle(code, packageData) {
+window.updateCalendarTitle = function updateCalendarTitle(code, packageData) {
     const titleEl = document.getElementById('calendar-title');
     if (titleEl) {
         titleEl.innerHTML = `
@@ -800,7 +826,8 @@ function updateCalendarTitle(code, packageData) {
     }
 }
 
-async function loadTimeSlots(program) {
+// Make loadTimeSlots globally available
+window.loadTimeSlots = async function loadTimeSlots(program) {
     try {
         const response = await fetch(`/.netlify/functions/get-time-slots?program=${program}&month=${currentCalendarMonth.toISOString()}`);
         
@@ -1799,13 +1826,25 @@ window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
         window.selectedProgram = window.singleLessonProgram;
         
         // Hide single lesson flow and show calendar
-        document.getElementById('single-lesson-flow').classList.add('hidden');
-        showCalendarSection();
-        updateCalendarTitle(packageCode, {
-            program: window.singleLessonProgram,
-            lessons_remaining: 1
-        });
-        loadTimeSlots(window.singleLessonProgram);
+        const singleLessonFlow = document.getElementById('single-lesson-flow');
+        if (singleLessonFlow) {
+            singleLessonFlow.classList.add('hidden');
+        }
+        
+        if (typeof window.showCalendarSection === 'function') {
+            window.showCalendarSection();
+        }
+        
+        if (typeof window.updateCalendarTitle === 'function') {
+            window.updateCalendarTitle(packageCode, {
+                program: window.singleLessonProgram,
+                lessons_remaining: 1
+            });
+        }
+        
+        if (typeof window.loadTimeSlots === 'function') {
+            window.loadTimeSlots(window.singleLessonProgram);
+        }
         
     } catch (error) {
         console.error('Failed to create free lesson:', error);
@@ -1850,7 +1889,13 @@ window.proceedToSingleLessonCalendar = function proceedToSingleLessonCalendar() 
     }
     
     // Load available times
-    loadTimeSlots(window.singleLessonProgram);
+    if (typeof window.loadTimeSlots === 'function') {
+        window.loadTimeSlots(window.singleLessonProgram);
+    } else if (typeof loadTimeSlots === 'function') {
+        loadTimeSlots(window.singleLessonProgram);
+    } else {
+        console.error('loadTimeSlots function not found');
+    }
 }
 
 // Modify the existing selectTimeSlot function to handle single lesson checkout

@@ -480,8 +480,8 @@ window.selectSingleLessonProgram = function(program) {
     // Store the selected program globally
     window.singleLessonProgram = program;
     
-    // Get the price
-    const PACKAGE_PRICING = {
+    // Get the price - use global PACKAGE_PRICING if available
+    const PACKAGE_PRICING = window.PACKAGE_PRICING || {
         'Droplet': { 1: 30 },
         'Splashlet': { 1: 40 },
         'Strokelet': { 1: 45 }
