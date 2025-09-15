@@ -1,5 +1,10 @@
 const { createClient } = require('@supabase/supabase-js');
 
+// Add error checking for environment variables
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+  console.error('Missing Supabase environment variables');
+}
+
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
@@ -28,47 +33,64 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { program, promoCode } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const { program, promoCode } = body;
 
-    // Validate inputs
-    if (!program || !promoCode) {
+    console.log('Creating free package:', { program, promoCode });
+
+    // Validate inputs - promoCode is optional
+    if (!program) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Missing required fields' }),
+        body: JSON.stringify({ error: 'Program is required' }),
       };
     }
 
-    // Generate a unique package code for free lesson
-    const packageCode = `FREE-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`.toUpperCase();
+    // Generate simpler package code
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const packageCode = `FREE-${timestamp}-${random}`;
     
-    // Create the free package
-    const { data: packageData, error: packageError } = await supabase
+    console.log('Generated package code:', packageCode);
+    
+    // Create the package with all required fields
+    const packageData = {
+      code: packageCode,
+      program: program,
+      lessons_total: 1,
+      lessons_remaining: 1,
+      amount_paid: 0,
+      payment_intent_id: `promo_${promoCode || 'FIRST-FREE'}_${timestamp}`,
+      status: 'paid',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      customer_email: null, // Will be updated when booking
+      promo_code: promoCode || 'FIRST-FREE'
+    };
+
+    console.log('Inserting package:', packageData);
+
+    const { data, error } = await supabase
       .from('packages')
-      .insert([
-        {
-          code: packageCode,
-          program: program,
-          lessons_total: 1,
-          lessons_remaining: 1,
-          amount_paid: 0,
-          payment_intent_id: `promo_${promoCode}`,
-          status: 'paid',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ])
+      .insert([packageData])
       .select()
       .single();
 
-    if (packageError) {
-      console.error('Package creation error:', packageError);
+    if (error) {
+      console.error('Supabase error:', error);
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: 'Failed to create free package' }),
+        body: JSON.stringify({ 
+          error: 'Database error creating package',
+          details: error.message,
+          code: error.code 
+        }),
       };
     }
+
+    console.log('Package created successfully:', data);
 
     return {
       statusCode: 200,
@@ -87,7 +109,8 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({ 
         error: 'Failed to create free package',
-        details: error.message 
+        details: error.message,
+        stack: error.stack
       }),
     };
   }

@@ -1920,8 +1920,18 @@ window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
     console.log('Program:', window.singleLessonProgram);
     console.log('Promo code:', window.appliedPromoCode);
     
+    // Show loading indicator
+    const singleLessonFlow = document.getElementById('single-lesson-flow');
+    if (singleLessonFlow) {
+        singleLessonFlow.innerHTML = `
+            <div class="text-center py-12">
+                <div class="spinner mx-auto mb-4"></div>
+                <p class="text-lg text-gray-600">Creating your free lesson package...</p>
+            </div>
+        `;
+    }
+    
     try {
-        // Get the promo code - use window variable
         const promoCode = window.appliedPromoCode?.code || 'FIRST-FREE';
         
         const response = await fetch('/.netlify/functions/create-free-package', {
@@ -1933,20 +1943,42 @@ window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
             })
         });
         
+        const responseData = await response.json();
+        console.log('Response:', response.status, responseData);
+        
         if (!response.ok) {
-            throw new Error('Failed to create free lesson package');
+            throw new Error(responseData.error || responseData.details || 'Failed to create free lesson package');
         }
         
-        const { packageCode } = await response.json();
+        const { packageCode } = responseData;
         window.enteredPackageCode = packageCode;
         window.selectedProgram = window.singleLessonProgram;
         
+        console.log('Free package created:', packageCode);
+        
         // Hide single lesson flow and show calendar
-        const singleLessonFlow = document.getElementById('single-lesson-flow');
         if (singleLessonFlow) {
             singleLessonFlow.classList.add('hidden');
         }
         
+        // Show success message briefly
+        const successMsg = document.createElement('div');
+        successMsg.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+        successMsg.innerHTML = `
+            <div class="flex items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <div class="font-bold">Free lesson package created!</div>
+                    <div class="text-sm">Package code: ${packageCode}</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(successMsg);
+        setTimeout(() => successMsg.remove(), 5000);
+        
+        // Continue to calendar
         if (typeof window.showCalendarSection === 'function') {
             window.showCalendarSection();
         }
@@ -1959,12 +1991,32 @@ window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
         }
         
         if (typeof window.loadTimeSlots === 'function') {
-            window.loadTimeSlots(window.singleLessonProgram);
+            await window.loadTimeSlots(window.singleLessonProgram);
         }
         
     } catch (error) {
         console.error('Failed to create free lesson:', error);
-        alert('Failed to process free lesson. Please try again.');
+        
+        // Show detailed error message
+        if (singleLessonFlow) {
+            singleLessonFlow.innerHTML = `
+                <div class="max-w-md mx-auto mt-8">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                        <h3 class="text-red-800 font-bold mb-2">Unable to Create Free Lesson</h3>
+                        <p class="text-red-600 text-sm mb-4">${error.message}</p>
+                        <p class="text-gray-600 text-sm mb-4">Please try again or contact support at 973-820-1153.</p>
+                        <div class="flex gap-3">
+                            <button onclick="location.reload()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                Try Again
+                            </button>
+                            <button onclick="backToOptions()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+                                Back to Options
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
     }
 }
 

@@ -42,9 +42,11 @@ exports.handler = async (event, context) => {
       .from('time_slots')
       .select('*')
       .eq('lesson_type', program)
-      .eq('status', 'available')
       .order('date', { ascending: true })
       .order('start_time', { ascending: true });
+    
+    // Make status filter optional - include slots that are available or have no status set
+    query = query.or('status.eq.available,status.is.null');
 
     // If specific date provided
     if (date) {
@@ -78,10 +80,14 @@ exports.handler = async (event, context) => {
       throw error;
     }
 
-    // Filter out full slots
-    const availableSlots = timeSlots.filter(slot => 
-      slot.current_enrollment < slot.max_capacity
-    );
+    // Filter out full slots and check status
+    const availableSlots = timeSlots.filter(slot => {
+      // Check if slot has capacity
+      const hasCapacity = slot.current_enrollment < slot.max_capacity;
+      // Check status if it exists (allow null or 'available')
+      const isAvailable = !slot.status || slot.status === 'available';
+      return hasCapacity && isAvailable;
+    });
 
     return {
       statusCode: 200,
