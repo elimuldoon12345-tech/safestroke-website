@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Test - SafeStroke</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        .links {
+            margin-top: 2rem;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 0 10px;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 255, 0, 0.2);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏊 SafeStroke Site is Working!</h1>
+        <p>If you can see this page, your Netlify deployment is successful.</p>
+        
+        <div class="status">
+            <strong>✅ Deployment Status: SUCCESS</strong><br>
+            <small>Timestamp: <span id="timestamp"></span></small>
+        </div>
+        
+        <div class="links">
+            <a href="index.html">Go to Main Site</a>
+            <a href="safestroke-booking.html">Go to Booking</a>
+        </div>
+        
+        <div style="margin-top: 2rem; font-size: 0.9em;">
+            <p>Quick Links for Testing:</p>
+            <a href="safestroke-programs.html">Programs</a>
+            <a href="safestroke-pricing.html">Pricing</a>
+            <a href="safestroke-location.html">Location</a>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>

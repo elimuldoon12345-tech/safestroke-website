@@ -339,6 +339,30 @@
                 <!-- Content will be dynamically inserted here -->
             </div>
 
+            <!-- Calendar Section (Hidden initially) -->
+            <div id="calendar-section" class="hidden">
+                <div id="calendar-title" class="mb-6"></div>
+                <div id="calendar-loading" class="text-center py-8">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-600">Loading available times...</p>
+                </div>
+                <div id="calendar-container" class="hidden"></div>
+            </div>
+
+            <!-- Form Section (Hidden initially) -->
+            <div id="form-section" class="hidden bg-white rounded-2xl p-8 shadow-lg">
+                <div id="form-container"></div>
+            </div>
+
+            <!-- Confirmation Message (Hidden initially) -->
+            <div id="confirmation-message" class="hidden bg-white rounded-2xl p-8 shadow-lg">
+                <!-- Confirmation content will be inserted here -->
+            </div>
+
+            <!-- Hidden inputs for tracking -->
+            <input type="hidden" id="package-code-input" />
+            <div id="code-error-message" class="hidden text-red-600 mt-2"></div>
+
             <!-- Returning Customer Block -->
             <div class="bg-white rounded-2xl p-8 shadow-lg mt-8">
                 <h2 class="text-2xl font-bold mb-4 text-center">Have a package code?</h2>
@@ -423,8 +447,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="booking-functions-fix.js"></script>
+    <!-- Removed booking-functions-fix.js to avoid conflicts -->
     <script src="booking-system-v2.js"></script>
+    <script src="booking-functions-fix.js"></script>
     <script>
         // Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {

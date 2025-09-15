@@ -1,0 +1,8 @@
+# Netlify redirects file
+# This ensures all routes work properly
+
+# API proxy (if needed)
+/api/*  https://api.example.com/:splat  200
+
+# SPA fallback (if needed) - commented out for now since this is a multi-page site
+# /*    /index.html   200

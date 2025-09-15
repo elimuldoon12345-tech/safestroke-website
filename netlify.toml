@@ -1,7 +1,34 @@
 [build]
-  command = "npm install"
+  # No build command needed for static site
+  command = ""
   functions = "netlify/functions"
-  publish = "."
+  publish = "./"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/safestroke-images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
 
 [functions]
   node_bundler = "esbuild"
+  included_files = ["netlify/functions/**"]
