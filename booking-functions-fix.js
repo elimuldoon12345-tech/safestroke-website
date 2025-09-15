@@ -431,10 +431,11 @@ function initializeProgramSelection() {
 
 // The rest of the functions remain the same...
 window.selectSingleLessonProgram = function(program) {
-    // Store the selected program
-    if (typeof singleLessonProgram !== 'undefined' || window.singleLessonProgram !== undefined) {
-        window.singleLessonProgram = program;
-    }
+    console.log('Selected program:', program);
+    console.log('Current promo code:', window.appliedPromoCode);
+    
+    // Store the selected program globally
+    window.singleLessonProgram = program;
     
     // Get the price
     const PACKAGE_PRICING = {
@@ -448,6 +449,7 @@ window.selectSingleLessonProgram = function(program) {
     // Check if promo code is applied
     if (window.appliedPromoCode && window.appliedPromoCode.type === 'single_lesson') {
         price = price * (1 - window.appliedPromoCode.discount / 100);
+        console.log('Applied promo discount, new price:', price);
     }
     
     window.singleLessonPrice = price;
@@ -459,13 +461,20 @@ window.selectSingleLessonProgram = function(program) {
     
     // If free lesson, create free package and go to calendar
     if (price === 0) {
+        console.log('Free lesson detected, creating free package...');
         if (typeof handleFreeSingleLesson === 'function') {
             handleFreeSingleLesson();
+        } else {
+            // Call the function directly if it exists in the global scope
+            console.log('Calling handleFreeSingleLesson directly');
+            window.handleFreeSingleLesson();
         }
     } else {
         // Go to calendar for time selection
         if (typeof proceedToSingleLessonCalendar === 'function') {
             proceedToSingleLessonCalendar();
+        } else {
+            console.log('proceedToSingleLessonCalendar not found');
         }
     }
 };
@@ -515,7 +524,9 @@ window.applySingleLessonPromo = function() {
         return;
     }
     
+    // Set the promo code globally so it's accessible everywhere
     window.appliedPromoCode = { code, ...promo };
+    console.log('Promo code applied:', window.appliedPromoCode);
     
     // Track promo code application
     if (typeof window.trackPromoCode === 'function') {
@@ -527,7 +538,11 @@ window.applySingleLessonPromo = function() {
         promoMessage.className = 'text-sm text-green-600 font-semibold';
         
         // Update all price displays to show FREE
-        updatePriceDisplaysForFree();
+        if (typeof updatePriceDisplaysForFree === 'function') {
+            updatePriceDisplaysForFree();
+        } else if (typeof window.updatePriceDisplaysForFree === 'function') {
+            window.updatePriceDisplaysForFree();
+        }
     } else {
         promoMessage.innerHTML = `✅ <strong>${promo.discount}% off</strong> applied!`;
         promoMessage.className = 'text-sm text-green-600 font-semibold';
@@ -536,7 +551,8 @@ window.applySingleLessonPromo = function() {
     promoMessage.classList.remove('hidden');
 };
 
-function updatePriceDisplaysForFree() {
+// Ensure this function is available globally
+window.updatePriceDisplaysForFree = function updatePriceDisplaysForFree() {
     // Update Droplet price
     const dropletPrice = document.getElementById('droplet-price');
     if (dropletPrice) {

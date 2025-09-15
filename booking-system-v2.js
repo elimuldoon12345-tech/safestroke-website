@@ -42,22 +42,39 @@ const PROMO_CODES = {
     }
 };
 
-// --- Global State ---
-let selectedProgram = null;
-let selectedPackage = null;
-let enteredPackageCode = null;
-let selectedTimeSlot = null;
-let stripe = null;
-let elements = null;
-let paymentElement = null;
-let currentCalendarMonth = new Date(2025, 9, 1); // Default to October 2025
-let appliedPromoCode = null;
-let bookingMode = null; // 'package' or 'single'
-let singleLessonProgram = null;
-let singleLessonPrice = null;
-let customerEmail = null; // Store email for package purchase
-let isReturningCustomer = false; // Track if customer is eligible for discount
-let loyaltyDiscountApplied = false; // Track if loyalty discount is active
+// --- Global State - Make these available globally via window object ---
+window.selectedProgram = null;
+window.selectedPackage = null;
+window.enteredPackageCode = null;
+window.selectedTimeSlot = null;
+window.stripe = null;
+window.elements = null;
+window.paymentElement = null;
+window.currentCalendarMonth = new Date(2025, 9, 1); // Default to October 2025
+window.appliedPromoCode = null;
+window.bookingMode = null; // 'package' or 'single'
+window.singleLessonProgram = null;
+window.singleLessonPrice = null;
+window.customerEmail = null; // Store email for package purchase
+window.isReturningCustomer = false; // Track if customer is eligible for discount
+window.loyaltyDiscountApplied = false; // Track if loyalty discount is active
+
+// Also create local references for easier access within this file
+let selectedProgram = window.selectedProgram;
+let selectedPackage = window.selectedPackage;
+let enteredPackageCode = window.enteredPackageCode;
+let selectedTimeSlot = window.selectedTimeSlot;
+let stripe = window.stripe;
+let elements = window.elements;
+let paymentElement = window.paymentElement;
+let currentCalendarMonth = window.currentCalendarMonth;
+let appliedPromoCode = window.appliedPromoCode;
+let bookingMode = window.bookingMode;
+let singleLessonProgram = window.singleLessonProgram;
+let singleLessonPrice = window.singleLessonPrice;
+let customerEmail = window.customerEmail;
+let isReturningCustomer = window.isReturningCustomer;
+let loyaltyDiscountApplied = window.loyaltyDiscountApplied;
 
 // --- Global Function Definitions (Must be available before DOM loads) ---
 // Functions moved to top of file for immediate availability
@@ -1684,7 +1701,8 @@ window.applySingleLessonPromo = function() {
 };
 */
 
-function updatePriceDisplaysForFree() {
+// Make this function globally available
+window.updatePriceDisplaysForFree = function updatePriceDisplaysForFree() {
     // Update Droplet price with crossed-out original price
     const dropletPrice = document.getElementById('droplet-price');
     if (dropletPrice) {
@@ -1751,14 +1769,22 @@ function resetPriceDisplays() {
     }
 }
 
-async function handleFreeSingleLesson() {
+// Make this function globally available
+window.handleFreeSingleLesson = async function handleFreeSingleLesson() {
+    console.log('handleFreeSingleLesson called');
+    console.log('Program:', window.singleLessonProgram);
+    console.log('Promo code:', window.appliedPromoCode);
+    
     try {
+        // Get the promo code - use window variable
+        const promoCode = window.appliedPromoCode?.code || 'FIRST-FREE';
+        
         const response = await fetch('/.netlify/functions/create-free-package', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                program: singleLessonProgram,
-                promoCode: appliedPromoCode.code
+                program: window.singleLessonProgram,
+                promoCode: promoCode
             })
         });
         
@@ -1767,17 +1793,17 @@ async function handleFreeSingleLesson() {
         }
         
         const { packageCode } = await response.json();
-        enteredPackageCode = packageCode;
-        selectedProgram = singleLessonProgram;
+        window.enteredPackageCode = packageCode;
+        window.selectedProgram = window.singleLessonProgram;
         
         // Hide single lesson flow and show calendar
         document.getElementById('single-lesson-flow').classList.add('hidden');
         showCalendarSection();
         updateCalendarTitle(packageCode, {
-            program: singleLessonProgram,
+            program: window.singleLessonProgram,
             lessons_remaining: 1
         });
-        loadTimeSlots(singleLessonProgram);
+        loadTimeSlots(window.singleLessonProgram);
         
     } catch (error) {
         console.error('Failed to create free lesson:', error);
@@ -1785,8 +1811,9 @@ async function handleFreeSingleLesson() {
     }
 }
 
-function proceedToSingleLessonCalendar() {
-    selectedProgram = singleLessonProgram;
+// Make this function globally available
+window.proceedToSingleLessonCalendar = function proceedToSingleLessonCalendar() {
+    window.selectedProgram = window.singleLessonProgram;
     
     // Hide single lesson flow
     document.getElementById('single-lesson-flow').classList.add('hidden');
@@ -1802,15 +1829,15 @@ function proceedToSingleLessonCalendar() {
             <div class="text-center">
                 <h2 class="text-3xl font-bold mb-2">Select Your Lesson Time</h2>
                 <div class="flex items-center justify-center gap-4 text-sm">
-                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">${singleLessonProgram}</span>
-                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - $${singleLessonPrice}</span>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">${window.singleLessonProgram}</span>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">Single Lesson - ${window.singleLessonPrice}</span>
                 </div>
             </div>
         `;
     }
     
     // Load available times
-    loadTimeSlots(singleLessonProgram);
+    loadTimeSlots(window.singleLessonProgram);
 }
 
 // Modify the existing selectTimeSlot function to handle single lesson checkout
