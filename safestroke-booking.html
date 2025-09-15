@@ -449,32 +449,49 @@
             el.addEventListener('click', () => trackCTA(el));
         });
         
-        // Placeholder functions (to be replaced with actual booking system)
-        function startSingleLessonFlow() {
-            document.getElementById('single-lesson-flow').classList.remove('hidden');
-            document.getElementById('package-flow').classList.add('hidden');
-            // Implementation here
-        }
+        // These functions are now properly defined in booking-functions-fix.js
+        // Removed placeholder functions that were overriding the actual implementations
         
-        function startPackageFlow() {
-            document.getElementById('package-flow').classList.remove('hidden');
-            document.getElementById('single-lesson-flow').classList.add('hidden');
-            // Implementation here
-        }
-        
+        // This function handles scheduling with an existing package code
         function scheduleWithCode() {
-            const code = document.getElementById('package-code').value;
+            const codeInput = document.getElementById('package-code');
+            const code = codeInput.value.trim();
             const successMsg = document.getElementById('code-success');
             const errorMsg = document.getElementById('code-error');
             
-            // Validate code (placeholder logic)
-            if (code && code.length > 5) {
-                errorMsg.classList.add('hidden');
-                successMsg.classList.remove('hidden');
-                // Load available times...
-            } else {
+            // Basic validation
+            if (!code) {
                 successMsg.classList.add('hidden');
                 errorMsg.classList.remove('hidden');
+                errorMsg.querySelector('p').textContent = 'Please enter a package code';
+                return;
+            }
+            
+            // Show success and hide error
+            errorMsg.classList.add('hidden');
+            successMsg.classList.remove('hidden');
+            
+            // Set the code in the proper input field and trigger the main handler
+            const packageCodeInput = document.getElementById('package-code-input');
+            if (packageCodeInput) {
+                packageCodeInput.value = code;
+            } else {
+                // Create a hidden input if it doesn't exist
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.id = 'package-code-input';
+                hiddenInput.value = code;
+                document.body.appendChild(hiddenInput);
+            }
+            
+            // Call the main handler from booking-system-v2.js
+            if (typeof handleScheduleWithCode === 'function') {
+                handleScheduleWithCode();
+            } else {
+                console.error('handleScheduleWithCode function not found');
+                errorMsg.classList.remove('hidden');
+                errorMsg.querySelector('p').textContent = 'Booking system not ready. Please refresh the page.';
+                successMsg.classList.add('hidden');
             }
         }
         
