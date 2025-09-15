@@ -87,7 +87,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const { amount, program, lessons, customerEmail } = requestData;
+    const { amount, program, lessons, customerEmail, isReturningCustomer, loyaltyDiscountApplied, originalPrice } = requestData;
 
     // Validate input
     if (!amount || !program || !lessons) {
@@ -106,7 +106,14 @@ exports.handler = async (event, context) => {
       console.log('Email provided for package code delivery:', customerEmail);
     }
 
-    console.log('Creating payment intent for:', { amount, program, lessons });
+    console.log('Creating payment intent for:', { 
+      amount, 
+      program, 
+      lessons,
+      customerEmail,
+      isReturningCustomer,
+      loyaltyDiscountApplied
+    });
 
     // Create Stripe payment intent
     const paymentIntent = await stripe.paymentIntents.create({
@@ -120,6 +127,9 @@ exports.handler = async (event, context) => {
         lessons: lessons.toString(),
         customerEmail: customerEmail || '',
         packageCode: generatePackageCode(program, lessons), // Pre-generate so we have it
+        isReturningCustomer: isReturningCustomer ? 'true' : 'false',
+        loyaltyDiscountApplied: loyaltyDiscountApplied ? 'true' : 'false',
+        originalPrice: originalPrice ? originalPrice.toString() : amount.toString()
       },
       receipt_email: customerEmail || null,
     });
@@ -147,6 +157,9 @@ exports.handler = async (event, context) => {
           status: isTestMode ? 'paid' : 'pending', // Set to 'paid' in test mode
           customer_email: customerEmail || null,
           created_at: new Date().toISOString(),
+          is_returning_customer: isReturningCustomer || false,
+          loyalty_discount_applied: loyaltyDiscountApplied || false,
+          original_price: originalPrice ? originalPrice / 100 : amount / 100
         }
       ]);
 
