@@ -372,6 +372,16 @@
         .pulse-subtle {
             animation: pulse 3s ease-in-out infinite;
         }
+        /* Gradient radial for hero CTA */
+        .bg-gradient-radial {
+            background: radial-gradient(ellipse at center, var(--tw-gradient-from), var(--tw-gradient-to));
+        }
+        /* Wave divider fix for mobile */
+        @media (max-width: 640px) {
+            .hero-cta-wave {
+                margin-bottom: -1px;
+            }
+        }
     </style>
 </head>
 <body class="gradient-bg">
@@ -795,181 +805,225 @@
             </div>
         </section>
         
-        <!-- CTA Section - Completely Revamped -->
-        <section class="relative py-20 overflow-hidden bg-gradient-to-br from-[#00253D] via-[#00365C] to-[#00253D]">
-            <!-- Animated background elements -->
-            <div class="absolute inset-0">
-                <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
-                <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500 rounded-full filter blur-3xl opacity-10 animate-pulse" style="animation-delay: 2s;"></div>
-            </div>
+        <!-- Hero CTA Section - Redesigned for Conversion -->
+        <section class="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-[#0B3856] to-[#00253D]" role="region" aria-label="Call to action">
+            <!-- Subtle gradient overlay -->
+            <div class="absolute inset-0 bg-gradient-radial from-[#2284B8]/10 via-transparent to-transparent"></div>
             
-            <div class="container mx-auto px-6 relative z-10">
-                <!-- Urgency Banner -->
-                <div class="flex justify-center mb-8">
-                    <div class="inline-flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold animate-pulse">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                <!-- Dynamic Month Ribbon -->
+                <div class="flex justify-center mb-6">
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold" aria-live="polite">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                        <span>Limited Spots Available for January Classes</span>
+                        <span id="monthRibbon" aria-label="Limited spots available">Limited Spots Available for <span id="currentMonth"></span> Classes</span>
                     </div>
                 </div>
                 
                 <!-- Main Headline -->
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl md:text-5xl font-black text-white mb-4">
-                        Is Your Child Missing Out on <span class="text-yellow-400">Pool Parties</span> and <span class="text-yellow-400">Beach Days</span>?
-                    </h2>
-                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                        While other kids are jumping in with joy, yours is watching from the sidelines. 
-                        <span class="text-white font-semibold">It doesn't have to be this way.</span>
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+                        Your Child Can Swim <span class="text-[#E9F5FC]">Confidently</span> in Just 12 Lessons
+                    </h1>
+                    <p class="text-lg sm:text-xl text-[#E9F5FC]/90 max-w-3xl mx-auto">
+                        Join 500+ North Jersey families who transformed their nervous beginners into capable swimmers
                     </p>
                 </div>
                 
                 <!-- Two-Column Layout -->
-                <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto mb-12">
-                    <!-- Left Column - The Problem/Solution -->
-                    <div class="text-white">
-                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">In Just 12 Lessons, Your Child Will:</h3>
-                        <ul class="space-y-4">
+                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
+                    <!-- Left Column - Outcomes & Trust -->
+                    <div class="text-white order-2 lg:order-1">
+                        <h2 class="text-2xl font-bold mb-6 text-[#E9F5FC]">By Lesson 12, Your Child Will:</h2>
+                        <ul class="space-y-4 mb-8" role="list">
                             <li class="flex items-start gap-3">
-                                <span class="text-green-400 text-2xl">✓</span>
+                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                                 <div>
-                                    <span class="font-semibold">Jump in fearlessly</span> instead of clinging to the edge
+                                    <span class="font-semibold">Jump in confidently</span> - no more poolside tears
                                 </div>
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="text-green-400 text-2xl">✓</span>
+                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                                 <div>
-                                    <span class="font-semibold">Swim across the pool independently</span> (yes, really!)
+                                    <span class="font-semibold">Swim independently</span> across the entire pool
                                 </div>
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="text-green-400 text-2xl">✓</span>
+                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                                 <div>
-                                    <span class="font-semibold">Float on their back for 60+ seconds</span> - a life-saving skill
+                                    <span class="font-semibold">Float & tread water</span> - critical safety skills
                                 </div>
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="text-green-400 text-2xl">✓</span>
+                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                                 <div>
-                                    <span class="font-semibold">Actually ENJOY the water</span> instead of fearing it
+                                    <span class="font-semibold">Love the water</span> instead of fearing it
                                 </div>
                             </li>
                         </ul>
                         
-                        <!-- Stats Box -->
-                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mt-8 border border-white/20">
-                            <div class="grid grid-cols-2 gap-4 text-center">
-                                <div>
-                                    <p class="text-3xl font-bold text-yellow-400">98%</p>
-                                    <p class="text-sm text-gray-300">Swimming independently by lesson 12</p>
-                                </div>
-                                <div>
-                                    <p class="text-3xl font-bold text-yellow-400">3-5x</p>
-                                    <p class="text-sm text-gray-300">Faster progress than typical programs</p>
-                                </div>
+                        <!-- Trust Band -->
+                        <div class="flex flex-wrap gap-3">
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl text-sm">
+                                <span class="text-yellow-400">★★★★★</span>
+                                <span>134+ Reviews</span>
+                            </div>
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl text-sm">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                                <span>3:1 Ratio</span>
+                            </div>
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl text-sm">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>
+                                <span>Water Safety Certified</span>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Right Column - Offer Box -->
-                    <div>
-                        <div class="bg-white rounded-2xl p-8 shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                    <!-- Right Column - Offer Card -->
+                    <aside class="order-1 lg:order-2">
+                        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
                             <div class="text-center mb-6">
-                                <p class="text-sm font-bold text-red-500 uppercase tracking-wide mb-2">January Special Offer</p>
-                                <h3 class="text-3xl font-black text-[#00253D]">Start with a FREE Trial</h3>
-                                <p class="text-gray-600 mt-2">No credit card. No commitment. No catch.</p>
+                                <h3 class="text-2xl sm:text-3xl font-black text-[#0B3856]">Start with a FREE Trial</h3>
+                                <p class="text-gray-600 mt-2" id="cardPolicy">No credit card required for your first lesson</p>
                             </div>
                             
+                            <!-- 3 Steps -->
                             <div class="space-y-4 mb-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span class="text-green-600 font-bold">1</span>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-[#E9F5FC] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-[#2284B8] font-bold">1</span>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-800">Book Your Free Trial</p>
-                                        <p class="text-sm text-gray-600">Pick a time that works for you</p>
+                                        <p class="font-semibold text-gray-800">Pick Your Time</p>
+                                        <p class="text-sm text-gray-600">Choose from available slots this week</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span class="text-green-600 font-bold">2</span>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-[#E9F5FC] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-[#2284B8] font-bold">2</span>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-800">Watch Your Child Thrive</p>
-                                        <p class="text-sm text-gray-600">See real progress in just one lesson</p>
+                                        <p class="font-semibold text-gray-800">Meet Your Instructor</p>
+                                        <p class="text-sm text-gray-600">Certified & experienced with kids</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span class="text-green-600 font-bold">3</span>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-[#E9F5FC] rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="text-[#2284B8] font-bold">3</span>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-800">Secure Your Spot</p>
-                                        <p class="text-sm text-gray-600">Join before classes fill up</p>
+                                        <p class="font-semibold text-gray-800">See Real Progress</p>
+                                        <p class="text-sm text-gray-600">Watch your child gain confidence</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <a href="safestroke-booking.html" class="block w-full text-center bg-gradient-to-r from-[#2284B8] to-[#1976a3] hover:from-[#1976a3] hover:to-[#15628a] text-white font-bold py-4 px-6 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg mb-4">
-                                Claim Your Free Lesson Now →
+                            <!-- CTA Button -->
+                            <a href="safestroke-booking.html" 
+                               class="block w-full text-center bg-[#2284B8] hover:bg-[#1976a3] text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2" 
+                               data-cta="hero_free_trial"
+                               role="button">
+                                Book Free Trial Now →
                             </a>
                             
-                            <div class="text-center">
-                                <p class="text-sm text-gray-500 mb-2">Or call/text us directly:</p>
-                                <a href="tel:973-820-1153" class="text-2xl font-bold text-[#2284B8] hover:text-[#1976a3]">
-                                    📱 973-820-1153
+                            <!-- Phone Link -->
+                            <div class="text-center mt-4">
+                                <p class="text-sm text-gray-500 mb-2">Prefer to call?</p>
+                                <a href="tel:973-820-1153" 
+                                   class="text-xl font-bold text-[#2284B8] hover:text-[#1976a3] transition-colors"
+                                   data-cta="hero_call"
+                                   aria-label="Call SafeStroke at 973-820-1153">
+                                    973-820-1153
                                 </a>
                             </div>
                             
-                            <!-- Trust Indicators -->
-                            <div class="border-t mt-6 pt-6">
-                                <div class="flex items-center justify-center gap-6 text-sm text-gray-600">
+                            <!-- Policy Line -->
+                            <div class="border-t mt-6 pt-4">
+                                <div class="flex items-center justify-center gap-4 text-xs text-gray-600">
                                     <div class="flex items-center gap-1">
-                                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span>No Hidden Fees</span>
+                                        <svg class="w-3 h-3 text-[#23C552]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                        <span>No hidden fees</span>
                                     </div>
                                     <div class="flex items-center gap-1">
-                                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span>Cancel Anytime</span>
+                                        <svg class="w-3 h-3 text-[#23C552]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                        <span>Cancel anytime</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Social Proof Bar -->
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                    <div class="flex flex-wrap items-center justify-center gap-8 text-white">
-                        <div class="flex items-center gap-2">
-                            <span class="text-yellow-400 text-xl">⭐⭐⭐⭐⭐</span>
-                            <span class="font-semibold">134+ Five-Star Reviews</span>
+                        
+                        <!-- Family Savings Badge -->
+                        <div class="mt-4 text-center">
+                            <a href="safestroke-pricing.html#family-savings" class="inline-flex items-center gap-2 text-sm text-white hover:text-[#E9F5FC] transition-colors">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"></path></svg>
+                                <span class="font-semibold">Family Savings: 10% off each additional package</span>
+                            </a>
                         </div>
-                        <div class="hidden md:block w-px h-8 bg-white/30"></div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">👨‍👩‍👧‍👦</span>
-                            <span class="font-semibold">500+ Kids Now Water-Safe</span>
-                        </div>
-                        <div class="hidden md:block w-px h-8 bg-white/30"></div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🏆</span>
-                            <span class="font-semibold">Clifton's #1 Rated Swim School</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- FAQ Teaser -->
-                <div class="text-center mt-12">
-                    <p class="text-gray-400 mb-2">Still have questions?</p>
-                    <div class="flex flex-wrap justify-center gap-4 text-sm">
-                        <a href="#" class="text-yellow-400 hover:text-yellow-300 underline">What ages do you teach?</a>
-                        <span class="text-gray-600">•</span>
-                        <a href="#" class="text-yellow-400 hover:text-yellow-300 underline">What if my child is scared of water?</a>
-                        <span class="text-gray-600">•</span>
-                        <a href="#" class="text-yellow-400 hover:text-yellow-300 underline">View full FAQ</a>
-                    </div>
+                    </aside>
                 </div>
             </div>
+            
+            <!-- Wave Divider -->
+            <div class="absolute bottom-0 left-0 right-0 overflow-hidden leading-none hero-cta-wave">
+                <svg class="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" 
+                          fill="#ffffff"></path>
+                </svg>
+            </div>
         </section>
+        
+        <!-- Dynamic Month Script -->
+        <script>
+        (function() {
+            // Configuration
+            const REQUIRE_CARD_FOR_TRIAL = false;
+            
+            // Set dynamic month
+            const monthElement = document.getElementById('currentMonth');
+            if (monthElement) {
+                const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
+                monthElement.textContent = currentMonth;
+            }
+            
+            // Update card policy if needed
+            if (REQUIRE_CARD_FOR_TRIAL) {
+                const policyElement = document.getElementById('cardPolicy');
+                if (policyElement) {
+                    policyElement.textContent = 'Free trial—card on file to hold your spot (no charge unless no-show).';
+                }
+            }
+            
+            // Analytics tracking
+            document.querySelectorAll('[data-cta]').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    const ctaType = this.getAttribute('data-cta');
+                    
+                    // Track with existing analytics
+                    if (typeof fbq !== 'undefined') {
+                        if (ctaType === 'hero_free_trial') {
+                            fbq('track', 'InitiateCheckout', {
+                                content_name: 'Free Trial Lesson',
+                                content_category: 'Swimming Lessons',
+                                value: 0.00,
+                                currency: 'USD'
+                            });
+                        } else if (ctaType === 'hero_call') {
+                            fbq('track', 'Contact', {
+                                contact_type: 'Phone Call - Hero CTA'
+                            });
+                        }
+                    }
+                    
+                    // Custom event for other analytics
+                    if (window.gtag) {
+                        gtag('event', 'cta_click', {
+                            'cta_location': 'hero',
+                            'cta_type': ctaType
+                        });
+                    }
+                });
+            });
+        })();
+        </script>
     </main>
 
     <!-- Enhanced Footer -->
