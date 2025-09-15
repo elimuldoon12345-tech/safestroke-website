@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Swim Lessons | SafeStroke Swim Academy</title>
+    <meta name="description" content="Book swim lessons at SafeStroke. Free first lesson for new families. Small groups, certified instructors. Ages 3 months to 12 years.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <meta name="stripe-public-key" content="pk_live_51S4Un3PKONca2rV4hsK1odzEvznKxPPcUPYChECIPMGTpNMHtFhevL5A5oIi5HoTbty8WMF7eW221YpCR565PxDG00hawzM5Fc">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '642654784918679');
+    fbq('track', 'PageView');
+    
+    // Track booking page view
+    fbq('track', 'ViewContent', {
+        content_name: 'Booking Page',
+        content_category: 'Swimming Lessons'
+    });
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=642654784918679&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <style>
+        :root {
+            --brand-blue: #2284B8;
+            --brand-navy: #0B3856;
+            --brand-sky: #E9F5FC;
+            --accent-green: #23C552;
+        }
+        
+        * {
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            color: var(--brand-navy);
+            background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            min-height: 100vh;
+        }
+        
+        .brand-blue { color: var(--brand-blue); }
+        .brand-blue-bg { background-color: var(--brand-blue); }
+        .brand-navy { color: var(--brand-navy); }
+        .brand-navy-bg { background-color: var(--brand-navy); }
+        
+        /* Focus states for accessibility */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--brand-blue);
+            outline-offset: 2px;
+        }
+        
+        /* Minimum touch target size */
+        button, a.btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Stepper styles */
+        .stepper-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .stepper-item::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: -1;
+        }
+        
+        .stepper-item:last-child::after {
+            display: none;
+        }
+        
+        .stepper-item.active .stepper-number {
+            background: var(--brand-blue);
+            color: white;
+        }
+        
+        .stepper-item.completed .stepper-number {
+            background: var(--brand-blue);
+            color: white;
+        }
+        
+        .stepper-item.completed .stepper-number::after {
+            content: '✓';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stepper-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        /* Offer badge styles */
+        .offer-badge {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        /* Card hover effects */
+        .choice-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .choice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid var(--brand-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="brand-navy-bg text-white text-center py-2 text-sm font-medium tracking-wider">
+        199 Scoles Ave, Clifton NJ | <a href="tel:973-820-1153" class="font-bold hover:underline" data-cta="phone_topbar">Call or Text 973-820-1153</a>
+    </div>
+
+    <!-- Header -->
+    <nav class="bg-white sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="index.html" class="flex items-center">
+                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-20 w-auto">
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex flex-grow justify-center items-center space-x-8 font-semibold">
+                <a href="index.html" class="hover:text-blue-600 transition">Main</a>
+                <a href="safestroke-programs.html" class="hover:text-blue-600 transition">Programs</a>
+                <a href="safestroke-pricing.html" class="hover:text-blue-600 transition">Pricing</a>
+                <a href="safestroke-aboutus.html" class="hover:text-blue-600 transition">About Us</a>
+                <a href="safestroke-reviews.html" class="hover:text-blue-600 transition">Reviews</a>
+                <a href="safestroke-location.html" class="hover:text-blue-600 transition">Our Location</a>
+            </div>
+            
+            <!-- Book Now Button -->
+            <div class="hidden md:flex flex-shrink-0">
+                <a href="safestroke-booking.html" class="brand-blue-bg hover:opacity-90 text-white font-bold py-2.5 px-6 rounded-full transition" data-cta="book_nav">Book Now</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white px-6 pb-4 border-t">
+            <a href="index.html" class="block py-2">Main</a>
+            <a href="safestroke-programs.html" class="block py-2">Programs</a>
+            <a href="safestroke-pricing.html" class="block py-2">Pricing</a>
+            <a href="safestroke-aboutus.html" class="block py-2">About Us</a>
+            <a href="safestroke-reviews.html" class="block py-2">Reviews</a>
+            <a href="safestroke-location.html" class="block py-2">Our Location</a>
+            <div class="mt-4 pt-4 border-t">
+                <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg text-white font-bold py-3 rounded-full">Book Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-12 md:py-16">
+        <div class="container mx-auto px-4 max-w-6xl">
+            
+            <!-- Header Area -->
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Book Your Lessons</h1>
+                
+                <!-- Trust Strip -->
+                <div class="flex flex-wrap justify-center gap-4 text-sm">
+                    <span class="inline-flex items-center gap-2 text-gray-600">
+                        <span>⭐</span> 5 Reviews
+                    </span>
+                    <span class="inline-flex items-center gap-2 text-gray-600">
+                        <span>👨‍👩‍👧</span> 3:1 Ratio
+                    </span>
+                    <span class="inline-flex items-center gap-2 text-gray-600">
+                        <span>🛟</span> CPR/First-Aid Certified
+                    </span>
+                </div>
+            </div>
+
+            <!-- Choice Cards -->
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <!-- Single Lesson Card -->
+                <div class="choice-card bg-white rounded-2xl p-8 shadow-lg border border-gray-200" 
+                     onclick="startSingleLessonFlow()" 
+                     role="button" 
+                     tabindex="0"
+                     aria-label="Book a single lesson">
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold mb-4">Single Lesson (New Families)</h2>
+                        <div class="space-y-3 mb-6">
+                            <p class="flex items-center justify-center gap-2 text-gray-700">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Try us out with no commitment
+                            </p>
+                            <p class="flex items-center justify-center gap-2 text-gray-700">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Perfect for trying our method
+                            </p>
+                        </div>
+                        <div class="offer-badge inline-block px-4 py-2 rounded-full text-white font-semibold mb-4">
+                            FIRST-FREE
+                        </div>
+                        <p class="text-sm text-gray-600 mb-6">One per family, no card required</p>
+                        <button class="w-full brand-blue-bg hover:opacity-90 text-white font-bold py-3 rounded-full transition">
+                            Book Free Lesson
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package Card -->
+                <div class="choice-card bg-white rounded-2xl p-8 shadow-lg border border-gray-200" 
+                     onclick="startPackageFlow()" 
+                     role="button" 
+                     tabindex="0"
+                     aria-label="Choose a lesson package">
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold mb-4">Lesson Packages</h2>
+                        <div class="space-y-3 mb-6">
+                            <p class="flex items-center justify-center gap-2 text-gray-700">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Predictable progress
+                            </p>
+                            <p class="flex items-center justify-center gap-2 text-gray-700">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Best per-lesson value
+                            </p>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                            <p class="text-sm font-semibold text-gray-700 mb-1">Family Savings</p>
+                            <p class="text-xs text-gray-600">10% off each additional package after the first — all programs & sizes. Auto-applied for the same family email.</p>
+                        </div>
+                        <button class="w-full brand-blue-bg hover:opacity-90 text-white font-bold py-3 rounded-full transition">
+                            Choose a Package
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package Flow (Hidden initially) -->
+            <div id="package-flow" class="hidden bg-white rounded-2xl p-8 shadow-lg">
+                <!-- Stepper -->
+                <div class="flex justify-between mb-12">
+                    <div class="stepper-item active">
+                        <div class="stepper-number">1</div>
+                        <span class="text-sm font-medium">Program</span>
+                    </div>
+                    <div class="stepper-item">
+                        <div class="stepper-number">2</div>
+                        <span class="text-sm font-medium">Package</span>
+                    </div>
+                    <div class="stepper-item">
+                        <div class="stepper-number">3</div>
+                        <span class="text-sm font-medium">Payment</span>
+                    </div>
+                    <div class="stepper-item">
+                        <div class="stepper-number">4</div>
+                        <span class="text-sm font-medium">Book</span>
+                    </div>
+                </div>
+
+                <!-- Step Content -->
+                <div id="step-content">
+                    <!-- Content will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Single Lesson Flow (Hidden initially) -->
+            <div id="single-lesson-flow" class="hidden bg-white rounded-2xl p-8 shadow-lg">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+
+            <!-- Returning Customer Block -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg mt-8">
+                <h2 class="text-2xl font-bold mb-4 text-center">Have a package code?</h2>
+                <p class="text-center text-gray-600 mb-6">Paste your code to book remaining lessons</p>
+                
+                <div class="max-w-md mx-auto">
+                    <label for="package-code" class="sr-only">Package code</label>
+                    <div class="flex gap-3">
+                        <input type="text" 
+                               id="package-code" 
+                               placeholder="Enter your package code"
+                               class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button onclick="scheduleWithCode()" 
+                                class="brand-blue-bg hover:opacity-90 text-white font-bold px-6 py-3 rounded-lg transition">
+                            Schedule
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Example: PKG-ABC123</p>
+                    
+                    <!-- Success/Error messages -->
+                    <div id="code-success" class="hidden mt-4 p-3 bg-green-100 text-green-800 rounded-lg" role="alert" aria-live="polite">
+                        <p class="font-medium">Code validated! Loading available times...</p>
+                    </div>
+                    <div id="code-error" class="hidden mt-4 p-3 bg-red-100 text-red-800 rounded-lg" role="alert" aria-live="assertive">
+                        <p class="font-medium">Invalid code. Please check and try again.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="brand-navy-bg text-white pt-12 pb-8 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & About -->
+                <div class="text-center md:text-left">
+                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-12 w-auto mb-4 mx-auto md:mx-0 opacity-90">
+                    <p class="text-sm opacity-80">Small-group swim lessons with certified instructors.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="text-center md:text-left">
+                    <h3 class="font-bold mb-4">Programs</h3>
+                    <ul class="space-y-2 text-sm opacity-80">
+                        <li><a href="safestroke-programs.html#droplet" class="hover:opacity-100 transition">Droplet (3-24 months)</a></li>
+                        <li><a href="safestroke-programs.html#splashlet" class="hover:opacity-100 transition">Splashlet (2-3 years)</a></li>
+                        <li><a href="safestroke-programs.html#strokelet" class="hover:opacity-100 transition">Strokelet (3-12 years)</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Information -->
+                <div class="text-center md:text-left">
+                    <h3 class="font-bold mb-4">Information</h3>
+                    <ul class="space-y-2 text-sm opacity-80">
+                        <li><a href="safestroke-aboutus.html" class="hover:opacity-100 transition">About Us</a></li>
+                        <li><a href="safestroke-reviews.html" class="hover:opacity-100 transition">Reviews</a></li>
+                        <li><a href="safestroke-location.html" class="hover:opacity-100 transition">Location</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div class="text-center md:text-left">
+                    <h3 class="font-bold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-sm opacity-80">
+                        <li>199 Scoles Avenue<br>Clifton, NJ 07012</li>
+                        <li><a href="tel:973-820-1153" class="hover:opacity-100 transition" data-cta="phone_footer">973-820-1153</a></li>
+                        <li><a href="mailto:contact@safestrokeswim.com" class="hover:opacity-100 transition">contact@safestrokeswim.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/20 pt-6 text-center text-sm opacity-70">
+                <p>&copy; 2025 SafeStroke Swim Academy. All Rights Reserved.</p>
+                <p class="mt-2">
+                    <a href="#" class="hover:opacity-100 transition">Privacy Policy</a> | 
+                    <a href="#" class="hover:opacity-100 transition">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="booking-functions-fix.js"></script>
+    <script src="booking-system-v2.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        
+        // Analytics tracking
+        function trackCTA(element) {
+            const cta = element.getAttribute('data-cta');
+            if (cta && window.gtag) {
+                gtag('event', 'cta_click', {
+                    'event': 'cta_click',
+                    'page': 'booking',
+                    'section': element.closest('section')?.id || 'unknown',
+                    'cta': cta
+                });
+            }
+        }
+        
+        // Add tracking to all CTAs
+        document.querySelectorAll('[data-cta]').forEach(el => {
+            el.addEventListener('click', () => trackCTA(el));
+        });
+        
+        // Placeholder functions (to be replaced with actual booking system)
+        function startSingleLessonFlow() {
+            document.getElementById('single-lesson-flow').classList.remove('hidden');
+            document.getElementById('package-flow').classList.add('hidden');
+            // Implementation here
+        }
+        
+        function startPackageFlow() {
+            document.getElementById('package-flow').classList.remove('hidden');
+            document.getElementById('single-lesson-flow').classList.add('hidden');
+            // Implementation here
+        }
+        
+        function scheduleWithCode() {
+            const code = document.getElementById('package-code').value;
+            const successMsg = document.getElementById('code-success');
+            const errorMsg = document.getElementById('code-error');
+            
+            // Validate code (placeholder logic)
+            if (code && code.length > 5) {
+                errorMsg.classList.add('hidden');
+                successMsg.classList.remove('hidden');
+                // Load available times...
+            } else {
+                successMsg.classList.add('hidden');
+                errorMsg.classList.remove('hidden');
+            }
+        }
+        
+        // Keyboard navigation for choice cards
+        document.querySelectorAll('.choice-card').forEach(card => {
+            card.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
