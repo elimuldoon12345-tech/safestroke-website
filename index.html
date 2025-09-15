@@ -641,7 +641,7 @@
             
             <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-12">
-                    <h2 class="text-4xl font-black mb-4 text-[#00253D]">Real Parents. Real Results.</h2>
+                    <h2 class="text-4xl font-black mb-4 text-[#00253D]">What Parents Are Saying</h2>
                     <div class="flex justify-center items-center gap-4 flex-wrap">
                         <div class="flex">
                             <span class="text-yellow-500 text-2xl">★★★★★</span>
@@ -920,20 +920,24 @@
         });
         
         // Reviews Carousel Functionality
-        (function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const reviewsContainer = document.getElementById('reviewsContainer');
             const prevButton = document.getElementById('prevReview');
             const nextButton = document.getElementById('nextReview');
             const dots = document.querySelectorAll('.review-dot');
             
+            if (!reviewsContainer || !prevButton || !nextButton) {
+                console.error('Carousel elements not found');
+                return;
+            }
+            
             let currentSlide = 0;
             const totalReviews = 8;
-            let reviewsPerView = window.innerWidth >= 768 ? 2 : 1; // Show 2 on desktop, 1 on mobile
+            let reviewsPerView = window.innerWidth >= 768 ? 2 : 1;
             let totalSlides = Math.ceil(totalReviews / reviewsPerView);
             
             function updateCarousel() {
-                const slideWidth = reviewsPerView === 2 ? 50 : 100;
-                const translateX = -currentSlide * 100 / reviewsPerView;
+                const translateX = -currentSlide * (100 / reviewsPerView);
                 reviewsContainer.style.transform = `translateX(${translateX}%)`;
                 
                 // Update dots
@@ -941,13 +945,11 @@
                     if (index < totalSlides) {
                         dot.style.display = 'block';
                         if (index === currentSlide) {
-                            dot.classList.remove('bg-gray-400');
-                            dot.classList.add('bg-[#2284B8]', 'w-8');
                             dot.style.backgroundColor = '#2284B8';
+                            dot.style.width = '32px';
                         } else {
-                            dot.classList.remove('bg-[#2284B8]', 'w-8');
-                            dot.classList.add('bg-gray-400');
                             dot.style.backgroundColor = '#9ca3af';
+                            dot.style.width = '8px';
                         }
                     } else {
                         dot.style.display = 'none';
@@ -955,15 +957,20 @@
                 });
                 
                 // Update button states
-                if (prevButton) {
-                    prevButton.style.opacity = currentSlide === 0 ? '0.3' : '1';
-                    prevButton.style.cursor = currentSlide === 0 ? 'not-allowed' : 'pointer';
-                    prevButton.disabled = currentSlide === 0;
+                if (currentSlide === 0) {
+                    prevButton.style.opacity = '0.3';
+                    prevButton.style.cursor = 'not-allowed';
+                } else {
+                    prevButton.style.opacity = '1';
+                    prevButton.style.cursor = 'pointer';
                 }
-                if (nextButton) {
-                    nextButton.style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
-                    nextButton.style.cursor = currentSlide === totalSlides - 1 ? 'not-allowed' : 'pointer';
-                    nextButton.disabled = currentSlide === totalSlides - 1;
+                
+                if (currentSlide === totalSlides - 1) {
+                    nextButton.style.opacity = '0.3';
+                    nextButton.style.cursor = 'not-allowed';
+                } else {
+                    nextButton.style.opacity = '1';
+                    nextButton.style.cursor = 'pointer';
                 }
             }
             
@@ -982,23 +989,29 @@
             }
             
             function goToSlide(slideIndex) {
-                currentSlide = slideIndex;
-                updateCarousel();
+                if (slideIndex >= 0 && slideIndex < totalSlides) {
+                    currentSlide = slideIndex;
+                    updateCarousel();
+                }
             }
             
-            // Event listeners
-            if (prevButton && nextButton) {
-                prevButton.addEventListener('click', prevSlide);
-                nextButton.addEventListener('click', nextSlide);
-            }
+            // Event listeners - use explicit functions
+            prevButton.onclick = function(e) {
+                e.preventDefault();
+                prevSlide();
+            };
+            
+            nextButton.onclick = function(e) {
+                e.preventDefault();
+                nextSlide();
+            };
             
             // Dot navigation
             dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    if (index < totalSlides) {
-                        goToSlide(index);
-                    }
-                });
+                dot.onclick = function(e) {
+                    e.preventDefault();
+                    goToSlide(index);
+                };
             });
             
             // Auto-play carousel
@@ -1009,16 +1022,16 @@
                     currentSlide = 0;
                     updateCarousel();
                 }
-            }, 5000); // Change slide every 5 seconds
+            }, 5000);
             
             // Pause auto-play on hover
             const carouselContainer = reviewsContainer.parentElement.parentElement;
             if (carouselContainer) {
-                carouselContainer.addEventListener('mouseenter', () => {
+                carouselContainer.onmouseenter = function() {
                     clearInterval(autoPlayInterval);
-                });
+                };
                 
-                carouselContainer.addEventListener('mouseleave', () => {
+                carouselContainer.onmouseleave = function() {
                     autoPlayInterval = setInterval(() => {
                         if (currentSlide < totalSlides - 1) {
                             nextSlide();
@@ -1027,12 +1040,12 @@
                             updateCarousel();
                         }
                     }, 5000);
-                });
+                };
             }
             
             // Handle window resize
             let resizeTimeout;
-            window.addEventListener('resize', () => {
+            window.addEventListener('resize', function() {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
                     const newReviewsPerView = window.innerWidth >= 768 ? 2 : 1;
@@ -1047,7 +1060,7 @@
             
             // Initialize
             updateCarousel();
-        })();
+        });
         
         // Smooth scroll for mobile reviews on touch
         const reviewsContainer = document.getElementById('reviewsContainer');
