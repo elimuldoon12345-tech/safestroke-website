@@ -1,7 +1,7 @@
 # Hero CTA Section Documentation
 
 ## Overview
-The Hero CTA section has been redesigned for improved conversion, accessibility, and mobile responsiveness. It features a two-column layout with dynamic content and comprehensive analytics tracking.
+The Hero CTA section has been redesigned with evidence-based, non-guarantee language for improved conversion, accessibility, and mobile responsiveness. It features a two-column layout with dynamic content and comprehensive analytics tracking.
 
 ## Structure
 
@@ -33,15 +33,13 @@ Configure the trial requirements using the `REQUIRE_CARD_FOR_TRIAL` flag:
 const REQUIRE_CARD_FOR_TRIAL = false; // Set to true to require card on file
 ```
 
-- **false** (default): "No credit card required for your first lesson"
-- **true**: "Free trial—card on file to hold your spot (no charge unless no-show)."
+- **false** (default): "No credit card required for your first lesson."
+- **true**: "Card on file to hold your spot—no charge unless no-show."
 
-### 3. Family Savings Badge
-Links to the pricing page with anchor:
+### 3. Family Savings Note
+Displays below the card:
 ```html
-<a href="safestroke-pricing.html#family-savings">
-  Family Savings: 10% off each additional package
-</a>
+Family Savings: 10% off each additional package after the first—all programs & package sizes.
 ```
 
 ## Accessibility Features
@@ -92,19 +90,22 @@ Links to the pricing page with anchor:
 
 - [ ] Dynamic month displays correctly
 - [ ] CTA button clicks track in analytics
-- [ ] Mobile layout doesn't clip or overflow
+- [ ] Mobile layout doesn't clip or overflow (test at 320px)
 - [ ] Wave divider scales properly
 - [ ] Focus states are visible
-- [ ] Family savings link works
+- [ ] Family savings note present and mentions all programs & package sizes
 - [ ] Card policy toggle functions
 - [ ] Lighthouse Accessibility ≥ 95
+- [ ] No guarantee language remains
+- [ ] Card width constrained to 420-480px
 
 ## Maintenance Notes
 
 1. To change the trial policy, modify `REQUIRE_CARD_FOR_TRIAL` in the inline script
 2. To update tracking events, edit the analytics section in the script
 3. The wave SVG can be customized by editing the path data
-4. Family savings text should match actual pricing page offers
+4. Family savings text is fixed: "10% off each additional package after the first—all programs & package sizes"
+5. Results disclaimer is included in list title to avoid guarantee claims
 
 ## Browser Support
 
