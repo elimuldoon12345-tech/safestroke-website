@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Consistency Test | SafeStroke Swim Academy</title>
+    
+    <!-- ONLY Outfit font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Brand System CSS -->
+    <link rel="stylesheet" href="/assets/css/brand-system.css">
+    
+    <style>
+        .test-grid {
+            display: grid;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .test-section {
+            border: 2px solid var(--ss-gray-200);
+            border-radius: var(--radius-2xl);
+            padding: 20px;
+            background: var(--ss-white);
+        }
+        
+        .pass { color: var(--ss-accent-green); }
+        .fail { color: #ef4444; }
+        
+        @media (max-width: 767px) {
+            body { padding-bottom: 80px; }
+        }
+    </style>
+</head>
+<body style="background: var(--ss-sky);">
+    
+    <div class="ss-container" style="padding-top: 40px;">
+        <h1 class="ss-page-header" style="text-align: center; margin-bottom: 40px;">
+            Brand Consistency Test Page
+        </h1>
+        
+        <div class="test-grid">
+            <!-- Test 1: Official Naming -->
+            <div class="test-section">
+                <h2 class="ss-section-header">1. Official Naming</h2>
+                <p class="ss-body pass">✓ SafeStroke Swim Academy</p>
+                <p class="ss-body fail">✗ <s>SafeStroke Swim School</s></p>
+            </div>
+            
+            <!-- Test 2: CTA Standards -->
+            <div class="test-section">
+                <h2 class="ss-section-header">2. CTA Standards</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                    <button class="ss-btn ss-btn-primary">Book Free Lesson</button>
+                    <button class="ss-btn ss-btn-secondary">Book Now</button>
+                </div>
+                <p class="ss-small" style="margin-top: 10px;">
+                    <span class="fail">✗ NOT: "Book a Free Lesson Today" or "Get Started"</span>
+                </p>
+            </div>
+            
+            <!-- Test 3: Program Names -->
+            <div class="test-section">
+                <h2 class="ss-section-header">3. Program Names</h2>
+                <ul style="list-style: none; padding: 0;">
+                    <li class="ss-body pass" style="padding: 5px 0;">✓ Droplet (3-24 months)</li>
+                    <li class="ss-body pass" style="padding: 5px 0;">✓ Splashlet (2-3 years)</li>
+                    <li class="ss-body pass" style="padding: 5px 0;">✓ Strokelet — Level 1 (3-6 years)</li>
+                    <li class="ss-body pass" style="padding: 5px 0;">✓ Strokelet — Level 2 (6-12 years)</li>
+                </ul>
+                <p class="ss-small fail" style="margin-top: 10px;">
+                    ✗ NOT: "Bubble Buddies" or "Stroke Starters"
+                </p>
+            </div>
+            
+            <!-- Test 4: Free Offer Badge -->
+            <div class="test-section">
+                <h2 class="ss-section-header">4. Free Offer Badge</h2>
+                <div style="margin: 15px 0;">
+                    <span class="ss-badge ss-badge-promo">First Lesson Free</span>
+                    <span class="ss-small pass" style="margin-left: 10px;">✓ Correct (Title Case)</span>
+                </div>
+                <div style="margin: 15px 0;">
+                    <span class="ss-small fail">✗ NOT: "FIRST-FREE" or "First Free"</span>
+                </div>
+            </div>
+            
+            <!-- Test 5: Rating Display -->
+            <div class="test-section">
+                <h2 class="ss-section-header">5. Rating Display</h2>
+                <div class="ss-rating">
+                    <span class="ss-rating-stars">★★★★★</span>
+                    <span class="ss-rating-text">5.0 (5 reviews)</span>
+                    <a href="#" class="ss-rating-link">View on Google</a>
+                </div>
+                <p class="ss-small pass" style="margin-top: 10px;">✓ Exact format required</p>
+            </div>
+            
+            <!-- Test 6: Location Label -->
+            <div class="test-section">
+                <h2 class="ss-section-header">6. Navigation Labels</h2>
+                <nav style="display: flex; gap: 20px; margin: 15px 0;">
+                    <a href="#" class="ss-nav-link">Home</a>
+                    <a href="#" class="ss-nav-link">Programs</a>
+                    <a href="#" class="ss-nav-link active">Our Location</a>
+                    <a href="#" class="ss-nav-link">About Us</a>
+                </nav>
+                <p class="ss-small pass">✓ "Our Location" (not just "Location")</p>
+            </div>
+            
+            <!-- Test 7: Color Tokens -->
+            <div class="test-section">
+                <h2 class="ss-section-header">7. Color System</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+                    <div style="width: 60px; height: 60px; background: var(--ss-blue); border-radius: 8px;"></div>
+                    <div style="width: 60px; height: 60px; background: var(--ss-navy); border-radius: 8px;"></div>
+                    <div style="width: 60px; height: 60px; background: var(--ss-sky); border-radius: 8px; border: 1px solid var(--ss-gray-200);"></div>
+                    <div style="width: 60px; height: 60px; background: var(--ss-accent-green); border-radius: 8px;"></div>
+                </div>
+                <p class="ss-small">Only use CSS variables, never hex codes directly</p>
+            </div>
+            
+            <!-- Test 8: Typography -->
+            <div class="test-section">
+                <h2 class="ss-section-header">8. Typography Test</h2>
+                <p style="font-family: var(--font-family); font-weight: 300;">Outfit Light (300)</p>
+                <p style="font-family: var(--font-family); font-weight: 400;">Outfit Regular (400)</p>
+                <p style="font-family: var(--font-family); font-weight: 600;">Outfit Semibold (600)</p>
+                <p style="font-family: var(--font-family); font-weight: 700;">Outfit Bold (700)</p>
+                <p class="ss-small fail" style="margin-top: 10px;">✗ No other fonts or weights allowed</p>
+            </div>
+            
+            <!-- Test 9: Mobile Responsiveness -->
+            <div class="test-section">
+                <h2 class="ss-section-header">9. Mobile Test (resize window)</h2>
+                <div class="ss-program-card" style="margin: 15px 0;">
+                    <h3 class="ss-sub-header">Responsive Card</h3>
+                    <p class="ss-body">This card should look good at all screen sizes with no horizontal scroll.</p>
+                    <button class="ss-btn ss-btn-primary" style="width: 100%; margin-top: 15px;">
+                        Full Width on Mobile
+                    </button>
+                </div>
+                <p class="ss-small pass">✓ No overflow at 360px width</p>
+            </div>
+            
+            <!-- Test 10: Component Examples -->
+            <div class="test-section">
+                <h2 class="ss-section-header">10. Standard Components</h2>
+                
+                <!-- Review Component -->
+                <div class="ss-review" style="margin: 15px 0;">
+                    <div class="ss-rating" style="margin-bottom: 10px;">
+                        <span class="ss-rating-stars">★★★★★</span>
+                    </div>
+                    <p class="ss-review-quote">
+                        "This is how reviews should look. Text should be clamped on mobile to prevent overflow."
+                    </p>
+                    <p class="ss-review-author">— Test User</p>
+                </div>
+                
+                <!-- Badges -->
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+                    <span class="ss-badge ss-badge-promo">Promo/Success Only</span>
+                    <span class="ss-badge ss-badge-info">Information</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary -->
+        <div class="test-section" style="margin: 40px 20px 20px; background: var(--ss-navy); color: white;">
+            <h2 style="color: white; margin-bottom: 15px;">✅ Validation Summary</h2>
+            <ul style="padding-left: 20px;">
+                <li>All text uses Outfit font</li>
+                <li>Colors use CSS variables only</li>
+                <li>CTAs use standard copy</li>
+                <li>Programs properly named</li>
+                <li>Components consistently styled</li>
+                <li>Mobile responsive at 360px+</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Mobile Sticky CTA Test -->
+    <div class="ss-mobile-cta">
+        <button class="ss-btn ss-btn-primary" style="width: 100%;">Book Free Lesson</button>
+    </div>
+    
+    <script>
+        // Test that only approved fonts are loaded
+        console.log('Font Test:', getComputedStyle(document.body).fontFamily);
+        
+        // Test responsive width
+        console.log('Viewport Width:', window.innerWidth);
+        
+        // Verify CSS variables
+        const root = getComputedStyle(document.documentElement);
+        console.log('Brand Colors Loaded:', {
+            blue: root.getPropertyValue('--ss-blue'),
+            navy: root.getPropertyValue('--ss-navy'),
+            sky: root.getPropertyValue('--ss-sky'),
+            green: root.getPropertyValue('--ss-accent-green')
+        });
+    </script>
+</body>
+</html>

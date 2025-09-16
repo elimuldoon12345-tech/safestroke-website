@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Style Guide | SafeStroke Swim Academy</title>
+    
+    <!-- Outfit Font - ONLY approved font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Brand System CSS -->
+    <link rel="stylesheet" href="/assets/css/brand-system.css">
+    
+    <style>
+        /* Page-specific styles for style guide only */
+        .guide-section {
+            padding: 40px 20px;
+            border-bottom: 1px solid var(--ss-gray-200);
+        }
+        
+        .color-swatch {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .component-example {
+            padding: 20px;
+            background: var(--ss-gray-50);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .do-example {
+            border-left: 4px solid var(--ss-accent-green);
+            background: #f0fdf4;
+        }
+        
+        .dont-example {
+            border-left: 4px solid #ef4444;
+            background: #fef2f2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to Content -->
+    <a href="#main" class="skip-to-content">Skip to content</a>
+    
+    <!-- Header -->
+    <header class="ss-nav">
+        <div class="ss-container" style="display: flex; align-items: center; justify-content: space-between; height: 72px;">
+            <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--ss-navy);">SafeStroke Brand Guide</h1>
+            <nav>
+                <a href="index.html" class="ss-btn ss-btn-tertiary">← Back to Site</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main id="main">
+        <!-- Brand Overview -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h1 class="ss-page-header">SafeStroke Swim Academy Brand Guidelines</h1>
+                <p class="ss-body" style="max-width: 800px;">
+                    This guide ensures consistent brand application across all SafeStroke Swim Academy touchpoints. 
+                    Follow these guidelines strictly to maintain brand integrity and user experience.
+                </p>
+                
+                <div class="component-example" style="margin-top: 40px;">
+                    <h3 class="ss-sub-header">Official Tagline</h3>
+                    <p style="font-size: 1.25rem; color: var(--ss-blue); font-weight: 600;">
+                        "North Jersey's Specialized Swim Academy for Toddlers & Kids"
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Color System -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Color System</h2>
+                
+                <h3 class="ss-sub-header">Primary Brand Colors</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="text-align: center;">
+                        <div class="color-swatch" style="background: var(--ss-blue); color: white;">
+                            Blue
+                        </div>
+                        <p class="ss-small">--ss-blue<br>#2284B8</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div class="color-swatch" style="background: var(--ss-navy); color: white;">
+                            Navy
+                        </div>
+                        <p class="ss-small">--ss-navy<br>#0B3856</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div class="color-swatch" style="background: var(--ss-sky); color: var(--ss-navy);">
+                            Sky
+                        </div>
+                        <p class="ss-small">--ss-sky<br>#E9F5FC</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div class="color-swatch" style="background: var(--ss-accent-green); color: white;">
+                            Promo
+                        </div>
+                        <p class="ss-small">--ss-accent-green<br>#10B981<br><strong>ONLY for promos</strong></p>
+                    </div>
+                </div>
+                
+                <div class="component-example dont-example" style="margin-top: 30px;">
+                    <p><strong>❌ DON'T:</strong> Use green for anything except "First Lesson Free" badges and success states</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Typography -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Typography</h2>
+                
+                <div class="component-example">
+                    <p style="font-family: var(--font-family); font-weight: 300; font-size: 1.5rem;">
+                        Outfit Light (300)
+                    </p>
+                    <p style="font-family: var(--font-family); font-weight: 400; font-size: 1.5rem;">
+                        Outfit Regular (400)
+                    </p>
+                    <p style="font-family: var(--font-family); font-weight: 600; font-size: 1.5rem;">
+                        Outfit Semibold (600)
+                    </p>
+                    <p style="font-family: var(--font-family); font-weight: 700; font-size: 1.5rem;">
+                        Outfit Bold (700)
+                    </p>
+                </div>
+                
+                <h3 class="ss-sub-header">Type Scale</h3>
+                <div class="component-example">
+                    <h1 class="ss-page-header">Page Header</h1>
+                    <h2 class="ss-section-header">Section Header</h2>
+                    <h3 class="ss-sub-header">Sub Header</h3>
+                    <p class="ss-body">Body text with proper line height and readability.</p>
+                    <p class="ss-small">Small text for captions and metadata.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Buttons -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Buttons</h2>
+                
+                <div class="component-example">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+                        <button class="ss-btn ss-btn-primary">Book Free Lesson</button>
+                        <button class="ss-btn ss-btn-secondary">Book Now</button>
+                        <button class="ss-btn ss-btn-tertiary">Learn More</button>
+                    </div>
+                </div>
+                
+                <div class="component-example do-example">
+                    <p><strong>✓ DO:</strong> Use "Book Free Lesson" as primary CTA where free offer applies</p>
+                    <p><strong>✓ DO:</strong> Use "Book Now" for general booking without free offer</p>
+                </div>
+                
+                <div class="component-example dont-example">
+                    <p><strong>❌ DON'T:</strong> Use variations like "Book a Free Lesson Today" or "Get Started"</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Cards -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Cards</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Program Card -->
+                    <div class="ss-program-card">
+                        <h3 class="ss-sub-header">Strokelet — Level 1</h3>
+                        <p class="ss-small" style="color: var(--ss-blue); margin-bottom: 10px;">Ages 3-6</p>
+                        <p class="ss-body">Building water confidence through play-based learning.</p>
+                        <button class="ss-btn ss-btn-primary" style="margin-top: 20px; width: 100%;">Learn More</button>
+                    </div>
+                    
+                    <!-- Pricing Card -->
+                    <div class="ss-pricing-card">
+                        <span class="ss-badge ss-badge-promo">First Lesson Free</span>
+                        <h3 class="ss-sub-header" style="margin-top: 15px;">8 Lessons</h3>
+                        <p style="font-size: 2rem; font-weight: 700; color: var(--ss-blue); margin: 10px 0;">$280</p>
+                        <p class="ss-small">$35 per lesson</p>
+                        <button class="ss-btn ss-btn-primary" style="margin-top: 20px; width: 100%;">Book Free Lesson</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Program Names -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Program Names</h2>
+                
+                <div class="component-example do-example">
+                    <h3 style="color: var(--ss-navy); margin-bottom: 15px;">✓ Correct Program Names:</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0;"><strong>Droplet</strong> (3-24 months)</li>
+                        <li style="padding: 8px 0;"><strong>Splashlet</strong> (2-3 years)</li>
+                        <li style="padding: 8px 0;"><strong>Strokelet — Level 1</strong> (3-6 years)</li>
+                        <li style="padding: 8px 0;"><strong>Strokelet — Level 2</strong> (6-12 years)</li>
+                    </ul>
+                </div>
+                
+                <div class="component-example dont-example">
+                    <h3 style="color: var(--ss-navy); margin-bottom: 15px;">❌ Do NOT use:</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0;"><s>Bubble Buddies</s></li>
+                        <li style="padding: 8px 0;"><s>Stroke Starters</s></li>
+                        <li style="padding: 8px 0;"><s>Strokelet Level 1</s> (missing em dash)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Standard Copy -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Standard Copy</h2>
+                
+                <div class="component-example">
+                    <h3 class="ss-sub-header">Rating Display</h3>
+                    <div class="ss-rating">
+                        <span class="ss-rating-stars">★★★★★</span>
+                        <span class="ss-rating-text">5.0 (5 reviews)</span>
+                        <a href="#" class="ss-rating-link">View on Google</a>
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="ss-sub-header">Navigation Labels</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 5px 0;">✓ <strong>Our Location</strong> (not "Location")</li>
+                        <li style="padding: 5px 0;">✓ <strong>SafeStroke Swim Academy</strong> (not "School")</li>
+                        <li style="padding: 5px 0;">✓ <strong>First Lesson Free</strong> (Title Case)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Badges -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Badges</h2>
+                
+                <div class="component-example">
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <span class="ss-badge ss-badge-promo">First Lesson Free</span>
+                        <span class="ss-badge ss-badge-info">Limited Spots</span>
+                        <span class="ss-badge" style="background: var(--ss-navy); color: white;">New</span>
+                    </div>
+                </div>
+                
+                <div class="component-example dont-example">
+                    <p><strong>❌ DON'T:</strong> Use green badge for anything except promos/success</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Reviews -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Review Component</h2>
+                
+                <div class="ss-review" style="max-width: 400px;">
+                    <div class="ss-rating" style="margin-bottom: 15px;">
+                        <span class="ss-rating-stars">★★★★★</span>
+                    </div>
+                    <p class="ss-review-quote">
+                        "The instructors at SafeStroke are amazing! My daughter went from being afraid of water to swimming confidently in just 8 lessons."
+                    </p>
+                    <p class="ss-review-author">— Sarah M.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Mobile Responsiveness -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Mobile Guidelines</h2>
+                
+                <div class="component-example">
+                    <h3 class="ss-sub-header">Key Requirements</h3>
+                    <ul style="padding-left: 20px;">
+                        <li style="padding: 5px 0;">Minimum touch target: 44px × 44px</li>
+                        <li style="padding: 5px 0;">No horizontal scroll at any width</li>
+                        <li style="padding: 5px 0;">Text readable at 360px width</li>
+                        <li style="padding: 5px 0;">Sticky CTA reserves 80px bottom padding</li>
+                        <li style="padding: 5px 0;">Review quotes clamp to 3 lines on mobile</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Usage Examples -->
+        <section class="guide-section">
+            <div class="ss-container">
+                <h2 class="ss-section-header">Implementation Examples</h2>
+                
+                <div class="component-example">
+                    <h3 class="ss-sub-header">HTML Structure</h3>
+                    <pre style="background: var(--ss-gray-800); color: white; padding: 20px; border-radius: 8px; overflow-x: auto;">
+&lt;!-- Always include brand system CSS --&gt;
+&lt;link rel="stylesheet" href="/assets/css/brand-system.css"&gt;
+
+&lt;!-- Button usage --&gt;
+&lt;button class="ss-btn ss-btn-primary"&gt;Book Free Lesson&lt;/button&gt;
+
+&lt;!-- Card usage --&gt;
+&lt;div class="ss-program-card"&gt;
+    &lt;h3 class="ss-sub-header"&gt;Strokelet — Level 1&lt;/h3&gt;
+    &lt;p class="ss-body"&gt;Program description&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Rating display --&gt;
+&lt;div class="ss-rating"&gt;
+    &lt;span class="ss-rating-stars"&gt;★★★★★&lt;/span&gt;
+    &lt;span class="ss-rating-text"&gt;5.0 (5 reviews)&lt;/span&gt;
+    &lt;a href="#" class="ss-rating-link"&gt;View on Google&lt;/a&gt;
+&lt;/div&gt;</pre>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer style="background: var(--ss-navy); color: white; padding: 40px 20px; text-align: center;">
+        <div class="ss-container">
+            <p style="font-size: 1.125rem; font-weight: 600; margin-bottom: 10px;">SafeStroke Swim Academy</p>
+            <p style="opacity: 0.9;">Brand Guidelines v1.0 | January 2025</p>
+        </div>
+    </footer>
+    
+    <!-- Mobile Sticky CTA Example -->
+    <div class="ss-mobile-cta">
+        <button class="ss-btn ss-btn-primary" style="width: 100%;">Book Free Lesson</button>
+    </div>
+</body>
+</html>

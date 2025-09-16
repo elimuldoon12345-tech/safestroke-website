@@ -1,0 +1,356 @@
+/**
+ * SafeStroke Swim Academy - Brand Design System
+ * Version 1.0
+ * 
+ * This file contains all centralized brand tokens, components, and utilities.
+ * DO NOT use any colors, fonts, or component styles outside of this system.
+ */
+
+/* =================================================================
+   1. DESIGN TOKENS
+   ================================================================= */
+
+:root {
+    /* Brand Colors - ONLY use these color tokens */
+    --ss-blue: #2284B8;        /* Primary brand blue */
+    --ss-navy: #0B3856;        /* Dark navy for text and headers */
+    --ss-sky: #E9F5FC;         /* Light sky background tint */
+    --ss-accent-green: #10B981; /* Success/promo green - ONLY for "First Lesson Free" and success states */
+    
+    /* Neutral Scale - WCAG AA compliant */
+    --ss-white: #FFFFFF;
+    --ss-gray-50: #F9FAFB;
+    --ss-gray-100: #F3F4F6;
+    --ss-gray-200: #E5E7EB;
+    --ss-gray-300: #D1D5DB;
+    --ss-gray-400: #9CA3AF;
+    --ss-gray-500: #6B7280;
+    --ss-gray-600: #4B5563;
+    --ss-gray-700: #374151;
+    --ss-gray-800: #1F2937;
+    --ss-gray-900: #111827;
+    --ss-black: #000000;
+    
+    /* Typography Scale */
+    --font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Font Sizes - Mobile First */
+    --text-xs: 0.75rem;    /* 12px */
+    --text-sm: 0.875rem;   /* 14px */
+    --text-base: 1rem;     /* 16px */
+    --text-lg: 1.125rem;   /* 18px */
+    --text-xl: 1.25rem;    /* 20px */
+    --text-2xl: 1.5rem;    /* 24px */
+    --text-3xl: 1.875rem;  /* 30px */
+    --text-4xl: 2.25rem;   /* 36px */
+    --text-5xl: 3rem;      /* 48px */
+    
+    /* Line Heights */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    
+    /* Letter Spacing */
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    
+    /* Spacing Scale */
+    --space-0: 0;
+    --space-1: 0.25rem;    /* 4px */
+    --space-2: 0.5rem;     /* 8px */
+    --space-3: 0.75rem;    /* 12px */
+    --space-4: 1rem;       /* 16px */
+    --space-5: 1.25rem;    /* 20px */
+    --space-6: 1.5rem;     /* 24px */
+    --space-8: 2rem;       /* 32px */
+    --space-10: 2.5rem;    /* 40px */
+    --space-12: 3rem;      /* 48px */
+    --space-16: 4rem;      /* 64px */
+    --space-20: 5rem;      /* 80px */
+    
+    /* Border Radius */
+    --radius-none: 0;
+    --radius-sm: 0.125rem;  /* 2px */
+    --radius-md: 0.375rem;  /* 6px */
+    --radius-lg: 0.5rem;    /* 8px */
+    --radius-xl: 0.75rem;   /* 12px */
+    --radius-2xl: 1rem;     /* 16px - STANDARD for cards/buttons */
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    
+    /* Z-index Scale */
+    --z-0: 0;
+    --z-10: 10;
+    --z-20: 20;
+    --z-30: 30;
+    --z-40: 40;
+    --z-50: 50;
+    --z-sticky: 100;
+    --z-modal: 1000;
+}
+
+/* =================================================================
+   2. BASE STYLES
+   ================================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    color: var(--ss-navy);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove any non-Outfit font declarations */
+h1, h2, h3, h4, h5, h6, p, a, button, input, select, textarea, label {
+    font-family: var(--font-family);
+}
+
+/* =================================================================
+   3. TYPOGRAPHY COMPONENTS
+   ================================================================= */
+
+/* Page Headers */
+.ss-page-header {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--ss-navy);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-6);
+}
+
+/* Section Headers */
+.ss-section-header {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--ss-navy);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-4);
+}
+
+/* Sub Headers */
+.ss-sub-header {
+    font-size: clamp(1.125rem, 3vw, 1.5rem);
+    font-weight: var(--font-weight-semibold);
+    color: var(--ss-navy);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-3);
+}
+
+/* Body Text */
+.ss-body {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-regular);
+    color: var(--ss-gray-700);
+    line-height: var(--leading-relaxed);
+}
+
+/* Small Text */
+.ss-small {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-regular);
+    color: var(--ss-gray-600);
+    line-height: var(--leading-normal);
+}
+
+/* =================================================================
+   4. BUTTON COMPONENTS
+   ================================================================= */
+
+/* Base Button Styles */
+.ss-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+    text-decoration: none;
+    border-radius: var(--radius-2xl);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    border: 2px solid transparent;
+    white-space: nowrap;
+    min-height: 44px; /* Accessibility - minimum touch target */
+}
+
+/* Primary Button - Solid Blue */
+.ss-btn-primary {
+    background-color: var(--ss-blue);
+    color: var(--ss-white);
+    border-color: var(--ss-blue);
+}
+
+.ss-btn-primary:hover {
+    background-color: #1a6b96;
+    border-color: #1a6b96;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+}
+
+.ss-btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+}
+
+.ss-btn-primary:focus-visible {
+    outline: 3px solid var(--ss-sky);
+    outline-offset: 2px;
+}
+
+/* Secondary Button - Navy Outline */
+.ss-btn-secondary {
+    background-color: var(--ss-white);
+    color: var(--ss-navy);
+    border-color: var(--ss-navy);
+}
+
+.ss-btn-secondary:hover {
+    background-color: var(--ss-navy);
+    color: var(--ss-white);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.ss-btn-secondary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.ss-btn-secondary:focus-visible {
+    outline: 3px solid var(--ss-sky);
+    outline-offset: 2px;
+}
+
+/* Tertiary Button - Text Link */
+.ss-btn-tertiary {
+    background-color: transparent;
+    color: var(--ss-blue);
+    border: none;
+    padding: var(--space-2) var(--space-3);
+    text-decoration: none;
+    position: relative;
+}
+
+.ss-btn-tertiary::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: var(--space-3);
+    right: var(--space-3);
+    height: 2px;
+    background-color: var(--ss-blue);
+    transform: scaleX(0);
+    transition: transform 0.2s ease-in-out;
+}
+
+.ss-btn-tertiary:hover::after {
+    transform: scaleX(1);
+}
+
+.ss-btn-tertiary:focus-visible {
+    outline: 2px solid var(--ss-blue);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+}
+
+/* =================================================================
+   5. CARD COMPONENTS
+   ================================================================= */
+
+.ss-card {
+    background-color: var(--ss-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease-in-out;
+}
+
+.ss-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Program Card */
+.ss-program-card {
+    background-color: var(--ss-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+.ss-program-card:hover {
+    border-color: var(--ss-blue);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* =================================================================
+   6. STANDARD COPY
+   ================================================================= */
+
+/* CTA Text Standards */
+.ss-cta-primary-text {
+    /* "Book Free Lesson" */
+}
+
+.ss-cta-secondary-text {
+    /* "Book Now" */
+}
+
+/* Rating Display Standard */
+.ss-rating-display {
+    /* ★★★★★ 5.0 (5 reviews) View on Google */
+}
+
+/* Program Names */
+.ss-program-droplet {
+    /* Droplet (3-24 months) */
+}
+
+.ss-program-splashlet {
+    /* Splashlet (2-3 years) */
+}
+
+.ss-program-strokelet-1 {
+    /* Strokelet — Level 1 (3-6 years) */
+}
+
+.ss-program-strokelet-2 {
+    /* Strokelet — Level 2 (6-12 years) */
+}
+
+/* Location Label */
+.ss-location-label {
+    /* "Our Location" */
+}
+
+/* Free Offer */
+.ss-free-badge-text {
+    /* "First Lesson Free" - Title Case */
+}
