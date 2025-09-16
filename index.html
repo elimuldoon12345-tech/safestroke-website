@@ -62,6 +62,25 @@
     <!-- End Meta Pixel Code -->
     <style>
         :root {
+            /* Brand Colors - Design Tokens */
+            --ss-blue: #2284B8;
+            --ss-navy: #0B3856;
+            --ss-sky: #E9F5FC;
+            --ss-accent-green: #10B981;
+            
+            /* Neutral Palette */
+            --ss-gray-50: #F9FAFB;
+            --ss-gray-100: #F3F4F6;
+            --ss-gray-200: #E5E7EB;
+            --ss-gray-300: #D1D5DB;
+            --ss-gray-400: #9CA3AF;
+            --ss-gray-500: #6B7280;
+            --ss-gray-600: #4B5563;
+            --ss-gray-700: #374151;
+            --ss-gray-800: #1F2937;
+            --ss-gray-900: #111827;
+            
+            /* Legacy support */
             --brand-blue: #2284B8;
             --brand-navy: #0B3856;
             --brand-sky: #E9F5FC;
@@ -518,389 +537,388 @@
     <!-- Main Content -->
     <main>
 
-        <!-- Programs Section - Revamped -->
+        <!-- Programs Section -->
         <section id="programs" class="py-20 bg-gray-50">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Section Header -->
                 <div class="text-center mb-12">
-                    <h2 class="text-4xl md:text-5xl font-black mb-4 text-[#0B3856]">Our Programs</h2>
-                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                        Age-appropriate instruction that builds skills progressively—at your child's pace. Every lesson focuses on safety, confidence, and measurable progress.
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif; font-weight: 700;">Our Programs</h2>
+                    <p class="text-lg max-w-3xl mx-auto" style="color: var(--ss-gray-600); font-family: 'Outfit', sans-serif; font-weight: 400;">
+                        Age-appropriate instruction that builds skills progressively at your child's pace.
                     </p>
                 </div>
 
                 <!-- Programs Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
                     <!-- Droplet Card -->
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="p-6">
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden h-full flex flex-col">
+                        <div class="p-6 flex-1">
                             <!-- Header Row -->
                             <div class="flex items-center justify-between mb-4">
                                 <div>
-                                    <h3 class="text-2xl font-bold text-[#00253D]">Droplet</h3>
-                                    <p class="text-sm font-semibold text-[#2284B8] mt-1">Ages 3–24 Months</p>
+                                    <h3 class="text-2xl font-bold" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Droplet</h3>
+                                    <p class="text-sm font-semibold mt-1" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Ages 3–24 Months</p>
                                 </div>
-                                <img src="safestroke-images/droplet-shield.png" alt="Droplet Shield" class="w-12 h-12 object-contain">
+                                <img src="safestroke-images/droplet-shield.png" alt="Droplet" class="w-12 h-12 object-contain">
                             </div>
                             
                             <!-- Meta Row -->
                             <div class="flex flex-wrap gap-2 mb-6">
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
-                                    <span>8:1 Ratio</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                                    <span>30 min</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-green-100 px-3 py-1 rounded-full text-xs font-medium text-green-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    <span>FIRST-FREE</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    <span>From $25/lesson</span>
-                                </div>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium" style="background: var(--ss-gray-100); color: var(--ss-gray-700);">
+                                    8:1 Ratio
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium" style="background: var(--ss-gray-100); color: var(--ss-gray-700);">
+                                    30 min
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold" style="background: rgba(16, 185, 129, 0.1); color: var(--ss-accent-green);">
+                                    First Lesson Free
+                                </span>
                             </div>
+                            
+                            <!-- Price -->
+                            <p class="text-sm font-medium mb-4" style="color: var(--ss-gray-600);">From $25 per lesson</p>
                             
                             <!-- What We Focus On -->
                             <div class="mb-5">
-                                <h4 class="font-bold text-sm text-gray-900 mb-3">What we focus on</h4>
+                                <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What we focus on</h4>
                                 <ul class="space-y-2">
                                     <li class="flex items-start gap-2">
-                                        <span class="w-2 h-2 bg-[#2284B8] rounded-full mt-1.5 flex-shrink-0"></span>
-                                        <span class="text-sm text-gray-700">Water comfort through songs, games & gentle play</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Water comfort with songs & play</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <span class="w-2 h-2 bg-[#2284B8] rounded-full mt-1.5 flex-shrink-0"></span>
-                                        <span class="text-sm text-gray-700">Parent holds & safe water handling</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Safe parent holds</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#2284B8] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Basic safety: waiting at the wall, assisted entries</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Wall holds & assisted entries</span>
                                     </li>
                                 </ul>
                             </div>
                             
-                            <!-- What Parents Typically Notice -->
+                            <!-- What Parents Notice -->
                             <div class="mb-5">
-                                <h4 class="font-bold text-sm text-gray-900 mb-3">What parents typically notice</h4>
+                                <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What parents notice</h4>
                                 <ul class="space-y-2">
                                     <li class="flex items-start gap-2">
-                                        <span class="w-2 h-2 bg-[#2284B8] rounded-full mt-1.5 flex-shrink-0"></span>
-                                        <span class="text-sm text-gray-700">Less crying at bath time</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Happier bath time</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <span class="w-2 h-2 bg-[#2284B8] rounded-full mt-1.5 flex-shrink-0"></span>
-                                        <span class="text-sm text-gray-700">Splashing & kicking on purpose</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Purposeful splashing & kicking</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Reaching for pool toys with excitement</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Reaching for toys</span>
                                     </li>
                                 </ul>
                             </div>
                             
                             <!-- Goal -->
-                            <p class="text-sm font-medium text-[#2284B8] mb-6 border-t pt-4">
-                                <strong>Goal:</strong> Happy, relaxed baby who loves the water
+                            <p class="text-sm font-medium mb-6 pt-4 border-t" style="color: var(--ss-navy); border-color: var(--ss-gray-200);">
+                                <strong>Goal:</strong> Calm, happy baby who enjoys the water
                             </p>
                             
                             <!-- CTA -->
                             <a href="safestroke-programs.html#droplet" 
-                               class="block w-full text-center py-3 px-6 border-2 border-[#2284B8] text-[#2284B8] rounded-2xl font-semibold hover:bg-[#2284B8] hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                               data-cta="programs_droplet_details">
+                               class="block w-full text-center py-3 px-6 border-2 rounded-2xl font-semibold transition duration-200" 
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
+                               onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 View Droplet Details
                             </a>
                         </div>
                     </div>
                     
                     <!-- Splashlet Card -->
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                        <div class="p-6">
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden h-full flex flex-col">
+                        <div class="p-6 flex-1">
                             <!-- Header Row -->
                             <div class="flex items-center justify-between mb-4">
                                 <div>
-                                    <h3 class="text-2xl font-bold text-[#00253D]">Splashlet</h3>
-                                    <p class="text-sm font-semibold text-[#2284B8] mt-1">Ages 2–3 Years</p>
+                                    <h3 class="text-2xl font-bold" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Splashlet</h3>
+                                    <p class="text-sm font-semibold mt-1" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Ages 2–3 Years</p>
                                 </div>
-                                <img src="safestroke-images/splashlet-shield.png" alt="Splashlet Shield" class="w-12 h-12 object-contain">
+                                <img src="safestroke-images/splashlet-shield.png" alt="Splashlet" class="w-12 h-12 object-contain">
                             </div>
                             
                             <!-- Meta Row -->
                             <div class="flex flex-wrap gap-2 mb-6">
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
-                                    <span>4:1 Ratio</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                                    <span>30 min</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-green-100 px-3 py-1 rounded-full text-xs font-medium text-green-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    <span>First Free</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    <span>From $35/lesson</span>
-                                </div>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium" style="background: var(--ss-gray-100); color: var(--ss-gray-700);">
+                                    4:1 Ratio
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium" style="background: var(--ss-gray-100); color: var(--ss-gray-700);">
+                                    30 min
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold" style="background: rgba(16, 185, 129, 0.1); color: var(--ss-accent-green);">
+                                    First Lesson Free
+                                </span>
                             </div>
+                            
+                            <!-- Price -->
+                            <p class="text-sm font-medium mb-4" style="color: var(--ss-gray-600);">From $35 per lesson</p>
                             
                             <!-- What We Focus On -->
                             <div class="mb-5">
-                                <h4 class="font-bold text-sm text-gray-900 mb-3">What we focus on</h4>
+                                <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What we focus on</h4>
                                 <ul class="space-y-2">
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Bubbles, breath control & submersion readiness</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Bubbles & breath control</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Assisted floats (back & front with support)</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Assisted front/back floats</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">First kicks & arm movements</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">First kicks & arm moves</span>
                                     </li>
                                 </ul>
                             </div>
                             
-                            <!-- What Parents Typically Notice -->
+                            <!-- What Parents Notice -->
                             <div class="mb-5">
-                                <h4 class="font-bold text-sm text-gray-900 mb-3">What parents typically notice</h4>
+                                <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What parents notice</h4>
                                 <ul class="space-y-2">
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Going underwater briefly (with encouragement)</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Brief submersion with encouragement</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Jumping from the side (with help)</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Safe jumps with help</span>
                                     </li>
                                     <li class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                        <span class="text-sm text-gray-700">Responding to "1, 2, 3" cues</span>
+                                        <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                        <span class="text-sm" style="color: var(--ss-gray-700);">Responds to "1–2–3"</span>
                                     </li>
                                 </ul>
                             </div>
                             
                             <!-- Goal -->
-                            <p class="text-sm font-medium text-[#2284B8] mb-6 border-t pt-4">
-                                <strong>Goal:</strong> Build trust & basic water skills without parent in pool
+                            <p class="text-sm font-medium mb-6 pt-4 border-t" style="color: var(--ss-navy); border-color: var(--ss-gray-200);">
+                                <strong>Goal:</strong> Trust in water & basic skills without a parent in the pool
                             </p>
                             
                             <!-- CTA -->
                             <a href="safestroke-programs.html#splashlet" 
-                               class="block w-full text-center py-3 px-6 border-2 border-[#2284B8] text-[#2284B8] rounded-2xl font-semibold hover:bg-[#2284B8] hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                               data-cta="programs_splashlet_details">
+                               class="block w-full text-center py-3 px-6 border-2 rounded-2xl font-semibold transition duration-200" 
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
+                               onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 View Splashlet Details
                             </a>
                         </div>
                     </div>
                     
-                    <!-- Strokelet Card with Level Tabs -->
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                        <div class="p-6">
+                    <!-- Strokelet Card -->
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden h-full flex flex-col">
+                        <div class="p-6 flex-1">
                             <!-- Header Row -->
                             <div class="flex items-center justify-between mb-4">
                                 <div>
-                                    <h3 class="text-2xl font-bold text-[#0B3856]">Strokelet</h3>
-                                    <p class="text-sm font-semibold text-[#2284B8] mt-1">Ages 3–12 Years</p>
+                                    <h3 class="text-2xl font-bold" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Strokelet</h3>
+                                    <p class="text-sm font-semibold mt-1" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Ages 3–12 Years</p>
                                 </div>
-                                <img src="safestroke-images/strokelet-shield.png" alt="Strokelet Shield" class="w-12 h-12 object-contain flex-shrink-0">
+                                <img src="safestroke-images/strokelet-shield.png" alt="Strokelet" class="w-12 h-12 object-contain">
                             </div>
                             
-                            <!-- Deep Water Safety Note (Elevated as bordered callout) -->
-                            <div class="bg-blue-50 border-2 border-blue-300 rounded-xl p-4 mb-4 shadow-sm">
-                                <div class="flex items-start gap-3">
-                                    <svg class="w-6 h-6 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <div>
-                                        <p class="text-sm font-bold text-blue-900 mb-1">Deep Water Safety Focus</p>
-                                        <p class="text-xs text-blue-800">
-                                            Both levels include jump-turn-swim skills and floating techniques essential for unexpected deep water situations.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Level Tabs (Accessible) -->
-                            <div role="tablist" class="flex border-b border-gray-200 mb-4" aria-label="Strokelet levels">
-                                <button role="tab" 
-                                        aria-selected="true" 
-                                        aria-controls="level1-panel"
-                                        id="level1-tab"
-                                        tabindex="0"
-                                        class="level-tab px-4 py-2 text-sm font-medium text-[#2284B8] border-b-2 border-[#2284B8] focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                                        onclick="switchLevel('level1')" 
-                                        onkeydown="handleTabKeydown(event, 'level1')">
+                            <!-- Level Pills -->
+                            <div class="flex gap-2 mb-4">
+                                <button class="px-3 py-1 rounded-full text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1" 
+                                        style="background: var(--ss-blue); color: white; font-family: 'Outfit', sans-serif;"
+                                        onclick="showLevel(this, 1)">
                                     Level 1
                                 </button>
-                                <button role="tab" 
-                                        aria-selected="false" 
-                                        aria-controls="level2-panel"
-                                        id="level2-tab"
-                                        tabindex="-1"
-                                        class="level-tab px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                                        onclick="switchLevel('level2')"
-                                        onkeydown="handleTabKeydown(event, 'level2')">
+                                <button class="px-3 py-1 rounded-full text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1" 
+                                        style="background: var(--ss-gray-100); color: var(--ss-gray-700); font-family: 'Outfit', sans-serif;"
+                                        onclick="showLevel(this, 2)">
                                     Level 2
                                 </button>
                             </div>
                             
                             <!-- Meta Row -->
                             <div class="flex flex-wrap gap-2 mb-6">
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
-                                    <span>3:1 Ratio</span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium" style="background: var(--ss-gray-100); color: var(--ss-gray-700);">
+                                    3:1 Ratio
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium" style="background: var(--ss-gray-100); color: var(--ss-gray-700);">
+                                    30 min
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold" style="background: rgba(16, 185, 129, 0.1); color: var(--ss-accent-green);">
+                                    First Lesson Free
+                                </span>
+                            </div>
+                            
+                            <!-- Price -->
+                            <p class="text-sm font-medium mb-4" style="color: var(--ss-gray-600);">From $40 per lesson</p>
+                            
+                            <!-- Level 1 Content (default shown) -->
+                            <div id="strokelet-level-1">
+                                <!-- What We Focus On -->
+                                <div class="mb-5">
+                                    <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What we focus on</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Breath control & confident submersion</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">5–10s back float</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Jump–turn–swim to safety</span>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                                    <span>30 min</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-green-100 px-3 py-1 rounded-full text-xs font-medium text-green-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                    <span>First Lesson Free</span>
-                                </div>
-                                <div class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-xs font-medium text-gray-700">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    <span>From $40/lesson</span>
+                                
+                                <!-- What Parents Notice -->
+                                <div class="mb-5">
+                                    <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What parents notice</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Swims a few yards</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Calm jump & resurface</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Relaxed back float</span>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             
-                            <!-- Level 1 Panel -->
-                            <div id="level1-panel" role="tabpanel" aria-labelledby="level1-tab">
+                            <!-- Level 2 Content (initially hidden) -->
+                            <div id="strokelet-level-2" style="display: none;">
                                 <!-- What We Focus On -->
                                 <div class="mb-5">
-                                    <h4 class="font-bold text-sm text-gray-900 mb-3">What we focus on</h4>
+                                    <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What we focus on</h4>
                                     <ul class="space-y-2">
                                         <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Breath control & confident submersion</span>
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Streamlined freestyle technique</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Back float mastery (5-10 seconds)</span>
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Backstroke fundamentals</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Jump-turn-swim to safety skill</span>
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-navy);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Endurance building (12+ yards)</span>
                                         </li>
                                     </ul>
                                 </div>
                                 
-                                <!-- What Parents Typically Notice -->
+                                <!-- What Parents Notice -->
                                 <div class="mb-5">
-                                    <h4 class="font-bold text-sm text-gray-900 mb-3">What parents typically notice</h4>
+                                    <h4 class="font-bold text-sm mb-3" style="color: var(--ss-navy);">What parents notice</h4>
                                     <ul class="space-y-2">
                                         <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Swimming a few yards independently</span>
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Swimming full pool width confidently</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Jumping in and resurfacing calmly</span>
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Floating for 1+ minute effortlessly</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Floating on back without panic</span>
+                                            <span class="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style="background: var(--ss-blue);"></span>
+                                            <span class="text-sm" style="color: var(--ss-gray-700);">Climbing out unassisted</span>
                                         </li>
                                     </ul>
                                 </div>
-                                
-                                <!-- Goal -->
-                                <p class="text-sm font-medium text-[#2284B8] mb-6 border-t pt-4">
-                                    <strong>Goal of this level:</strong> Foundation skills for safe, independent swimming
-                                </p>
                             </div>
                             
-                            <!-- Level 2 Panel (Initially Hidden) -->
-                            <div id="level2-panel" role="tabpanel" aria-labelledby="level2-tab" class="hidden">
-                                <!-- What We Focus On -->
-                                <div class="mb-5">
-                                    <h4 class="font-bold text-sm text-gray-900 mb-3">What we focus on</h4>
-                                    <ul class="space-y-2">
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Streamlined freestyle technique</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Backstroke fundamentals</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Endurance building (12+ yards)</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <!-- What Parents Typically Notice -->
-                                <div class="mb-5">
-                                    <h4 class="font-bold text-sm text-gray-900 mb-3">What parents typically notice</h4>
-                                    <ul class="space-y-2">
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Swimming full pool width confidently</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Floating for 1+ minute effortlessly</span>
-                                        </li>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-4 h-4 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                            <span class="text-sm text-gray-700">Climbing out unassisted</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <!-- Goal -->
-                                <p class="text-sm font-medium text-[#2284B8] mb-6 border-t pt-4">
-                                    <strong>Goal of this level:</strong> Water-safe swimmer with proper stroke technique
-                                </p>
-                            </div>
+                            <!-- Goal -->
+                            <p class="text-sm font-medium mb-6 pt-4 border-t" style="color: var(--ss-navy); border-color: var(--ss-gray-200);">
+                                <strong>Goal:</strong> Foundation for safe, independent swimming
+                            </p>
                             
                             <!-- CTA -->
                             <a href="safestroke-programs.html#strokelet" 
-                               class="block w-full text-center py-3 px-6 border-2 border-[#2284B8] text-[#2284B8] rounded-2xl font-semibold hover:bg-[#2284B8] hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2"
-                               data-cta="programs_strokelet_details">
+                               class="block w-full text-center py-3 px-6 border-2 rounded-2xl font-semibold transition duration-200" 
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
+                               onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 View Strokelet Details
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Family Savings Banner -->
-                <div class="mt-12 bg-gradient-to-r from-[#23C552] to-[#1FA548] rounded-2xl p-6 max-w-4xl mx-auto text-white">
-                    <div class="flex items-center justify-between flex-wrap gap-4">
-                        <div class="flex items-start gap-3">
-                            <svg class="w-8 h-8 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-                            </svg>
-                            <div>
-                                <h3 class="text-lg font-bold mb-1">Family Savings</h3>
-                                <p class="text-sm opacity-95">
-                                    10% off each additional package after the first—applies to all programs & package sizes. Perfect for siblings or when enrolling in multiple sessions!
-                                </p>
+                <!-- Family Savings Banner (Reduced Green) -->
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <div class="bg-white rounded-2xl shadow-md p-6 border-l-4" style="border-color: var(--ss-accent-green);">
+                        <div class="flex items-center justify-between flex-wrap gap-4">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-8 h-8 mt-1 flex-shrink-0" style="color: var(--ss-accent-green);" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                                </svg>
+                                <div>
+                                    <h3 class="text-lg font-bold mb-1" style="color: var(--ss-navy); font-family: 'Outfit', sans-serif;">Family Savings</h3>
+                                    <p class="text-sm" style="color: var(--ss-gray-600); font-family: 'Outfit', sans-serif; font-weight: 400;">
+                                        10% off each additional package after the first—all programs & sizes.
+                                    </p>
+                                </div>
                             </div>
+                            <a href="safestroke-pricing.html#family-savings" 
+                               class="inline-block px-5 py-2 border-2 rounded-full font-semibold text-sm transition duration-200 whitespace-nowrap"
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
+                               onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
+                                Learn More
+                            </a>
                         </div>
-                        <a href="safestroke-pricing.html#family-savings" 
-                           class="inline-block bg-white text-[#23C552] px-5 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition duration-200 whitespace-nowrap">
-                            Learn More →
-                        </a>
                     </div>
                 </div>
                 
                 <!-- Progress Disclaimer -->
                 <div class="mt-8 text-center">
-                    <p class="text-xs text-gray-500 max-w-3xl mx-auto px-4">
-                        Progress varies by individual child based on age, starting comfort level, attendance consistency, and practice outside of lessons. While many children show significant improvement within 8-12 lessons, every child progresses at their own pace.
+                    <p class="text-xs max-w-3xl mx-auto px-4" style="color: var(--ss-gray-500); font-family: 'Outfit', sans-serif; font-weight: 300;">
+                        Progress varies by individual child based on age, starting comfort level, and attendance consistency.
                     </p>
                 </div>
             </div>
         </section>
+        
+        <script>
+        function showLevel(button, level) {
+            // Get all level buttons in this card
+            const buttons = button.parentElement.querySelectorAll('button');
+            
+            // Update button styles
+            buttons.forEach(btn => {
+                if (btn === button) {
+                    btn.style.background = 'var(--ss-blue)';
+                    btn.style.color = 'white';
+                } else {
+                    btn.style.background = 'var(--ss-gray-100)';
+                    btn.style.color = 'var(--ss-gray-700)';
+                }
+            });
+            
+            // Show/hide content
+            const level1Content = document.getElementById('strokelet-level-1');
+            const level2Content = document.getElementById('strokelet-level-2');
+            
+            if (level === 1) {
+                level1Content.style.display = 'block';
+                level2Content.style.display = 'none';
+            } else {
+                level1Content.style.display = 'none';
+                level2Content.style.display = 'block';
+            }
+        }
+        </script>
 
         <!-- About Section -->
         <section id="about" class="py-16 sm:py-20">
@@ -1487,276 +1505,56 @@
     </footer>
     
     <!-- Mobile Sticky Book Now Button -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t shadow-2xl rounded-t-2xl">
-        <a href="safestroke-booking.html" class="block w-full brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-center text-lg transition duration-300">
-            Book Now - Free Lesson Available
-        </a>
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-2xl p-4">
+        <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg text-white font-bold py-3 rounded-full">Book Free Trial</a>
     </div>
-    
-    <script>
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // Reviews Carousel Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const reviewsContainer = document.getElementById('reviewsContainer');
-            const dots = document.querySelectorAll('.review-dot');
-            
-            if (!reviewsContainer) {
-                console.error('Carousel container not found');
-                return;
-            }
-            
-            let currentSlide = 0;
-            const totalReviews = 8;
-            let reviewsPerView = window.innerWidth >= 768 ? 2 : 1;
-            let totalSlides = Math.ceil(totalReviews / reviewsPerView);
-            
-            function updateCarousel() {
-                const translateX = -currentSlide * (100 / reviewsPerView);
-                reviewsContainer.style.transform = `translateX(${translateX}%)`;
-                
-                // Update dots
-                dots.forEach((dot, index) => {
-                    if (index < totalSlides) {
-                        dot.style.display = 'block';
-                        if (index === currentSlide) {
-                            dot.style.backgroundColor = '#2284B8';
-                            dot.style.width = '32px';
-                        } else {
-                            dot.style.backgroundColor = '#9ca3af';
-                            dot.style.width = '8px';
-                        }
-                    } else {
-                        dot.style.display = 'none';
-                    }
-                });
-            }
-            
-            function nextSlide() {
-                if (currentSlide < totalSlides - 1) {
-                    currentSlide++;
-                    updateCarousel();
-                }
-            }
-            
-            function prevSlide() {
-                if (currentSlide > 0) {
-                    currentSlide--;
-                    updateCarousel();
-                }
-            }
-            
-            function goToSlide(slideIndex) {
-                if (slideIndex >= 0 && slideIndex < totalSlides) {
-                    currentSlide = slideIndex;
-                    updateCarousel();
-                }
-            }
-            
-            // Dot navigation
-            dots.forEach((dot, index) => {
-                dot.onclick = function(e) {
-                    e.preventDefault();
-                    goToSlide(index);
-                };
-            });
-            
-            // Auto-play carousel
-            let autoPlayInterval = setInterval(() => {
-                if (currentSlide < totalSlides - 1) {
-                    nextSlide();
-                } else {
-                    currentSlide = 0;
-                    updateCarousel();
-                }
-            }, 5000);
-            
-            // Pause auto-play on hover
-            const carouselContainer = reviewsContainer.parentElement.parentElement;
-            if (carouselContainer) {
-                carouselContainer.onmouseenter = function() {
-                    clearInterval(autoPlayInterval);
-                };
-                
-                carouselContainer.onmouseleave = function() {
-                    autoPlayInterval = setInterval(() => {
-                        if (currentSlide < totalSlides - 1) {
-                            nextSlide();
-                        } else {
-                            currentSlide = 0;
-                            updateCarousel();
-                        }
-                    }, 5000);
-                };
-            }
-            
-            // Handle window resize
-            let resizeTimeout;
-            window.addEventListener('resize', function() {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    const newReviewsPerView = window.innerWidth >= 768 ? 2 : 1;
-                    if (newReviewsPerView !== reviewsPerView) {
-                        reviewsPerView = newReviewsPerView;
-                        totalSlides = Math.ceil(totalReviews / reviewsPerView);
-                        currentSlide = Math.min(currentSlide, totalSlides - 1);
-                        updateCarousel();
-                    }
-                }, 250);
-            });
-            
-            // Initialize
-            updateCarousel();
-        });
-        
-        // Touch swipe functionality for mobile (updated to work without buttons)
-        (function() {
-            const container = document.getElementById('reviewsContainer');
-            if (container && 'ontouchstart' in window) {
-                let touchStartX = 0;
-                let touchEndX = 0;
-                let currentSlide = 0;
-                const totalReviews = 8;
-                let reviewsPerView = window.innerWidth >= 768 ? 2 : 1;
-                let totalSlides = Math.ceil(totalReviews / reviewsPerView);
-                
-                container.addEventListener('touchstart', e => {
-                    touchStartX = e.changedTouches[0].screenX;
-                });
-                
-                container.addEventListener('touchend', e => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    handleSwipe();
-                });
-                
-                function handleSwipe() {
-                    if (touchEndX < touchStartX - 50) {
-                        // Swipe left - trigger next slide via dot click
-                        const dots = document.querySelectorAll('.review-dot');
-                        const currentActiveDot = Array.from(dots).findIndex(dot => 
-                            dot.style.backgroundColor === 'rgb(34, 132, 184)' || 
-                            dot.style.backgroundColor === '#2284B8'
-                        );
-                        if (currentActiveDot >= 0 && currentActiveDot < dots.length - 1) {
-                            dots[currentActiveDot + 1].click();
-                        }
-                    }
-                    if (touchEndX > touchStartX + 50) {
-                        // Swipe right - trigger previous slide via dot click
-                        const dots = document.querySelectorAll('.review-dot');
-                        const currentActiveDot = Array.from(dots).findIndex(dot => 
-                            dot.style.backgroundColor === 'rgb(34, 132, 184)' || 
-                            dot.style.backgroundColor === '#2284B8'
-                        );
-                        if (currentActiveDot > 0) {
-                            dots[currentActiveDot - 1].click();
-                        }
-                    }
-                }
-            }
-        })();
-        
-        // JavaScript for Level Tabs
-        function switchLevel(level) {
-            // Get tab elements
-            const level1Tab = document.getElementById('level1-tab');
-            const level2Tab = document.getElementById('level2-tab');
-            const level1Panel = document.getElementById('level1-panel');
-            const level2Panel = document.getElementById('level2-panel');
-            
-            if (level === 'level1') {
-                // Activate Level 1
-                level1Tab.setAttribute('aria-selected', 'true');
-                level1Tab.classList.add('text-[#2284B8]', 'border-b-2', 'border-[#2284B8]');
-                level1Tab.classList.remove('text-gray-600', 'hover:text-gray-800');
-                
-                level2Tab.setAttribute('aria-selected', 'false');
-                level2Tab.classList.remove('text-[#2284B8]', 'border-b-2', 'border-[#2284B8]');
-                level2Tab.classList.add('text-gray-600', 'hover:text-gray-800');
-                
-                level1Panel.classList.remove('hidden');
-                level2Panel.classList.add('hidden');
-            } else {
-                // Activate Level 2
-                level2Tab.setAttribute('aria-selected', 'true');
-                level2Tab.classList.add('text-[#2284B8]', 'border-b-2', 'border-[#2284B8]');
-                level2Tab.classList.remove('text-gray-600', 'hover:text-gray-800');
-                
-                level1Tab.setAttribute('aria-selected', 'false');
-                level1Tab.classList.remove('text-[#2284B8]', 'border-b-2', 'border-[#2284B8]');
-                level1Tab.classList.add('text-gray-600', 'hover:text-gray-800');
-                
-                level2Panel.classList.remove('hidden');
-                level1Panel.classList.add('hidden');
-            }
-        }
 
-        // Add keyboard navigation for tabs
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('[role="tab"]');
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
+
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('reviewsContainer');
+        const dots = document.querySelectorAll('.review-dot');
+        let currentIndex = 0;
+        const totalSlides = 4; // 8 reviews, 2 per slide = 4 slides
+        
+        // Function to update carousel
+        function updateCarousel(index) {
+            const offset = index * -50; // Each slide is 50% width (2 reviews)
+            container.style.transform = `translateX(${offset}%)`;
             
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('keydown', function(e) {
-                    let newIndex;
-                    
-                    if (e.key === 'ArrowRight') {
-                        newIndex = (index + 1) % tabs.length;
-                        tabs[newIndex].focus();
-                        tabs[newIndex].click();
-                    } else if (e.key === 'ArrowLeft') {
-                        newIndex = (index - 1 + tabs.length) % tabs.length;
-                        tabs[newIndex].focus();
-                        tabs[newIndex].click();
-                    }
-                });
-            });
-        });
-        
-        // Meta Pixel Event Tracking
-        // Track Book Now button clicks
-        document.querySelectorAll('a[href="safestroke-booking.html"]').forEach(button => {
-            button.addEventListener('click', function() {
-                // Track as InitiateCheckout event
-                if (typeof fbq !== 'undefined') {
-                    fbq('track', 'InitiateCheckout', {
-                        content_name: 'Swimming Lessons',
-                        content_category: 'Swim Classes',
-                        value: 0.00,
-                        currency: 'USD'
-                    });
+            // Update dots
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-400');
+                    dot.classList.add('bg-[#2284B8]');
+                } else {
+                    dot.classList.remove('bg-[#2284B8]');
+                    dot.classList.add('bg-gray-400');
                 }
             });
-        });
+        }
         
-        // Track Free Lesson CTA clicks
-        document.querySelectorAll('a[href="safestroke-booking.html"]').forEach(button => {
-            if (button.textContent.includes('FREE Lesson')) {
-                button.addEventListener('click', function() {
-                    // Track as Lead event for free lesson interest
-                    if (typeof fbq !== 'undefined') {
-                        fbq('track', 'Lead', {
-                            content_name: 'Free Lesson Request',
-                            content_category: 'Swimming Lessons'
-                        });
-                    }
-                });
-            }
-        });
-        
-        // Track phone number clicks
-        document.querySelectorAll('a[href^="tel:"]').forEach(link => {
-            link.addEventListener('click', function() {
-                if (typeof fbq !== 'undefined') {
-                    fbq('track', 'Contact', {
-                        contact_type: 'Phone Call'
-                    });
-                }
+        // Add click handlers to dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel(index);
             });
         });
+        
+        // Auto-rotate carousel every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateCarousel(currentIndex);
+        }, 5000);
+    });
     </script>
+
 </body>
 </html>
