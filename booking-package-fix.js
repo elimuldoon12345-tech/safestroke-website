@@ -1,6 +1,122 @@
 // Fix for package booking email step error
 // This fixes the DOM insertion error when selecting a package
 
+// First, ensure showStep function exists and works properly
+window.showStepOriginal = window.showStep;
+window.showStep = function(stepNumber) {
+    console.log('showStep called with:', stepNumber);
+    
+    // Get or create the step-content container
+    let stepContent = document.getElementById('step-content');
+    if (!stepContent) {
+        const packageFlow = document.getElementById('package-flow');
+        if (packageFlow) {
+            stepContent = document.createElement('div');
+            stepContent.id = 'step-content';
+            packageFlow.appendChild(stepContent);
+        }
+    }
+    
+    if (stepNumber === 3 && stepContent) {
+        // Create payment section HTML
+        console.log('Creating payment section HTML');
+        stepContent.innerHTML = `
+            <div id="payment-section">
+                <div class="max-w-lg mx-auto">
+                    <h3 class="text-2xl font-bold text-center mb-6">Step 3: Complete Payment</h3>
+                    
+                    <div id="payment-summary"></div>
+                    
+                    <form id="payment-form" class="mt-6">
+                        <div id="payment-element" class="mb-6">
+                            <!-- Stripe payment element will be mounted here -->
+                        </div>
+                        
+                        <button type="submit" id="pay-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-full">
+                            Complete Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="success-section" class="hidden">
+                <div class="text-center">
+                    <div class="text-green-500 mb-4">
+                        <svg class="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-4">Payment Successful!</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Your package has been created. We've sent your package code to your email.
+                    </p>
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
+                        <p class="text-sm text-gray-600 mb-2">Your Package Code:</p>
+                        <p id="package-code-display" class="text-2xl font-bold text-blue-800 font-mono"></p>
+                    </div>
+                    <button id="book-now-btn" onclick="handleScheduleWithCode()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full">
+                        Book Your First Lesson →
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Show payment section, hide others
+        const paymentSection = document.getElementById('payment-section');
+        const successSection = document.getElementById('success-section');
+        const emailStep = document.getElementById('email-step');
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        
+        if (paymentSection) paymentSection.classList.remove('hidden');
+        if (successSection) successSection.classList.add('hidden');
+        if (emailStep) emailStep.classList.add('hidden');
+        if (step1) step1.classList.add('hidden');
+        if (step2) step2.classList.add('hidden');
+        
+        // Call setupPaymentForm after creating the elements
+        setTimeout(() => {
+            if (typeof window.setupPaymentForm === 'function') {
+                window.setupPaymentForm();
+            }
+        }, 100);
+        
+    } else if (stepNumber === 4 && stepContent) {
+        // Show success section
+        const paymentSection = document.getElementById('payment-section');
+        const successSection = document.getElementById('success-section');
+        
+        if (paymentSection) paymentSection.classList.add('hidden');
+        if (successSection) successSection.classList.remove('hidden');
+        
+    } else if (typeof window.showStepOriginal === 'function') {
+        // Try the original function if it exists
+        window.showStepOriginal(stepNumber);
+    } else {
+        // Handle other steps normally
+        // Hide all steps
+        const allSteps = ['step-1', 'step-2', 'email-step', 'payment-section', 'success-section'];
+        allSteps.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        });
+        
+        // Show requested step
+        const stepId = stepNumber === 1 ? 'step-1' : 
+                       stepNumber === 2 ? 'step-2' : 
+                       stepNumber === 2.5 ? 'email-step' : 
+                       'success-section';
+        
+        const stepEl = document.getElementById(stepId);
+        if (stepEl) stepEl.classList.remove('hidden');
+    }
+    
+    // Update step indicators
+    if (typeof window.updateStepIndicators === 'function') {
+        window.updateStepIndicators(stepNumber);
+    }
+};
+
 // Add missing global functions that may not exist
 if (typeof window.checkReturningCustomerStatus !== 'function') {
     window.checkReturningCustomerStatus = async function(email) {
@@ -200,6 +316,45 @@ if (typeof window.setupPaymentForm !== 'function') {
                     submitButton.disabled = false;
                 }
             };
+        }
+    };
+}
+
+// Add handleScheduleWithCode function if it doesn't exist
+if (typeof window.handleScheduleWithCode !== 'function') {
+    window.handleScheduleWithCode = function() {
+        const packageCode = document.getElementById('package-code-display')?.textContent || window.recentPackageCode;
+        if (packageCode) {
+            // Set the package code and trigger the schedule flow
+            const packageCodeInput = document.getElementById('package-code-input');
+            if (packageCodeInput) {
+                packageCodeInput.value = packageCode;
+            }
+            
+            // Hide success section and show calendar
+            const successSection = document.getElementById('success-section');
+            if (successSection) successSection.classList.add('hidden');
+            
+            // Show calendar section
+            if (typeof window.showCalendarSection === 'function') {
+                window.showCalendarSection();
+            }
+            
+            // Update calendar title
+            if (typeof window.updateCalendarTitle === 'function') {
+                window.updateCalendarTitle(packageCode, {
+                    program: window.selectedPackage.program,
+                    lessons_remaining: window.selectedPackage.lessons
+                });
+            }
+            
+            // Load time slots
+            if (typeof window.loadTimeSlots === 'function') {
+                window.loadTimeSlots(window.selectedPackage.program);
+            }
+            
+            // Store the entered package code globally
+            window.enteredPackageCode = packageCode;
         }
     };
 }
