@@ -35,7 +35,15 @@
             background-image: radial-gradient(circle at top left, rgba(34, 132, 184, 0.1) 0%, transparent 30%);
         }
         .brand-blue { color: #2284B8; }
-        .brand-blue-bg { background-color: #2284B8; }
+        .brand-blue-bg { 
+            background: linear-gradient(135deg, #2284B8 0%, #1976a3 100%);
+            box-shadow: 0 4px 15px rgba(34, 132, 184, 0.3);
+        }
+        .brand-blue-bg:hover {
+            background: linear-gradient(135deg, #1976a3 0%, #15628a 100%);
+            box-shadow: 0 6px 20px rgba(34, 132, 184, 0.4);
+            transform: translateY(-2px);
+        }
         .nav-link { transition: color 0.3s; position: relative; }
         .nav-link.active { font-weight: 700; color: #2284B8; }
         .nav-link:not(.active):hover { color: #2284B8; }
@@ -47,8 +55,9 @@
             bottom: -4px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #2284B8;
+            background: linear-gradient(90deg, #2284B8, #1976a3);
             transition: width 0.3s ease-in-out;
+            border-radius: 1px;
         }
         .nav-link:hover::after, .nav-link.active::after {
             width: 100%;
@@ -97,7 +106,7 @@
             
             <!-- Book Now Button (Right, Desktop) -->
             <div class="hidden md:flex flex-shrink-0">
-                <a href="safestroke-booking.html" class="brand-blue-bg hover:bg-blue-600 text-white font-bold py-2.5 px-7 rounded-full text-md transition duration-300 transform hover:scale-105">Book Now</a>
+                <a href="safestroke-booking.html" class="brand-blue-bg hover:bg-blue-600 text-white font-bold py-2.5 px-7 rounded-full text-md transition duration-300 transform hover:scale-105">Book Free Lesson</a>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -117,7 +126,7 @@
             <a href="safestroke-reviews.html" class="block py-2 text-gray-800">Reviews</a>
             <a href="safestroke-location.html" class="block py-2 text-gray-800">Our Location</a>
             <div class="mt-4 pt-4 border-t">
-                 <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-md transition duration-300">Book Now</a>
+                 <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-md transition duration-300">Book Free Lesson</a>
             </div>
         </div>
     </nav>

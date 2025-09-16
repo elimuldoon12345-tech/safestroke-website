@@ -35,7 +35,15 @@
             background-image: radial-gradient(circle at top left, rgba(34, 132, 184, 0.1) 0%, transparent 30%);
         }
         .brand-blue { color: #2284B8; }
-        .brand-blue-bg { background-color: #2284B8; }
+        .brand-blue-bg { 
+            background: linear-gradient(135deg, #2284B8 0%, #1976a3 100%);
+            box-shadow: 0 4px 15px rgba(34, 132, 184, 0.3);
+        }
+        .brand-blue-bg:hover {
+            background: linear-gradient(135deg, #1976a3 0%, #15628a 100%);
+            box-shadow: 0 6px 20px rgba(34, 132, 184, 0.4);
+            transform: translateY(-2px);
+        }
         .nav-link { transition: color 0.3s; position: relative; }
         .nav-link.active { font-weight: 700; color: #2284B8; }
         .nav-link:not(.active):hover { color: #2284B8; }
@@ -47,8 +55,9 @@
             bottom: -4px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #2284B8;
+            background: linear-gradient(90deg, #2284B8, #1976a3);
             transition: width 0.3s ease-in-out;
+            border-radius: 1px;
         }
         .nav-link:hover::after, .nav-link.active::after {
             width: 100%;
@@ -76,10 +85,10 @@
     </div>
 
     <!-- Header -->
-    <nav class="bg-white sticky top-0 z-50 shadow-md">
+    <nav class="bg-white sticky top-0 z-50 shadow-lg rounded-b-2xl">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <!-- Logo (Left) -->
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0 md:flex-grow-0">
                 <a href="index.html" class="flex items-center">
                     <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-20 w-auto">
                 </a>
@@ -97,7 +106,7 @@
             
             <!-- Book Now Button (Right, Desktop) -->
             <div class="hidden md:flex flex-shrink-0">
-                <a href="safestroke-booking.html" class="brand-blue-bg hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full text-md transition duration-300 transform hover:scale-105 shadow-sm">Book Now</a>
+                <a href="safestroke-booking.html" class="brand-blue-bg hover:bg-blue-600 text-white font-bold py-2.5 px-7 rounded-full text-md transition duration-300 transform hover:scale-105">Book Free Lesson</a>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -109,7 +118,7 @@
         </div>
         
         <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="md:hidden hidden bg-white px-6 pb-4 border-t border-gray-100">
+        <div id="mobile-menu" class="md:hidden hidden bg-white px-6 pb-4 border-t border-gray-100 rounded-b-2xl">
             <a href="index.html" class="block py-2 text-gray-800">Main</a>
             <a href="safestroke-programs.html" class="block py-2 text-gray-800">Programs</a>
             <a href="safestroke-pricing.html" class="block py-2 text-gray-800">Pricing</a>
@@ -117,7 +126,7 @@
             <a href="safestroke-reviews.html" class="block py-2 text-gray-800">Reviews</a>
             <a href="safestroke-location.html" class="block py-2 text-gray-800 font-semibold">Our Location</a>
             <div class="mt-4 pt-4 border-t">
-                 <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-md transition duration-300">Book Now</a>
+                 <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-md transition duration-300">Book Free Lesson</a>
             </div>
         </div>
     </nav>
