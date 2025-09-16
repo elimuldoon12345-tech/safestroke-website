@@ -93,10 +93,7 @@
         * {
             font-family: 'Outfit', sans-serif;
         }
-        /* Add padding bottom on mobile for sticky button */
-        @media (max-width: 767px) {
-            body { padding-bottom: 80px; }
-        }
+
         
         /* New Hero Styles */
         .hero {
@@ -1192,181 +1189,223 @@
             </div>
         </section>
         
-        <!-- Hero CTA Section - Redesigned for Conversion -->
-        <section class="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-[#0B3856] to-[#00253D]" role="region" aria-label="Call to action">
-            <!-- Subtle gradient overlay -->
-            <div class="absolute inset-0 bg-gradient-radial from-[#2284B8]/10 via-transparent to-transparent"></div>
-            
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-                <!-- Dynamic Month Ribbon -->
-                <div class="flex justify-center mb-6">
+        <!-- Final Pitch CTA Section -->
+        <section class="relative py-12 md:py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-[#0B3856] to-[#1D79A8]" role="region" aria-label="Start your free trial">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Scarcity Pill -->
+                <div class="flex justify-center mb-8">
                     <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold" aria-live="polite">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                    <span id="monthRibbon">Limited Spots Available for October Classes</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span id="scarcityPill">Limited Spots Available for <span id="nextMonth"></span> Classes</span>
                     </div>
                 </div>
                 
-                <!-- Main Headline -->
-                <div class="text-center mb-10">
-                    <h1 class="text-[28px] sm:text-4xl md:text-5xl font-black text-white mb-4 leading-[1.25]">
-                    Build Water-Confident Swimmers—Safely, Step by Step
-                    </h1>
-                    <p class="text-base sm:text-lg md:text-xl text-[#E9F5FC]/90 max-w-3xl mx-auto">
-                    Small-group swim lessons with certified instructors and a skills-first approach.
-                    </p>
-                </div>
-                
-                <!-- Two-Column Layout -->
-                <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
-                    <!-- Left Column - Outcomes & Trust -->
-                    <div class="text-white order-2 lg:order-1">
-                        <h2 class="text-xl font-bold mb-7 text-[#E9F5FC]">What many families notice within 8–12 lessons <span class="text-base font-normal opacity-90">(results vary by age, comfort, and attendance)</span></h2>
-                        <ul class="space-y-4 mb-7" role="list">
-                            <li class="flex items-start gap-3">
-                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <div>
-                                    <span class="font-semibold">Confident entries and safe push-offs</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <div>
-                                    <span class="font-semibold">Short independent swims</span> (distance varies)
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <div>
-                                    <span class="font-semibold">Reliable back float & breath control</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <svg class="w-6 h-6 text-[#23C552] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <div>
-                                    <span class="font-semibold">A child who enjoys the water</span>
-                                </div>
-                            </li>
-                        </ul>
+                <!-- Two Column Layout -->
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+                    <!-- Left Column - Benefits & Social Proof -->
+                    <div class="text-white">
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4" style="font-family: 'Outfit', sans-serif; line-height: 1.1;">Build Water-Confident Swimmers—Safely, Step by Step</h2>
+                        <p class="text-lg mb-8 opacity-95" style="font-family: 'Outfit', sans-serif;">Small-group swim lessons with certified instructors and a skills-first approach.</p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-2" style="font-family: 'Outfit', sans-serif;">What many families notice within 8–12 lessons</h3>
+                            <p class="text-sm opacity-80 mb-4" style="font-family: 'Outfit', sans-serif;">(results vary by age, comfort, and attendance)</p>
+                            
+                            <ul class="space-y-3" role="list">
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#2284B8" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span style="font-family: 'Outfit', sans-serif;">Confident entries and safe push-offs</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#2284B8" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span style="font-family: 'Outfit', sans-serif;">Short independent swims (distance varies)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#2284B8" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span style="font-family: 'Outfit', sans-serif;">Reliable back float & breath control</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="#2284B8" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span style="font-family: 'Outfit', sans-serif;">A child who enjoys the water</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Social Proof -->
+                        <div class="flex items-center gap-3 text-sm opacity-80">
+                            <div class="flex gap-1">
+                                <span class="text-yellow-400">⭐</span>
+                                <span class="text-yellow-400">⭐</span>
+                                <span class="text-yellow-400">⭐</span>
+                                <span class="text-yellow-400">⭐</span>
+                                <span class="text-yellow-400">⭐</span>
+                            </div>
+                            <span style="font-family: 'Outfit', sans-serif;">5.0/5 from 5 local families</span>
+                            <!-- TODO: Replace with dynamic review count if available -->
+                        </div>
                     </div>
                     
-                    <!-- Right Column - Offer Card -->
-                    <aside class="order-1 lg:order-2 flex flex-col items-center lg:items-end">
-                        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl w-full max-w-[420px] lg:max-w-[480px]">
-                            <div class="text-center mb-6">
-                                <h3 class="text-2xl sm:text-3xl font-black text-[#0B3856]">Start with a FREE Trial <span class="text-lg font-normal">(new families)</span></h3>
-                                <p class="text-gray-600 mt-2" id="cardPolicy">No credit card required for your first lesson.</p>
+                    <!-- Right Column - Conversion Card -->
+                    <div class="relative">
+                        <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/50 p-6 sm:p-8" style="font-family: 'Outfit', sans-serif;">
+                            <!-- Title with Badge -->
+                            <div class="flex items-center justify-center gap-3 mb-4">
+                                <h3 class="text-2xl sm:text-3xl font-bold text-[#0B3856]">Start with a FREE Trial</h3>
+                                <span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">new families</span>
                             </div>
                             
+                            <!-- Trust Line -->
+                            <p class="text-center font-semibold text-[#0B3856] mb-6">No credit card required for your first lesson.</p>
+                            
                             <!-- 3 Steps -->
-                            <div class="space-y-6 mb-7">
-                                <div class="flex items-start gap-3">
+                            <div class="space-y-4 mb-8">
+                                <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 bg-[#E9F5FC] rounded-full flex items-center justify-center flex-shrink-0">
                                         <span class="text-[#2284B8] font-bold">1</span>
                                     </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Pick your time</p>
-                                    </div>
+                                    <p class="text-[#0B3856]">Pick your time</p>
                                 </div>
-                                <div class="flex items-start gap-3">
+                                <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 bg-[#E9F5FC] rounded-full flex items-center justify-center flex-shrink-0">
                                         <span class="text-[#2284B8] font-bold">2</span>
                                     </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">Meet your instructor</p>
-                                    </div>
+                                    <p class="text-[#0B3856]">Meet your instructor</p>
                                 </div>
-                                <div class="flex items-start gap-3">
+                                <div class="flex items-center gap-4">
                                     <div class="w-10 h-10 bg-[#E9F5FC] rounded-full flex items-center justify-center flex-shrink-0">
                                         <span class="text-[#2284B8] font-bold">3</span>
                                     </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">See real progress</p>
-                                    </div>
+                                    <p class="text-[#0B3856]">See real progress</p>
                                 </div>
                             </div>
                             
-                            <!-- CTA Button -->
+                            <!-- Primary CTA Button -->
                             <a href="safestroke-booking.html" 
-                               class="block w-full text-center bg-[#2284B8] hover:bg-[#1976a3] text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2" 
-                               data-cta="hero_free_trial"
-                               role="button">
+                               class="block w-full text-center bg-[#2284B8] hover:bg-[#1976a3] text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#2284B8] focus:ring-offset-2 min-h-[44px]" 
+                               onclick="if(typeof fbq !== 'undefined') { fbq('track', 'InitiateCheckout', {content_name: 'Free Trial CTA Bottom'}); }"
+                               role="button"
+                               aria-label="Book your free swim trial">
                                 Book Free Trial Now →
                             </a>
                             
-                            <!-- Phone Link -->
-                            <div class="text-center mt-4">
-                                <p class="text-sm text-gray-500 mb-1">Prefer to call?</p>
+                            <!-- Secondary Path -->
+                            <div class="text-center mt-6">
+                                <p class="text-sm text-gray-600 mb-2">Prefer to call?</p>
                                 <a href="tel:973-820-1153" 
-                                   class="text-xl font-bold text-[#2284B8] hover:text-[#1976a3] transition-colors"
-                                   data-cta="hero_call"
+                                   class="text-2xl font-bold text-[#2284B8] hover:text-[#1976a3] transition-colors inline-block"
                                    aria-label="Call SafeStroke at 973-820-1153">
                                     973-820-1153
                                 </a>
                             </div>
                             
-                            <!-- Policy Line -->
-                            <div class="border-t mt-6 pt-4">
-                                <div class="text-center text-xs text-gray-600">
-                                    <span>No hidden fees • Cancel within policy</span>
-                                </div>
+                            <!-- Microcopy Footer -->
+                            <div class="border-t border-gray-200 mt-6 pt-4">
+                                <p class="text-xs text-center text-gray-500 mb-3">
+                                    No hidden fees · Cancel within policy
+                                </p>
+                                <p class="text-xs text-center text-[#0B3856]">
+                                    <span class="font-semibold">Family Savings:</span> 10% off each additional package after the first—applies to all programs & package sizes.
+                                </p>
                             </div>
                         </div>
-                        
-                        <!-- Family Savings Note -->
-                        <div class="mt-4 text-center w-full max-w-[420px] lg:max-w-[480px]">
-                            <p class="text-sm text-white/90">
-                                <span class="font-semibold">Family Savings:</span> 10% off each additional package after the first—all programs & package sizes.
-                            </p>
-                        </div>
-                    </aside>
+                    </div>
                 </div>
             </div>
         </section>
         
-        <!-- Dynamic Month Script -->
+        <!-- Mobile Sticky CTA Bar -->
+        <div id="mobileStickyBar" class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0B3856] border-t border-white/20 shadow-2xl transition-transform duration-300 translate-y-full" style="padding-bottom: env(safe-area-inset-bottom);">
+            <div class="flex items-center justify-between px-4 py-3" style="min-height: 56px;">
+                <div class="flex-1 pr-3">
+                    <p class="text-white text-sm font-semibold" style="font-family: 'Outfit', sans-serif;">Free trial—no card needed</p>
+                </div>
+                <a href="safestroke-booking.html" 
+                   class="bg-[#2284B8] hover:bg-[#1976a3] text-white font-bold px-5 py-2 rounded-full text-sm transition-colors min-h-[44px] flex items-center"
+                   onclick="if(typeof fbq !== 'undefined') { fbq('track', 'InitiateCheckout', {content_name: 'Free Trial Sticky Mobile'}); }"
+                   style="font-family: 'Outfit', sans-serif;">
+                    Book Now →
+                </a>
+                <button id="closeStickyBar" 
+                        class="ml-3 text-white/70 hover:text-white transition-colors p-1"
+                        aria-label="Close notification">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- CTA Section Scripts -->
         <script>
         (function() {
-            // Configuration
-            const REQUIRE_CARD_FOR_TRIAL = false;
-            
-            // Update card policy if needed
-            if (REQUIRE_CARD_FOR_TRIAL) {
-                const policyElement = document.getElementById('cardPolicy');
-                if (policyElement) {
-                    policyElement.textContent = 'Card on file to hold your spot—no charge unless no-show.';
-                }
+            // Set next month dynamically
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"];
+            const currentDate = new Date();
+            const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+            const nextMonthElement = document.getElementById('nextMonth');
+            if (nextMonthElement) {
+                nextMonthElement.textContent = monthNames[nextMonth.getMonth()];
             }
             
-            // Analytics tracking
-            document.querySelectorAll('[data-cta]').forEach(element => {
-                element.addEventListener('click', function(e) {
-                    const ctaType = this.getAttribute('data-cta');
+            // Mobile Sticky Bar Logic
+            const stickyBar = document.getElementById('mobileStickyBar');
+            const closeBtn = document.getElementById('closeStickyBar');
+            const ctaCard = document.querySelector('[aria-label="Start your free trial"] .bg-white\\/95');
+            let isBarDismissed = sessionStorage.getItem('stickyBarDismissed') === 'true';
+            
+            if (stickyBar && !isBarDismissed) {
+                // Function to check if CTA card is in viewport
+                function checkCTAVisibility() {
+                    if (!ctaCard) return;
                     
-                    // Track with existing analytics
-                    if (typeof fbq !== 'undefined') {
-                        if (ctaType === 'hero_free_trial') {
-                            fbq('track', 'InitiateCheckout', {
-                                content_name: 'Free Trial Lesson',
-                                content_category: 'Swimming Lessons',
-                                value: 0.00,
-                                currency: 'USD'
-                            });
-                        } else if (ctaType === 'hero_call') {
-                            fbq('track', 'Contact', {
-                                contact_type: 'Phone Call - Hero CTA'
-                            });
+                    const rect = ctaCard.getBoundingClientRect();
+                    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                    
+                    // Only show on mobile
+                    if (window.innerWidth < 768 && !isBarDismissed) {
+                        if (isVisible) {
+                            stickyBar.classList.add('translate-y-full');
+                        } else {
+                            stickyBar.classList.remove('translate-y-full');
                         }
+                    } else {
+                        stickyBar.classList.add('translate-y-full');
                     }
-                    
-                    // Custom event for other analytics
-                    if (window.gtag) {
-                        gtag('event', 'cta_click', {
-                            'cta_location': 'hero',
-                            'cta_type': ctaType
-                        });
-                    }
+                }
+                
+                // Initial check
+                setTimeout(checkCTAVisibility, 100);
+                
+                // Check on scroll
+                let scrollTimeout;
+                window.addEventListener('scroll', function() {
+                    if (scrollTimeout) clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(checkCTAVisibility, 50);
                 });
-            });
+                
+                // Check on resize
+                window.addEventListener('resize', checkCTAVisibility);
+                
+                // Close button functionality
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        stickyBar.classList.add('translate-y-full');
+                        sessionStorage.setItem('stickyBarDismissed', 'true');
+                        isBarDismissed = true;
+                    });
+                }
+            }
         })();
         </script>
         
@@ -1481,11 +1520,7 @@
             </div>
         </div>
     </footer>
-    
-    <!-- Mobile Sticky Book Now Button -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-2xl p-4">
-        <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg text-white font-bold py-3 rounded-full">Book Free Trial</a>
-    </div>
+
 
     <!-- Mobile Menu Toggle Script -->
     <script>
