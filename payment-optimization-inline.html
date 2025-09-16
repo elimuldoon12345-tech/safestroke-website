@@ -1,0 +1,41 @@
+<!-- Add this script tag RIGHT BEFORE </body> in safestroke-booking.html -->
+<!-- This is an inline failsafe to ensure payment optimization works -->
+<script>
+(function() {
+    console.log('Payment Optimization Failsafe Active');
+    
+    // Wait for all scripts to load
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            // Check if optimization is needed
+            if (window.setupPaymentFormOptimized && window.setupPaymentForm !== window.setupPaymentFormOptimized) {
+                console.log('⚠️ Payment not optimized - applying failsafe override');
+                window.setupPaymentForm = window.setupPaymentFormOptimized;
+                console.log('✅ Payment form optimized via failsafe');
+            }
+            
+            if (window.handleBookingSubmitFixed && window.handleBookingSubmit !== window.handleBookingSubmitFixed) {
+                console.log('⚠️ Booking submit not optimized - applying failsafe override');
+                window.handleBookingSubmit = window.handleBookingSubmitFixed;
+                console.log('✅ Booking submit optimized via failsafe');
+            }
+            
+            // Verify final state
+            console.log('Final payment state:', {
+                paymentOptimized: window.setupPaymentForm === window.setupPaymentFormOptimized,
+                bookingOptimized: window.handleBookingSubmit === window.handleBookingSubmitFixed
+            });
+        }, 1000); // Wait 1 second after page load to ensure all scripts have executed
+    });
+    
+    // Also try immediately for faster response
+    setTimeout(function() {
+        if (window.setupPaymentFormOptimized) {
+            window.setupPaymentForm = window.setupPaymentFormOptimized;
+        }
+        if (window.handleBookingSubmitFixed) {
+            window.handleBookingSubmit = window.handleBookingSubmitFixed;
+        }
+    }, 100);
+})();
+</script>

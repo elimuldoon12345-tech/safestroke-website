@@ -459,12 +459,15 @@
     </footer>
 
     <!-- Scripts -->
-    <!-- Removed booking-functions-fix.js to avoid conflicts -->
+    <!-- Core booking system -->
     <script src="booking-system-v2.js"></script>
     <script src="booking-functions-fix.js"></script>
-    <script src="booking-single-lesson-fix.js"></script>
     <script src="booking-package-fix.js"></script>
-    <script src="booking-payment-fix.js"></script>
+    <!-- Optimized payment with Card + Apple/Google Pay only -->
+    <script src="booking-payment-optimized.js"></script>
+    <script src="booking-single-lesson-optimized.js"></script>
+    <!-- Payment optimization enforcer - MUST BE LAST -->
+    <script src="payment-optimization-enforcer.js"></script>
     <script>
         // Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
@@ -544,6 +547,47 @@
                 }
             });
         });
+    </script>
+    
+    <!-- Payment Optimization Failsafe - Ensures optimized payment methods are used -->
+    <script>
+    (function() {
+        console.log('Payment Optimization Failsafe Active');
+        
+        // Wait for all scripts to load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                // Check if optimization is needed
+                if (window.setupPaymentFormOptimized && window.setupPaymentForm !== window.setupPaymentFormOptimized) {
+                    console.log('⚠️ Payment not optimized - applying failsafe override');
+                    window.setupPaymentForm = window.setupPaymentFormOptimized;
+                    console.log('✅ Payment form optimized via failsafe');
+                }
+                
+                if (window.handleBookingSubmitFixed && window.handleBookingSubmit !== window.handleBookingSubmitFixed) {
+                    console.log('⚠️ Booking submit not optimized - applying failsafe override');
+                    window.handleBookingSubmit = window.handleBookingSubmitFixed;
+                    console.log('✅ Booking submit optimized via failsafe');
+                }
+                
+                // Verify final state
+                console.log('Final payment state:', {
+                    paymentOptimized: window.setupPaymentForm === window.setupPaymentFormOptimized,
+                    bookingOptimized: window.handleBookingSubmit === window.handleBookingSubmitFixed
+                });
+            }, 1000); // Wait 1 second after page load
+        });
+        
+        // Also try immediately for faster response
+        setTimeout(function() {
+            if (window.setupPaymentFormOptimized) {
+                window.setupPaymentForm = window.setupPaymentFormOptimized;
+            }
+            if (window.handleBookingSubmitFixed) {
+                window.handleBookingSubmit = window.handleBookingSubmitFixed;
+            }
+        }, 100);
+    })();
     </script>
 </body>
 </html>

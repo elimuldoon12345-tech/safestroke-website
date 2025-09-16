@@ -327,7 +327,23 @@ function handlePaymentSuccess(packageCode) {
     }
 }
 
-// Override the original setupPaymentForm with optimized version
+// Force override the original setupPaymentForm with optimized version
+if (window.setupPaymentForm) {
+    window.setupPaymentFormOriginal = window.setupPaymentForm;
+    console.log('Original setupPaymentForm backed up');
+}
 window.setupPaymentForm = window.setupPaymentFormOptimized;
 
-console.log('Optimized payment (Card + Apple/Google Pay only) loaded');
+// Also override immediately after DOM ready to ensure it takes effect
+document.addEventListener('DOMContentLoaded', function() {
+    window.setupPaymentForm = window.setupPaymentFormOptimized;
+    console.log('Payment form override confirmed');
+});
+
+// Double-check override after a short delay
+setTimeout(() => {
+    window.setupPaymentForm = window.setupPaymentFormOptimized;
+    console.log('Payment form override enforced');
+}, 100);
+
+console.log('Optimized payment (Card + Apple/Google Pay only) loaded and enforced');

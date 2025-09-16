@@ -115,13 +115,11 @@ exports.handler = async (event, context) => {
       loyaltyDiscountApplied
     });
 
-    // Create Stripe payment intent
+    // Create Stripe payment intent - restricted to card payments only
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount, // amount in cents
       currency: 'usd',
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      payment_method_types: ['card'], // Only card payments allowed
       metadata: {
         program: program,
         lessons: lessons.toString(),
