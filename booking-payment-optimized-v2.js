@@ -1,8 +1,8 @@
 // Optimized payment form with Card + Apple Pay/Google Pay only
-// Replaces the previous payment setup with cleaner wallet integration
+// Version 2.0 - Fixed express checkout display issue
 
 window.setupPaymentFormOptimized = async function() {
-    console.log('Setting up optimized payment form');
+    console.log('Setting up optimized payment form v2.0');
     
     // Prevent double initialization
     if (window.paymentFormInitializing) {
@@ -124,107 +124,115 @@ window.setupPaymentFormOptimized = async function() {
                 appearance: { 
                     theme: 'stripe',
                     variables: {
-                        colorPrimary: '#2284B8', // SafeStroke brand blue
+                        colorPrimary: '#2284B8',
                     }
                 }
             });
             
-            // First, set up Payment Request for Apple Pay/Google Pay
-            const paymentRequest = window.stripe.paymentRequest({
-                country: 'US',
-                currency: 'usd',
-                total: {
-                    label: `SafeStroke ${window.selectedPackage.program} - ${window.selectedPackage.lessons} Lessons`,
-                    amount: window.selectedPackage.price * 100,
-                },
-                requestPayerName: true,
-                requestPayerEmail: true,
-            });
-            
-            // Check if Apple Pay/Google Pay is available
-            const canMakePaymentResult = await paymentRequest.canMakePayment();
-            console.log('Express checkout available:', canMakePaymentResult);
-            
-            // Add express checkout button if available
+            // Clear payment div
             const paymentDiv = document.getElementById('payment-element');
             if (paymentDiv) {
-            paymentDiv.innerHTML = '';
-            
-            // Add express checkout section if available
-            if (canMakePaymentResult) {
-            console.log('Adding express checkout button...');
-            const expressCheckoutDiv = document.createElement('div');
-            expressCheckoutDiv.id = 'express-checkout-container';
-            expressCheckoutDiv.className = 'mb-4';
-            paymentDiv.appendChild(expressCheckoutDiv);
-            
-            // Create and mount Payment Request Button
-            const prButton = elements.create('paymentRequestButton', {
-                paymentRequest: paymentRequest
-            });
-            
-            // Check if the Payment Request Button can be used
-            prButton.on('ready', function() {
-            console.log('Payment Request Button ready, mounting...');
-            const container = document.getElementById('express-checkout-container');
-            if (container) {
-            prButton.mount('#express-checkout-container');
-            console.log('Payment Request Button mounted successfully');
-            } else {
-                    console.error('Express checkout container not found');
-                }
-            });
-            
-            prButton.on('click', function(event) {
-                console.log('Payment Request Button clicked');
-                        });
-                    
-                    // Handle Payment Request submission
-                    paymentRequest.on('paymentmethod', async (ev) => {
-                        console.log('Payment Request submitted');
-                        
-                        // Confirm the PaymentIntent with the payment method returned
-                        const {error: confirmError} = await window.stripe.confirmCardPayment(
-                            clientSecret,
-                            {
-                                payment_method: ev.paymentMethod.id,
-                                receipt_email: ev.payerEmail || window.customerEmail
-                            },
-                            {
-                                handleActions: false
-                            }
-                        );
-                        
-                        if (confirmError) {
-                            ev.complete('fail');
-                            console.error('Payment failed:', confirmError);
-                            alert('Payment failed: ' + confirmError.message);
-                        } else {
-                            ev.complete('success');
-                            console.log('Payment successful via express checkout!');
-                            handlePaymentSuccess(packageCode);
-                        }
+                paymentDiv.innerHTML = '';
+                
+                // Try to set up Payment Request for Apple Pay/Google Pay
+                let expressCheckoutAvailable = false;
+                
+                try {
+                    const paymentRequest = window.stripe.paymentRequest({
+                        country: 'US',
+                        currency: 'usd',
+                        total: {
+                            label: `SafeStroke ${window.selectedPackage.program} - ${window.selectedPackage.lessons} Lessons`,
+                            amount: window.selectedPackage.price * 100,
+                        },
+                        requestPayerName: true,
+                        requestPayerEmail: true,
                     });
                     
-                    // Add divider
-                    const dividerDiv = document.createElement('div');
-                    dividerDiv.className = 'flex items-center my-4';
-                    dividerDiv.innerHTML = `
-                        <div class="flex-1 border-t border-gray-300"></div>
-                        <span class="px-3 text-sm text-gray-500">or pay with card</span>
-                        <div class="flex-1 border-t border-gray-300"></div>
-                    `;
-                    paymentDiv.appendChild(dividerDiv);
-                } else {
-                    console.log('Express checkout not available on this device/browser');
+                    // Check if express checkout is available
+                    const canMakePaymentResult = await paymentRequest.canMakePayment();
+                    console.log('Express checkout (Apple/Google Pay) available:', canMakePaymentResult);
+                    
+                    if (canMakePaymentResult) {
+                        // Create container for express checkout
+                        const expressContainer = document.createElement('div');
+                        expressContainer.id = 'express-checkout-container';
+                        expressContainer.className = 'mb-4';
+                        paymentDiv.appendChild(expressContainer);
+                        
+                        // Try to create and mount Payment Request Button
+                        const prButton = elements.create('paymentRequestButton', {
+                            paymentRequest: paymentRequest
+                        });
+                        
+                        // Wait for button to be ready
+                        await new Promise((resolve) => {
+                            prButton.on('ready', function() {
+                                console.log('Express checkout button ready, mounting...');
+                                prButton.mount('#express-checkout-container');
+                                expressCheckoutAvailable = true;
+                                resolve();
+                            });
+                            
+                            // Timeout after 2 seconds if button doesn't become ready
+                            setTimeout(() => {
+                                console.log('Express checkout button timeout - not available');
+                                resolve();
+                            }, 2000);
+                        });
+                        
+                        if (expressCheckoutAvailable) {
+                            // Handle express checkout payment
+                            paymentRequest.on('paymentmethod', async (ev) => {
+                                console.log('Processing express checkout payment...');
+                                
+                                const {error: confirmError} = await window.stripe.confirmCardPayment(
+                                    clientSecret,
+                                    {
+                                        payment_method: ev.paymentMethod.id,
+                                        receipt_email: ev.payerEmail || window.customerEmail
+                                    },
+                                    { handleActions: false }
+                                );
+                                
+                                if (confirmError) {
+                                    ev.complete('fail');
+                                    console.error('Express payment failed:', confirmError);
+                                    alert('Payment failed: ' + confirmError.message);
+                                } else {
+                                    ev.complete('success');
+                                    console.log('Express payment successful!');
+                                    handlePaymentSuccess(packageCode);
+                                }
+                            });
+                            
+                            // Add divider between express and card options
+                            const divider = document.createElement('div');
+                            divider.className = 'flex items-center my-4';
+                            divider.innerHTML = `
+                                <div class="flex-1 border-t border-gray-300"></div>
+                                <span class="px-3 text-sm text-gray-500">or pay with card</span>
+                                <div class="flex-1 border-t border-gray-300"></div>
+                            `;
+                            paymentDiv.appendChild(divider);
+                        } else {
+                            // Remove empty express container if button didn't mount
+                            expressContainer.remove();
+                        }
+                    } else {
+                        console.log('Express checkout not available - showing card only');
+                    }
+                } catch (error) {
+                    console.log('Express checkout setup error (non-fatal):', error.message);
+                    // Continue with card-only payment
                 }
                 
-                // Add card payment element container
-                const cardElementDiv = document.createElement('div');
-                cardElementDiv.id = 'card-element-container';
-                paymentDiv.appendChild(cardElementDiv);
+                // Add card payment element
+                const cardContainer = document.createElement('div');
+                cardContainer.id = 'card-element-container';
+                paymentDiv.appendChild(cardContainer);
                 
-                // Create and mount card-only payment element
+                // Create card-only payment element
                 const paymentElement = elements.create('payment', {
                     defaultValues: {
                         billingDetails: {
@@ -232,8 +240,8 @@ window.setupPaymentFormOptimized = async function() {
                         }
                     },
                     wallets: {
-                        applePay: 'never', // Disable in payment element since we have express checkout
-                        googlePay: 'never'  // Disable in payment element since we have express checkout
+                        applePay: 'never', // Disable to avoid duplication with express checkout
+                        googlePay: 'never'  // Disable to avoid duplication with express checkout
                     },
                     layout: {
                         type: 'tabs',
@@ -242,13 +250,21 @@ window.setupPaymentFormOptimized = async function() {
                 });
                 
                 paymentElement.mount('#card-element-container');
-                console.log('Payment element mounted');
+                console.log('Card payment element mounted');
+                
+                // Log what payment methods are available
+                if (expressCheckoutAvailable) {
+                    console.log('✅ Payment methods available: Card + Express Checkout (Apple/Google Pay)');
+                } else {
+                    console.log('✅ Payment methods available: Card only');
+                    console.log('ℹ️ Express checkout requires: HTTPS, saved cards, and domain registration in Stripe');
+                }
             }
             
             submitButton.textContent = 'Complete Payment';
             submitButton.disabled = false;
             
-            // Handle regular card payment submission
+            // Handle card payment submission
             const processPayment = async function(e) {
                 e.preventDefault();
                 console.log('Processing card payment...');
@@ -328,23 +344,23 @@ function handlePaymentSuccess(packageCode) {
     }
 }
 
-// Force override the original setupPaymentForm with optimized version
+// Force override the original setupPaymentForm
 if (window.setupPaymentForm) {
     window.setupPaymentFormOriginal = window.setupPaymentForm;
     console.log('Original setupPaymentForm backed up');
 }
 window.setupPaymentForm = window.setupPaymentFormOptimized;
 
-// Also override immediately after DOM ready to ensure it takes effect
+// Also override immediately after DOM ready
 document.addEventListener('DOMContentLoaded', function() {
     window.setupPaymentForm = window.setupPaymentFormOptimized;
     console.log('Payment form override confirmed');
 });
 
-// Double-check override after a short delay
+// Double-check override after a delay
 setTimeout(() => {
     window.setupPaymentForm = window.setupPaymentFormOptimized;
     console.log('Payment form override enforced');
 }, 100);
 
-console.log('Optimized payment (Card + Apple/Google Pay only) loaded and enforced');
+console.log('Optimized payment v2.0 (Card + Apple/Google Pay) loaded and enforced');
