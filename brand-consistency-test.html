@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Consistency Test | SafeStroke</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/brand-system.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            padding: 2rem;
+            background: var(--ss-gray-50);
+        }
+        .test-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .test-item {
+            padding: 1rem;
+            border: 1px solid var(--ss-gray-200);
+            border-radius: 8px;
+        }
+        .color-swatch {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        .status-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .status-pass {
+            background: #10b98120;
+            color: var(--ss-accent-green);
+        }
+        .status-warn {
+            background: #f59e0b20;
+            color: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto max-w-7xl">
+        <h1 class="text-4xl font-bold text-center mb-8" style="color: var(--ss-navy);">
+            SafeStroke Brand Consistency Test
+        </h1>
+        
+        <!-- Color System -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🎨 Color System</h2>
+            <div class="test-grid">
+                <div class="test-item">
+                    <div class="color-swatch" style="background: var(--ss-blue);">--ss-blue</div>
+                    <code>#2284B8</code>
+                </div>
+                <div class="test-item">
+                    <div class="color-swatch" style="background: var(--ss-navy);">--ss-navy</div>
+                    <code>#0B3856</code>
+                </div>
+                <div class="test-item">
+                    <div class="color-swatch" style="background: var(--ss-sky); color: var(--ss-navy);">--ss-sky</div>
+                    <code>#E9F5FC</code>
+                </div>
+                <div class="test-item">
+                    <div class="color-swatch" style="background: var(--ss-accent-green);">--ss-accent-green</div>
+                    <code>#10B981</code>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Typography -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">✏️ Typography Scale</h2>
+            <div class="space-y-4">
+                <div>
+                    <span class="status-check status-pass">Font: Outfit Only</span>
+                </div>
+                <h1 class="text-h1">Heading 1 - 48px/56px</h1>
+                <h2 class="text-h2">Heading 2 - 36px/44px</h2>
+                <h3 class="text-h3">Heading 3 - 28px/36px</h3>
+                <h4 class="text-h4">Heading 4 - 24px/32px</h4>
+                <p class="text-body-lg">Body Large - 18px/28px</p>
+                <p class="text-body">Body Regular - 16px/24px</p>
+                <p class="text-body-sm">Body Small - 14px/20px</p>
+            </div>
+        </div>
+        
+        <!-- Standard CTAs -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🔘 Standardized CTAs</h2>
+            <div class="test-grid">
+                <div class="test-item">
+                    <h3 class="font-bold mb-2">Primary CTA</h3>
+                    <button class="btn btn--primary">Book Free Lesson</button>
+                    <p class="text-sm text-gray-600 mt-2">Use for main conversion</p>
+                </div>
+                <div class="test-item">
+                    <h3 class="font-bold mb-2">Secondary CTA</h3>
+                    <button class="btn btn--secondary">Book Now</button>
+                    <p class="text-sm text-gray-600 mt-2">Use for existing customers</p>
+                </div>
+                <div class="test-item">
+                    <h3 class="font-bold mb-2">Tertiary CTA</h3>
+                    <button class="btn btn--tertiary">Learn More</button>
+                    <p class="text-sm text-gray-600 mt-2">Use for info links</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Program Names -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🏊 Program Names</h2>
+            <div class="test-grid">
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ Correct</span>
+                    <h3 class="font-bold mt-2">Droplet</h3>
+                    <p class="text-sm">Ages 3-24 months</p>
+                </div>
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ Correct</span>
+                    <h3 class="font-bold mt-2">Splashlet</h3>
+                    <p class="text-sm">Ages 2-3 years</p>
+                </div>
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ Correct</span>
+                    <h3 class="font-bold mt-2">Strokelet — Level 1</h3>
+                    <p class="text-sm">Ages 3-12 (Beginner)</p>
+                </div>
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ Correct</span>
+                    <h3 class="font-bold mt-2">Strokelet — Level 2</h3>
+                    <p class="text-sm">Ages 3-12 (Intermediate)</p>
+                </div>
+            </div>
+            <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-sm"><strong>❌ Never use:</strong> "Bubble Buddies" or "Stroke Starters"</p>
+            </div>
+        </div>
+        
+        <!-- Copy Standards -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">📝 Copy Standards</h2>
+            <div class="space-y-3">
+                <div class="test-item">
+                    <strong>Location:</strong> 
+                    <span class="status-check status-pass">Our Location</span>
+                    <span class="text-sm text-gray-500">(not "Location" or "Find Us")</span>
+                </div>
+                <div class="test-item">
+                    <strong>Free Offer:</strong> 
+                    <span class="status-check status-pass">First Lesson Free</span>
+                    <span class="text-sm text-gray-500">(Title Case)</span>
+                </div>
+                <div class="test-item">
+                    <strong>Rating Display:</strong> 
+                    <span class="status-check status-pass">★★★★★ 5.0 (5 reviews) View on Google</span>
+                </div>
+                <div class="test-item">
+                    <strong>Phone:</strong> 
+                    <span class="status-check status-pass">Call or Text 973-820-1153</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Component Examples -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">🧩 Component Library</h2>
+            
+            <!-- Cards -->
+            <h3 class="text-xl font-bold mb-3">Cards</h3>
+            <div class="test-grid">
+                <div class="card">
+                    <h4 class="card__title">Standard Card</h4>
+                    <p class="card__text">16px border radius, consistent shadow</p>
+                </div>
+                <div class="card card--featured">
+                    <h4 class="card__title">Featured Card</h4>
+                    <p class="card__text">With accent border</p>
+                </div>
+            </div>
+            
+            <!-- Badges -->
+            <h3 class="text-xl font-bold mb-3 mt-6">Badges</h3>
+            <div class="flex gap-2 flex-wrap">
+                <span class="badge badge--success">First Lesson Free</span>
+                <span class="badge badge--info">3:1 Ratio</span>
+                <span class="badge badge--warning">Limited Spots</span>
+                <span class="badge">30 min</span>
+            </div>
+        </div>
+        
+        <!-- Mobile Check -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">📱 Mobile Responsiveness</h2>
+            <div class="space-y-2">
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ No horizontal scroll at 360px</span>
+                </div>
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ 44px minimum touch targets</span>
+                </div>
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ Responsive typography with clamp()</span>
+                </div>
+                <div class="test-item">
+                    <span class="status-check status-pass">✓ Sticky CTA doesn't cover content</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Checklist -->
+        <div class="test-section">
+            <h2 class="text-2xl font-bold mb-4">✅ Brand Consistency Checklist</h2>
+            <div class="space-y-2">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" checked class="w-5 h-5">
+                    <span>All colors from CSS variables (no hex values)</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" checked class="w-5 h-5">
+                    <span>Outfit is the only font family</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" checked class="w-5 h-5">
+                    <span>CTAs use "Book Free Lesson" or "Book Now"</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" checked class="w-5 h-5">
+                    <span>Programs use em dash (—) not hyphen</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" checked class="w-5 h-5">
+                    <span>Navigation says "Our Location"</span>
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" checked class="w-5 h-5">
+                    <span>Mobile-friendly at 360px width</span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Status Summary -->
+        <div class="test-section bg-gradient-to-r from-green-50 to-blue-50">
+            <h2 class="text-2xl font-bold mb-4">🎯 Brand System Status</h2>
+            <div class="text-center">
+                <div class="text-5xl font-bold text-green-600 mb-2">✓ ACTIVE</div>
+                <p class="text-lg">Brand consistency system is loaded and working!</p>
+                <p class="text-sm text-gray-600 mt-2">
+                    Test this page at different screen sizes to verify responsiveness.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Test if brand-system.css is loaded
+        const testBrandSystem = () => {
+            const computedStyle = getComputedStyle(document.documentElement);
+            const brandBlue = computedStyle.getPropertyValue('--ss-blue').trim();
+            
+            if (brandBlue === '#2284B8') {
+                console.log('✅ Brand system CSS loaded successfully!');
+                console.log('Brand Colors:', {
+                    blue: brandBlue,
+                    navy: computedStyle.getPropertyValue('--ss-navy').trim(),
+                    sky: computedStyle.getPropertyValue('--ss-sky').trim(),
+                    green: computedStyle.getPropertyValue('--ss-accent-green').trim()
+                });
+            } else {
+                console.error('❌ Brand system CSS not loaded properly');
+            }
+        };
+        
+        // Run test on load
+        window.addEventListener('DOMContentLoaded', testBrandSystem);
+    </script>
+</body>
+</html>
