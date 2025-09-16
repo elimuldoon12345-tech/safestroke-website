@@ -131,8 +131,18 @@ window.handleBookingSubmitFixed = async function(event) {
                 console.log('Payment initialized, package code:', packageCode);
                 
                 // Create and show payment form
-                if (!window.stripe) {
-                    throw new Error('Stripe not initialized');
+                // Initialize Stripe if needed
+                let stripe = window.stripe;
+                if (!stripe && typeof Stripe !== 'undefined') {
+                    const stripeKey = document.querySelector('meta[name="stripe-public-key"]')?.content || 
+                                     'pk_test_51S4UnDPRIIfaJZnp1eF8ZlFCD74YDhIU0LVsu3oX3RAy58FBARnucYobBFWf2Wr0wBTZ7smsb1br4ySd2PcfZN4m00oGXz5yQn';
+                    stripe = Stripe(stripeKey);
+                    window.stripe = stripe; // Store globally for reuse
+                    console.log('Stripe initialized in fix');
+                }
+                
+                if (!stripe) {
+                    throw new Error('Stripe library not available - please refresh the page');
                 }
                 
                 // Hide the current form and show payment UI
@@ -178,7 +188,7 @@ window.handleBookingSubmitFixed = async function(event) {
                 }
                 
                 // Create Stripe Elements
-                const elements = window.stripe.elements({ 
+                const elements = stripe.elements({ 
                     clientSecret,
                     appearance: { theme: 'stripe' }
                 });
@@ -202,7 +212,7 @@ window.handleBookingSubmitFixed = async function(event) {
                     payBtn.textContent = 'Processing...';
                     
                     try {
-                        const result = await window.stripe.confirmPayment({
+                        const result = await stripe.confirmPayment({
                             elements,
                             confirmParams: {
                                 return_url: window.location.href,

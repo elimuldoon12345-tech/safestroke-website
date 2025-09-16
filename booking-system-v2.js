@@ -148,6 +148,7 @@ function initializeStripe() {
     
     if (typeof Stripe !== 'undefined') {
         stripe = Stripe(stripeKey);
+        window.stripe = stripe; // Make it globally available
         console.log('Stripe initialized successfully');
     } else {
         console.error('Stripe library not loaded');
