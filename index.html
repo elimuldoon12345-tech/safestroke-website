@@ -435,6 +435,15 @@
                 margin-bottom: -1px;
             }
         }
+        
+        /* Programs Section - Ensure Outfit font throughout */
+        #programs * {
+            font-family: 'Outfit', sans-serif !important;
+        }
+        #programs h2, #programs h3, #programs h4, #programs p, 
+        #programs span, #programs a, #programs button, #programs li {
+            font-family: 'Outfit', sans-serif !important;
+        }
     </style>
 </head>
 <body class="gradient-bg">
@@ -624,7 +633,7 @@
                             <!-- CTA -->
                             <a href="safestroke-programs.html#droplet" 
                                class="block w-full text-center py-3 px-6 border-2 rounded-2xl font-semibold transition duration-200" 
-                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif !important;"
                                onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 View Droplet Details
@@ -706,7 +715,7 @@
                             <!-- CTA -->
                             <a href="safestroke-programs.html#splashlet" 
                                class="block w-full text-center py-3 px-6 border-2 rounded-2xl font-semibold transition duration-200" 
-                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif !important;"
                                onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 View Splashlet Details
@@ -726,18 +735,23 @@
                                 <img src="safestroke-images/strokelet-shield.png" alt="Strokelet" class="w-12 h-12 object-contain">
                             </div>
                             
-                            <!-- Level Pills -->
-                            <div class="flex gap-2 mb-4">
-                                <button class="px-3 py-1 rounded-full text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1" 
-                                        style="background: var(--ss-blue); color: white; font-family: 'Outfit', sans-serif;"
-                                        onclick="showLevel(this, 1)">
-                                    Level 1
-                                </button>
-                                <button class="px-3 py-1 rounded-full text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1" 
-                                        style="background: var(--ss-gray-100); color: var(--ss-gray-700); font-family: 'Outfit', sans-serif;"
-                                        onclick="showLevel(this, 2)">
-                                    Level 2
-                                </button>
+                            <!-- Level Pills - Combined Pill Design -->
+                            <div class="mb-4">
+                                <div class="inline-flex rounded-full overflow-hidden border-2" style="border-color: var(--ss-blue);">
+                                    <button class="px-4 py-1.5 text-xs font-medium transition-all duration-200 relative" 
+                                            style="background: var(--ss-blue); color: white; font-family: 'Outfit', sans-serif;"
+                                            onclick="showLevel(this, 1)"
+                                            id="strokelet-btn-1">
+                                        Level 1
+                                    </button>
+                                    <div class="w-0.5" style="background: var(--ss-blue);"></div>
+                                    <button class="px-4 py-1.5 text-xs font-medium transition-all duration-200 relative" 
+                                            style="background: white; color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                                            onclick="showLevel(this, 2)"
+                                            id="strokelet-btn-2">
+                                        Level 2
+                                    </button>
+                                </div>
                             </div>
                             
                             <!-- Meta Row -->
@@ -846,7 +860,7 @@
                             <!-- CTA -->
                             <a href="safestroke-programs.html#strokelet" 
                                class="block w-full text-center py-3 px-6 border-2 rounded-2xl font-semibold transition duration-200" 
-                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif !important;"
                                onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 View Strokelet Details
@@ -872,7 +886,7 @@
                             </div>
                             <a href="safestroke-pricing.html#family-savings" 
                                class="inline-block px-5 py-2 border-2 rounded-full font-semibold text-sm transition duration-200 whitespace-nowrap"
-                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif;"
+                               style="border-color: var(--ss-blue); color: var(--ss-blue); font-family: 'Outfit', sans-serif !important;"
                                onmouseover="this.style.backgroundColor='var(--ss-blue)'; this.style.color='white';"
                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--ss-blue)';">
                                 Learn More
@@ -892,19 +906,22 @@
         
         <script>
         function showLevel(button, level) {
-            // Get all level buttons in this card
-            const buttons = button.parentElement.querySelectorAll('button');
+            // Get both level buttons
+            const btn1 = document.getElementById('strokelet-btn-1');
+            const btn2 = document.getElementById('strokelet-btn-2');
             
-            // Update button styles
-            buttons.forEach(btn => {
-                if (btn === button) {
-                    btn.style.background = 'var(--ss-blue)';
-                    btn.style.color = 'white';
-                } else {
-                    btn.style.background = 'var(--ss-gray-100)';
-                    btn.style.color = 'var(--ss-gray-700)';
-                }
-            });
+            // Update button styles for the split pill design
+            if (level === 1) {
+                btn1.style.background = 'var(--ss-blue)';
+                btn1.style.color = 'white';
+                btn2.style.background = 'white';
+                btn2.style.color = 'var(--ss-blue)';
+            } else {
+                btn1.style.background = 'white';
+                btn1.style.color = 'var(--ss-blue)';
+                btn2.style.background = 'var(--ss-blue)';
+                btn2.style.color = 'white';
+            }
             
             // Show/hide content
             const level1Content = document.getElementById('strokelet-level-1');
