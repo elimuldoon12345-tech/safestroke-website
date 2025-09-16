@@ -76,7 +76,8 @@ window.showStep = function(stepNumber) {
         
         // Call setupPaymentForm after creating the elements
         setTimeout(() => {
-            if (typeof window.setupPaymentForm === 'function') {
+            if (typeof window.setupPaymentForm === 'function' && !window.paymentFormInitialized) {
+                window.paymentFormInitialized = true;
                 window.setupPaymentForm();
             }
         }, 100);
@@ -521,14 +522,12 @@ window.showEmailCollectionStepFixed = function() {
             
             // Now show payment step
             if (typeof window.showStep === 'function') {
+                window.paymentFormInitialized = false; // Reset flag before showing step
                 window.showStep(3);
             }
             
-            if (typeof window.setupPaymentForm === 'function') {
-                window.setupPaymentForm();
-            } else {
-                console.error('setupPaymentForm function not found');
-            }
+            // setupPaymentForm will be called automatically by showStep(3)
+            // so we don't need to call it again here
         };
     }
 };

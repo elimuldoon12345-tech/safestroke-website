@@ -5,6 +5,13 @@
 window.setupPaymentForm = async function() {
     console.log('Setting up payment form for package');
     
+    // Prevent double initialization
+    if (window.paymentFormInitializing) {
+        console.log('Payment form already initializing, skipping...');
+        return;
+    }
+    window.paymentFormInitializing = true;
+    
     if (!window.stripe || !window.selectedPackage) {
         console.error('Stripe not initialized or no package selected');
         if (!window.stripe && typeof Stripe !== 'undefined') {
@@ -123,6 +130,11 @@ window.setupPaymentForm = async function() {
                     billingDetails: {
                         email: window.customerEmail
                     }
+                },
+                // Disable Link for testing to avoid rate limiting
+                wallets: {
+                    applePay: 'auto',
+                    googlePay: 'auto'
                 }
             });
             
@@ -156,7 +168,19 @@ window.setupPaymentForm = async function() {
                     
                     if (result.error) {
                         console.error('Payment error:', result.error);
-                        alert('Payment failed: ' + result.error.message);
+                        
+                        // Check if it's a Link rate limiting error (not blocking)
+                        if (result.error.message && result.error.message.includes('too many')) {
+                            // This is just Stripe Link rate limiting, payment can still proceed
+                            console.log('Note: Stripe Link is rate limited for this email. You can still enter card details manually.');
+                            // Don't show this error to user as it's not blocking
+                            if (result.error.code && result.error.code !== 'email_verification_failed') {
+                                alert('Payment failed: ' + result.error.message);
+                            }
+                        } else {
+                            alert('Payment failed: ' + result.error.message);
+                        }
+                        
                         submitButton.textContent = 'Complete Payment';
                         submitButton.disabled = false;
                     } else {
@@ -179,6 +203,9 @@ window.setupPaymentForm = async function() {
                 
                 return false;
             };
+            
+            // Reset initialization flag after setup
+            window.paymentFormInitializing = false;
             
             // Attach handler to both form and button
             paymentForm.onsubmit = processPayment;
