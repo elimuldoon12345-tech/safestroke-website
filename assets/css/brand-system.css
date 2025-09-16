@@ -17,6 +17,12 @@
     --ss-sky: #E9F5FC;         /* Light sky background tint */
     --ss-accent-green: #10B981; /* Success/promo green - ONLY for "First Lesson Free" and success states */
     
+    /* Legacy support - maps old names to new */
+    --brand-blue: var(--ss-blue);
+    --brand-navy: var(--ss-navy);
+    --brand-sky: var(--ss-sky);
+    --accent-green: var(--ss-accent-green);
+    
     /* Neutral Scale - WCAG AA compliant */
     --ss-white: #FFFFFF;
     --ss-gray-50: #F9FAFB;
@@ -350,7 +356,81 @@ h1, h2, h3, h4, h5, h6, p, a, button, input, select, textarea, label {
     /* "Our Location" */
 }
 
-/* Free Offer */
-.ss-free-badge-text {
-    /* "First Lesson Free" - Title Case */
+/* =================================================================
+   7. OVERRIDE STYLES - APPLY TO ALL ELEMENTS
+   ================================================================= */
+
+/* Force brand colors on common classes */
+.brand-blue-bg,
+.bg-blue-600,
+.bg-blue-500 {
+    background-color: var(--ss-blue) !important;
+}
+
+.brand-blue-bg:hover,
+.hover\:bg-blue-600:hover,
+.hover\:bg-blue-700:hover {
+    background-color: #1a6b96 !important;
+}
+
+.text-blue-600,
+.text-blue-500,
+.brand-blue {
+    color: var(--ss-blue) !important;
+}
+
+/* Navy overrides */
+.text-\[\#0B3856\],
+.text-\[\#00253D\] {
+    color: var(--ss-navy) !important;
+}
+
+.bg-\[\#0B3856\],
+.bg-\[\#00253D\] {
+    background-color: var(--ss-navy) !important;
+}
+
+/* Green overrides */
+.text-\[\#23C552\],
+.text-\[\#10B981\],
+.text-green-500 {
+    color: var(--ss-accent-green) !important;
+}
+
+.bg-\[\#23C552\],
+.bg-\[\#10B981\] {
+    background-color: var(--ss-accent-green) !important;
+}
+
+/* Sky overrides */
+.bg-\[\#E9F5FC\] {
+    background-color: var(--ss-sky) !important;
+}
+
+/* Button text standardization */
+a[href*="booking"].brand-blue-bg,
+a[href*="booking"].btn,
+button:contains("Book") {
+    /* Standardize booking CTAs */
+}
+
+/* Mobile responsiveness fixes */
+@media (max-width: 360px) {
+    body {
+        overflow-x: hidden !important;
+    }
+    
+    .container {
+        max-width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* Ensure buttons don't overflow */
+    .btn,
+    .ss-btn,
+    a.brand-blue-bg {
+        max-width: 100% !important;
+        white-space: normal !important;
+    }
 }
