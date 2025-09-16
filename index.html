@@ -429,12 +429,6 @@
         .bg-gradient-radial {
             background: radial-gradient(ellipse at center, var(--tw-gradient-from), var(--tw-gradient-to));
         }
-        /* Wave divider fix for mobile */
-        @media (max-width: 640px) {
-            .hero-cta-wave {
-                margin-bottom: -1px;
-            }
-        }
         
         /* Programs Section - Ensure Outfit font throughout */
         #programs * {
@@ -1199,7 +1193,7 @@
         </section>
         
         <!-- Hero CTA Section - Redesigned for Conversion -->
-        <section class="relative py-16 md:py-20 pb-24 overflow-hidden bg-gradient-to-b from-[#0B3856] to-[#00253D]" role="region" aria-label="Call to action">
+        <section class="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-[#0B3856] to-[#00253D]" role="region" aria-label="Call to action">
             <!-- Subtle gradient overlay -->
             <div class="absolute inset-0 bg-gradient-radial from-[#2284B8]/10 via-transparent to-transparent"></div>
             
@@ -1208,7 +1202,7 @@
                 <div class="flex justify-center mb-6">
                     <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold" aria-live="polite">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                    <span id="monthRibbon">Limited Spots Available for <span id="currentMonth"></span> Classes</span>
+                    <span id="monthRibbon">Limited Spots Available for October Classes</span>
                     </div>
                 </div>
                 
@@ -1253,22 +1247,6 @@
                                 </div>
                             </li>
                         </ul>
-                        
-                        <!-- Trust Chips -->
-                        <div class="flex flex-wrap gap-4 items-center">
-                            <div class="inline-flex items-center gap-2 text-sm">
-                                <span class="text-yellow-400">⭐</span>
-                                <span>5 Five-Star Reviews</span>
-                            </div>
-                            <div class="inline-flex items-center gap-2 text-sm">
-                                <span class="text-white">👨‍👩‍👧</span>
-                                <span>3:1 Ratio</span>
-                            </div>
-                            <div class="inline-flex items-center gap-2 text-sm">
-                                <span class="text-white">🛟</span>
-                                <span>CPR/First-Aid Certified</span>
-                            </div>
-                        </div>
                     </div>
                     
                     <!-- Right Column - Offer Card -->
@@ -1343,14 +1321,6 @@
                     </aside>
                 </div>
             </div>
-            
-            <!-- Wave Divider -->
-            <div class="absolute bottom-0 left-0 right-0 overflow-hidden leading-none hero-cta-wave z-0">
-                <svg class="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" 
-                          fill="#ffffff"></path>
-                </svg>
-            </div>
         </section>
         
         <!-- Dynamic Month Script -->
@@ -1358,13 +1328,6 @@
         (function() {
             // Configuration
             const REQUIRE_CARD_FOR_TRIAL = false;
-            
-            // Set dynamic month - Fixed
-            const monthElement = document.getElementById('currentMonth');
-            if (monthElement) {
-                const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
-                monthElement.textContent = currentMonth;
-            }
             
             // Update card policy if needed
             if (REQUIRE_CARD_FOR_TRIAL) {
