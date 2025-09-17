@@ -86,36 +86,46 @@
             -moz-osx-font-smoothing: grayscale;
         }
         
-        /* Typography Scale */
+        /* Typography Scale - Enhanced hierarchy */
         h1 {
-            font-size: var(--h1-size);
+            font-size: 2.75rem;  /* 44px mobile */
             line-height: 1.2;
             font-weight: 700;
             letter-spacing: -0.02em;
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
         }
         
         h2 {
-            font-size: var(--h2-size);
+            font-size: 2rem;     /* 32px */
             line-height: 1.3;
             font-weight: 600;
             margin-bottom: var(--space-md);
         }
         
         h3 {
-            font-size: var(--h3-size);
+            font-size: 1.375rem;  /* 22px */
             line-height: 1.4;
             font-weight: 600;
             margin-bottom: var(--space-xs);
+        }
+        
+        @media (min-width: 768px) {
+            h1 { 
+                font-size: 3.75rem;  /* 60px desktop */
+            }
+            h2 {
+                font-size: 2.5rem;   /* 40px desktop */
+            }
+            h3 {
+                font-size: 1.5rem;   /* 24px desktop */
+            }
         }
         
         p {
             margin-bottom: var(--space-sm);
         }
         
-        @media (min-width: 768px) {
-            h1 { font-size: var(--h1-size-lg); }
-        }
+
         
         /* Universal Component Styles */
         
@@ -633,22 +643,22 @@
                     
                     <div class="space-y-3">
                         <div class="flex items-start gap-3">
-                            <svg class="icon-sm text-blue-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm mt-1 flex-shrink-0" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
                             </svg>
                             <p class="text-sm">
                                 <strong>Under 2 years or needs a parent in water</strong> → 
-                                <a href="#droplet" class="text-blue-600 hover:underline font-semibold">Droplet</a>
+                                <a href="#droplet" class="hover:underline font-semibold" style="color: #2284B8;">Droplet</a>
                             </p>
                         </div>
                         
                         <div class="flex items-start gap-3">
-                            <svg class="icon-sm text-blue-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm mt-1 flex-shrink-0" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
                             </svg>
                             <p class="text-sm">
                                 <strong>Age 2–3, not ready without parent</strong> → 
-                                <a href="#splashlet" class="text-blue-600 hover:underline font-semibold">Splashlet</a>
+                                <a href="#splashlet" class="hover:underline font-semibold" style="color: #2284B8;">Splashlet</a>
                             </p>
                         </div>
                         
@@ -658,7 +668,7 @@
                             </svg>
                             <p class="text-sm">
                                 <strong>Age 3+ and water-shy or learning basics</strong> → 
-                                <a href="#strokelet-l1" class="text-blue-600 hover:underline font-semibold">Strokelet L1</a>
+                                <a href="#strokelet-l1" class="hover:underline font-semibold" style="color: #2284B8;">Strokelet L1</a>
                             </p>
                         </div>
                         
@@ -668,7 +678,7 @@
                             </svg>
                             <p class="text-sm">
                                 <strong>Age 3+ and comfortable face-in, ready for skills & short swims</strong> → 
-                                <a href="#strokelet-l2" class="text-blue-600 hover:underline font-semibold">Strokelet L2</a>
+                                <a href="#strokelet-l2" class="hover:underline font-semibold" style="color: #2284B8;">Strokelet L2</a>
                             </p>
                         </div>
                     </div>
@@ -678,7 +688,7 @@
                             <strong>Note:</strong> We confirm placement at your first lesson and adjust as needed.
                         </p>
                         <p class="text-sm text-gray-600 text-center">
-                            Still unsure? <a href="tel:973-820-1153" class="text-blue-600 hover:underline font-semibold">
+                            Still unsure? <a href="tel:973-820-1153" class="hover:underline font-semibold" style="color: #2284B8;">
                                 Call or text 973-820-1153
                             </a>
                         </p>
@@ -698,9 +708,12 @@
                 <!-- Strokelet L1 Card -->
                 <div id="strokelet-l1" class="card scroll-mt-24">
                     <span class="card-tag">Level 1</span>
-                    <h3>Strokelet L1 (Bubble Buddies)</h3>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="safestroke-images/strokelet-shield.png" alt="Strokelet L1 icon" class="w-12 h-12 object-contain">
+                        <h3 class="mb-0">Strokelet L1 (Bubble Buddies)</h3>
+                    </div>
                     <p class="text-sm text-gray-600">Ages 3–12 | 3:1 Swimmer-to-Instructor</p>
-                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                    <p class="text-sm font-semibold" style="color: #2284B8; margin-bottom: var(--space-sm);">
                         Best for: Beginners or water-shy
                     </p>
                     
@@ -743,9 +756,12 @@
                 <!-- Strokelet L2 Card -->
                 <div id="strokelet-l2" class="card scroll-mt-24">
                     <span class="card-tag">Level 2</span>
-                    <h3>Strokelet L2 (Stroke Starters)</h3>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="safestroke-images/strokelet-shield.png" alt="Strokelet L2 icon" class="w-12 h-12 object-contain">
+                        <h3 class="mb-0">Strokelet L2 (Stroke Starters)</h3>
+                    </div>
                     <p class="text-sm text-gray-600">Ages 3–12 | 3:1 Swimmer-to-Instructor</p>
-                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                    <p class="text-sm font-semibold" style="color: #2284B8; margin-bottom: var(--space-sm);">
                         Best for: Comfortable in water & skill-ready
                     </p>
                     
@@ -791,15 +807,15 @@
                 <h3 style="margin-bottom: var(--space-sm);">L1 vs L2: What's the difference?</h3>
                 <div class="space-y-2">
                     <div class="flex gap-3 text-sm">
-                        <span class="font-semibold text-blue-600" style="min-width: 80px;">Comfort:</span>
+                        <span class="font-semibold" style="color: #2284B8; min-width: 80px;">Comfort:</span>
                         <span>L1 builds calm water comfort; L2 builds skillful independence</span>
                     </div>
                     <div class="flex gap-3 text-sm">
-                        <span class="font-semibold text-blue-600" style="min-width: 80px;">Skills:</span>
+                        <span class="font-semibold" style="color: #2284B8; min-width: 80px;">Skills:</span>
                         <span>L1 = supported floats & kicks; L2 = streamline, arms, rollover breathing</span>
                     </div>
                     <div class="flex gap-3 text-sm">
-                        <span class="font-semibold text-blue-600" style="min-width: 80px;">Outcome:</span>
+                        <span class="font-semibold" style="color: #2284B8; min-width: 80px;">Outcome:</span>
                         <span>L1 = first short swims; L2 = consistent short swims with form</span>
                     </div>
                 </div>
@@ -810,7 +826,7 @@
     <!-- 4. Water Acclimation Classes -->
     <section class="section bg-gray-50">
         <div class="container">
-            <p class="text-center text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-xs);">
+            <p class="text-center text-sm font-semibold" style="color: #2284B8; margin-bottom: var(--space-xs);">
                 For children under 3 years
             </p>
             <h2 class="text-center">Water Acclimation Classes</h2>
@@ -818,9 +834,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 <!-- Droplet Card -->
                 <div id="droplet" class="card scroll-mt-24">
-                    <h3>Droplet — Parent & Child</h3>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="safestroke-images/droplet-shield.png" alt="Droplet program icon" class="w-12 h-12 object-contain">
+                        <h3 class="mb-0">Droplet — Parent & Child</h3>
+                    </div>
                     <p class="text-sm text-gray-600">3–24 months | 8:1 Family-to-Instructor</p>
-                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                    <p class="text-sm font-semibold" style="color: #2284B8; margin-bottom: var(--space-sm);">
                         Parent joins in water
                     </p>
                     
@@ -862,9 +881,12 @@
                 
                 <!-- Splashlet Card -->
                 <div id="splashlet" class="card scroll-mt-24">
-                    <h3>Splashlet</h3>
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="safestroke-images/splashlet-shield.png" alt="Splashlet program icon" class="w-12 h-12 object-contain">
+                        <h3 class="mb-0">Splashlet</h3>
+                    </div>
                     <p class="text-sm text-gray-600">Ages 2–3 | 4:1 Swimmer-to-Instructor</p>
-                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                    <p class="text-sm font-semibold" style="color: #2284B8; margin-bottom: var(--space-sm);">
                         Parent observes poolside
                     </p>
                     
@@ -947,7 +969,7 @@
                 <div class="space-y-4">
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             Which level should I choose?
@@ -959,7 +981,7 @@
                     
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             What if my child cries or is anxious?
@@ -971,7 +993,7 @@
                     
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             Do parents go in the water?
@@ -983,7 +1005,7 @@
                     
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             What should we bring?
@@ -995,7 +1017,7 @@
                     
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             Make-ups & cancellations?
@@ -1007,7 +1029,7 @@
                     
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             Hygiene & safety?
@@ -1019,7 +1041,7 @@
                     
                     <div class="card" style="padding: var(--space-md);">
                         <h3 class="flex items-center gap-2">
-                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" style="color: #2284B8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             How fast will my child progress?
@@ -1131,18 +1153,18 @@
                 <div class="text-center md:text-left">
                     <h3 class="font-semibold mb-4">Programs</h3>
                     <ul class="space-y-2 text-sm opacity-80">
-                        <li><a href="#droplet" class="hover:text-blue-300 transition-colors">Droplet (3-24 months)</a></li>
-                        <li><a href="#splashlet" class="hover:text-blue-300 transition-colors">Splashlet (2-3 years)</a></li>
-                        <li><a href="#strokelet-l1" class="hover:text-blue-300 transition-colors">Strokelet (3-12 years)</a></li>
+                        <li><a href="#droplet" class="hover:opacity-90 transition-opacity">Droplet (3-24 months)</a></li>
+                        <li><a href="#splashlet" class="hover:opacity-90 transition-opacity">Splashlet (2-3 years)</a></li>
+                        <li><a href="#strokelet-l1" class="hover:opacity-90 transition-opacity">Strokelet (3-12 years)</a></li>
                     </ul>
                 </div>
                 
                 <div class="text-center md:text-left">
                     <h3 class="font-semibold mb-4">Information</h3>
                     <ul class="space-y-2 text-sm opacity-80">
-                        <li><a href="safestroke-aboutus.html" class="hover:text-blue-300 transition-colors">About Us</a></li>
-                        <li><a href="safestroke-reviews.html" class="hover:text-blue-300 transition-colors">Reviews</a></li>
-                        <li><a href="safestroke-location.html" class="hover:text-blue-300 transition-colors">Location</a></li>
+                        <li><a href="safestroke-aboutus.html" class="hover:opacity-90 transition-opacity">About Us</a></li>
+                        <li><a href="safestroke-reviews.html" class="hover:opacity-90 transition-opacity">Reviews</a></li>
+                        <li><a href="safestroke-location.html" class="hover:opacity-90 transition-opacity">Location</a></li>
                     </ul>
                 </div>
                 
@@ -1150,7 +1172,7 @@
                     <h3 class="font-semibold mb-4">Contact</h3>
                     <ul class="space-y-2 text-sm opacity-80">
                         <li>199 Scoles Avenue<br>Clifton, NJ 07012</li>
-                        <li><a href="tel:973-820-1153" class="hover:text-blue-300 transition-colors">973-820-1153</a></li>
+                        <li><a href="tel:973-820-1153" class="hover:opacity-90 transition-opacity">973-820-1153</a></li>
                     </ul>
                 </div>
             </div>
