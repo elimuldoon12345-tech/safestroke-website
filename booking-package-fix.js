@@ -503,29 +503,33 @@ window.showEmailCollectionStepFixed = function() {
     if (form) {
         form.onsubmit = async function(event) {
             event.preventDefault();
-            
+
             const emailInput = document.getElementById('customer-email');
-            window.customerEmail = emailInput.value.trim();
-            
+            window.customerEmail = emailInput?.value.trim();
+
             if (!window.customerEmail) {
                 alert('Please enter a valid email address');
                 return;
             }
-            
+
             // Store email
             console.log('Email collected:', window.customerEmail);
-            
+
+            if (typeof window.handleEmailSubmission === 'function') {
+                return window.handleEmailSubmission.call(this, event);
+            }
+
             // Check if this is a returning customer (for loyalty discount)
             if (typeof window.checkReturningCustomerStatus === 'function') {
                 await window.checkReturningCustomerStatus(window.customerEmail);
             }
-            
+
             // Now show payment step
             if (typeof window.showStep === 'function') {
                 window.paymentFormInitialized = false; // Reset flag before showing step
                 window.showStep(3);
             }
-            
+
             // setupPaymentForm will be called automatically by showStep(3)
             // so we don't need to call it again here
         };
