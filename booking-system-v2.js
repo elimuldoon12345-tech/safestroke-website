@@ -845,9 +845,27 @@ async function handlePaymentSubmit(event) {
 // --- Calendar Functions ---
 // Make showCalendarSection globally available
 window.showCalendarSection = function showCalendarSection() {
-    document.getElementById('existing-customer-path').classList.add('hidden');
-    document.getElementById('new-customer-path').classList.add('hidden');
-    document.getElementById('calendar-section').classList.remove('hidden');
+    // Hide any open flows that might be showing
+    const elementsToHide = [
+        'package-flow',
+        'single-lesson-flow',
+        'existing-customer-path',  // May not exist
+        'new-customer-path'        // May not exist
+    ];
+    
+    elementsToHide.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.classList.add('hidden');
+        }
+    });
+    
+    // Show the calendar section
+    const calendarSection = document.getElementById('calendar-section');
+    if (calendarSection) {
+        calendarSection.classList.remove('hidden');
+    }
+    
     updateCalendarLoading('Loading available times...');
 }
 
@@ -1913,11 +1931,27 @@ function hideError(element) {
 }
 
 function resetToInitialState() {
-    document.getElementById('existing-customer-path').classList.remove('hidden');
-    document.getElementById('new-customer-path').classList.remove('hidden');
-    document.getElementById('calendar-section').classList.add('hidden');
-    document.getElementById('form-section').classList.add('hidden');
-    document.getElementById('confirmation-message').classList.add('hidden');
+    // Show main choice cards if they exist
+    const existingPath = document.getElementById('existing-customer-path');
+    const newPath = document.getElementById('new-customer-path');
+    if (existingPath) existingPath.classList.remove('hidden');
+    if (newPath) newPath.classList.remove('hidden');
+    
+    // Hide all sections
+    const sectionsToHide = [
+        'calendar-section',
+        'form-section',
+        'confirmation-message',
+        'package-flow',
+        'single-lesson-flow'
+    ];
+    
+    sectionsToHide.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.classList.add('hidden');
+        }
+    });
     
     // Reset global state
     selectedProgram = null;
