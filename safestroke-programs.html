@@ -21,8 +21,6 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '642654784918679');
     fbq('track', 'PageView');
-    
-    // Track programs page view
     fbq('track', 'ViewContent', {
         content_name: 'Programs Page',
         content_category: 'Programs'
@@ -31,10 +29,48 @@
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=642654784918679&ev=PageView&noscript=1"
     /></noscript>
-    <!-- End Meta Pixel Code -->
     
     <style>
-        /* Global Reset for Programs Page */
+        /* Design System Foundation */
+        :root {
+            /* Colors */
+            --deep-navy: #0B3856;
+            --primary-blue: #2284B8;
+            --light-blue: rgba(34, 132, 184, 0.08);
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            
+            /* Spacing rhythm (8px base) */
+            --space-xs: 0.5rem;   /* 8px */
+            --space-sm: 1rem;     /* 16px */
+            --space-md: 1.5rem;   /* 24px */
+            --space-lg: 2rem;     /* 32px */
+            --space-xl: 3rem;     /* 48px */
+            --space-2xl: 4rem;    /* 64px */
+            
+            /* Typography */
+            --font-family: 'Outfit', sans-serif;
+            --h1-size: 2.5rem;    /* 40px mobile */
+            --h1-size-lg: 3.5rem; /* 56px desktop */
+            --h2-size: 1.75rem;   /* 28px */
+            --h3-size: 1.25rem;   /* 20px */
+            --body-size: 1rem;    /* 16px */
+            --small-size: 0.875rem; /* 14px */
+            
+            /* Consistent design tokens */
+            --radius: 0.75rem;
+            --shadow-sm: 0 2px 4px rgba(11, 56, 86, 0.08);
+            --shadow-md: 0 4px 12px rgba(11, 56, 86, 0.12);
+            --shadow-lg: 0 8px 24px rgba(11, 56, 86, 0.16);
+            --border-width: 1px;
+            --border-color: rgba(11, 56, 86, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        /* Global Reset */
         * {
             margin: 0;
             padding: 0;
@@ -42,192 +78,252 @@
         }
         
         body {
-            font-family: 'Outfit', sans-serif;
-            color: #0B3856;
+            font-family: var(--font-family);
+            font-size: var(--body-size);
             line-height: 1.6;
+            color: var(--deep-navy);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
-        /* Brand Colors */
-        :root {
-            --primary-blue: #2284B8;
-            --deep-navy: #0B3856;
-            --light-blue: rgba(34, 132, 184, 0.1);
-            --text-dark: #0B3856;
-            --text-light: rgba(11, 56, 86, 0.7);
-            --white: #ffffff;
-            --gray-bg: #f9fafb;
-        }
-        
-        /* Typography System */
+        /* Typography Scale */
         h1 {
-            font-size: 3rem;
-            line-height: 1.1;
+            font-size: var(--h1-size);
+            line-height: 1.2;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: var(--deep-navy);
+            margin-bottom: var(--space-sm);
         }
         
         h2 {
-            font-size: 2rem;
-            line-height: 1.2;
+            font-size: var(--h2-size);
+            line-height: 1.3;
             font-weight: 600;
-            color: var(--deep-navy);
-            margin-bottom: 1rem;
+            margin-bottom: var(--space-md);
         }
         
         h3 {
-            font-size: 1.25rem;
-            line-height: 1.3;
+            font-size: var(--h3-size);
+            line-height: 1.4;
             font-weight: 600;
-            color: var(--deep-navy);
+            margin-bottom: var(--space-xs);
         }
         
-        .lead-text {
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: var(--text-dark);
+        p {
+            margin-bottom: var(--space-sm);
         }
         
-        /* Header Section Styles */
-        .header-section {
-            background: linear-gradient(135deg, var(--deep-navy) 0%, #00253D 100%);
-            position: relative;
-            overflow: hidden;
+        @media (min-width: 768px) {
+            h1 { font-size: var(--h1-size-lg); }
         }
         
-        .header-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 40%, rgba(34, 132, 184, 0.15) 0%, transparent 50%);
-            pointer-events: none;
-        }
+        /* Universal Component Styles */
         
-        /* Chip Styles */
-        .info-chip {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            white-space: nowrap;
+        /* Chips - One consistent style */
+        .chip {
             display: inline-flex;
             align-items: center;
-            color: white;
-            min-height: 36px;
-        }
-        
-        .level-chip {
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--deep-navy);
-            padding: 0.625rem 1.25rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
+            height: 36px;
+            padding: 0 var(--space-sm);
+            border-radius: 999px;
+            font-size: var(--small-size);
             font-weight: 500;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
             white-space: nowrap;
+            transition: var(--transition);
+        }
+        
+        .chip-light {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .chip-dark {
+            background: var(--light-blue);
+            border: 1px solid var(--border-color);
+            color: var(--deep-navy);
+        }
+        
+        .chip-interactive {
+            background: white;
+            border: 2px solid transparent;
+            color: var(--deep-navy);
             cursor: pointer;
             text-decoration: none;
         }
         
-        .level-chip:hover {
-            background: white;
+        .chip-interactive:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        
-        .level-chip:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
-        }
-        
-        .level-chip.active {
-            background: white;
+            box-shadow: var(--shadow-md);
             border-color: var(--primary-blue);
-            color: var(--primary-blue);
-            font-weight: 600;
         }
         
-        /* Button Styles */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #1c6fa0 100%);
+        .chip-interactive:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
+        
+        .chip-interactive.active {
+            background: var(--primary-blue);
             color: white;
-            font-weight: 600;
-            padding: 0.875rem 2rem;
-            border-radius: 9999px;
-            transition: all 0.3s ease;
+            border-color: var(--primary-blue);
+        }
+        
+        /* Buttons - Two styles only */
+        .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(34, 132, 184, 0.3);
-            font-size: 1rem;
             min-height: 48px;
+            padding: 0 var(--space-lg);
+            font-size: var(--body-size);
+            font-weight: 600;
+            border-radius: 999px;
+            transition: var(--transition);
             cursor: pointer;
+            text-decoration: none;
             border: none;
         }
         
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1c6fa0 0%, #15628a 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(34, 132, 184, 0.4);
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: var(--shadow-md);
         }
         
-        .btn-primary:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(34, 132, 184, 0.5);
+        .btn-primary:hover {
+            background: #1c6fa0;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
         }
         
         .btn-secondary {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
+            color: var(--primary-blue);
             text-decoration: underline;
             text-underline-offset: 4px;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
+            background: transparent;
+            padding: 0;
             min-height: 44px;
         }
         
         .btn-secondary:hover {
-            color: white;
             text-decoration-thickness: 2px;
         }
         
-        /* Card Styles */
-        .program-card {
+        /* Cards - One consistent system */
+        .card {
             background: white;
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            border: var(--border-width) solid var(--border-color);
+            transition: var(--transition);
             height: 100%;
             display: flex;
             flex-direction: column;
         }
         
-        .program-card:hover {
+        .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1), 0 20px 25px rgba(0, 0, 0, 0.08);
+            box-shadow: var(--shadow-lg);
         }
         
         .card-tag {
             display: inline-block;
             background: var(--light-blue);
             color: var(--primary-blue);
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+            padding: 4px 12px;
+            border-radius: 999px;
             font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--space-xs);
         }
         
-        /* Wave Divider */
+        /* Icons - Consistent sizing */
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+        }
+        
+        .icon-md {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+        
+        /* Utility classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+        
+        .section {
+            padding: var(--space-2xl) 0;
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: var(--space-xl) 0;
+            }
+        }
+        
+        /* Header specific styles */
+        .header-bg {
+            background: linear-gradient(135deg, var(--deep-navy), #00253D);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(34, 132, 184, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-blue);
+        }
+        
+        .nav-link.active {
+            font-weight: 600;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-blue);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            transform: scaleX(1);
+        }
+        
+        /* Wave Divider - Single clean wave */
         .wave-divider {
             position: absolute;
             bottom: -1px;
@@ -238,28 +334,33 @@
         }
         
         .wave-divider svg {
-            position: relative;
             display: block;
             width: calc(100% + 1.3px);
             height: 60px;
         }
         
-        /* Progress Timeline */
+        @media (min-width: 768px) {
+            .wave-divider svg {
+                height: 80px;
+            }
+        }
+        
+        /* Timeline */
         .timeline {
             display: flex;
             justify-content: space-between;
             position: relative;
-            padding: 2rem 0;
+            padding: var(--space-lg) 0;
         }
         
         .timeline::before {
             content: '';
             position: absolute;
-            top: 2.5rem;
-            left: 10%;
-            right: 10%;
+            top: calc(var(--space-lg) + 8px);
+            left: 15%;
+            right: 15%;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--deep-navy));
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--deep-navy) 100%);
         }
         
         .timeline-item {
@@ -269,432 +370,416 @@
         }
         
         .timeline-dot {
-            width: 1rem;
-            height: 1rem;
+            width: 16px;
+            height: 16px;
             background: var(--primary-blue);
             border: 3px solid white;
             border-radius: 50%;
-            margin: 0 auto 1rem;
+            margin: 0 auto var(--space-sm);
             position: relative;
             z-index: 1;
             box-shadow: 0 0 0 4px var(--light-blue);
         }
         
-        /* FAQ Styles */
-        .faq-item {
-            border-bottom: 1px solid rgba(11, 56, 86, 0.1);
-            padding: 1.5rem 0;
-        }
-        
-        .faq-item:last-child {
-            border-bottom: none;
-        }
-        
-        .faq-question {
-            font-weight: 600;
-            color: var(--deep-navy);
-            margin-bottom: 0.5rem;
+        /* Mobile scroll container */
+        .scroll-x {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        /* Review Card */
-        .review-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* Mobile Scroll Container */
-        .mobile-scroll {
-            display: flex;
-            gap: 0.5rem;
+            gap: var(--space-xs);
             overflow-x: auto;
-            padding-bottom: 0.5rem;
+            padding-bottom: var(--space-xs);
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
         }
         
-        .mobile-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .mobile-scroll::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 2px;
-        }
-        
-        .mobile-scroll::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 2px;
-        }
-        
-        .mobile-scroll > * {
+        .scroll-x > * {
             scroll-snap-align: start;
         }
         
-        /* Nav Styles (keeping existing) */
-        .nav-link {
-            position: relative;
-            transition: color 0.3s;
+        .scroll-x::-webkit-scrollbar {
+            height: 4px;
         }
         
-        .nav-link.active {
-            font-weight: 600;
-            color: var(--primary-blue);
+        .scroll-x::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 2px;
         }
         
-        .nav-link:not(.active):hover {
-            color: var(--primary-blue);
+        .scroll-x::-webkit-scrollbar-thumb {
+            background: var(--deep-navy);
+            border-radius: 2px;
+            opacity: 0.3;
         }
         
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--primary-blue);
-            transition: width 0.3s ease-in-out;
+        /* Reduce motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
         
-        .nav-link:hover::after,
-        .nav-link.active::after {
+        /* Custom focus visible for better accessibility */
+        :focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+        
+        /* Image consistency */
+        .img-program {
             width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: var(--radius);
+            border: var(--border-width) solid var(--border-color);
         }
         
-        /* Utility Classes */
-        .container-narrow {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
+        /* List styling */
+        .list-check {
+            list-style: none;
+            padding: 0;
+            margin: var(--space-sm) 0;
         }
         
-        .section-padding {
-            padding: 4rem 0;
+        .list-check li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-xs);
+            font-size: var(--small-size);
+            color: var(--gray-700);
         }
         
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem;
-            }
-            
-            .section-padding {
-                padding: 3rem 0;
-            }
-            
-            .timeline::before {
-                display: none;
-            }
+        .list-check svg {
+            flex-shrink: 0;
+            color: var(--primary-blue);
+            margin-top: 2px;
         }
     </style>
 </head>
 <body>
     <!-- Top Bar -->
-    <div style="background-color: var(--deep-navy); color: white; text-align: center; padding: 0.5rem; font-size: 0.875rem;">
-        199 Scoles Ave, Clifton NJ | <a href="tel:973-820-1153" style="color: white; font-weight: 600;">Call or Text 973-820-1153</a>
+    <div style="background: var(--deep-navy); color: white; text-align: center; padding: var(--space-xs); font-size: var(--small-size);">
+        199 Scoles Ave, Clifton NJ | 
+        <a href="tel:973-820-1153" style="color: white; font-weight: 600;">Call or Text 973-820-1153</a>
     </div>
 
     <!-- Navigation -->
-    <nav class="bg-white sticky top-0 z-50 shadow-lg">
-        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex-shrink-0">
-                <a href="index.html" class="flex items-center">
-                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-20 w-auto">
+    <nav class="bg-white sticky top-0 z-50" style="box-shadow: var(--shadow-sm);">
+        <div class="container" style="padding-top: var(--space-sm); padding-bottom: var(--space-sm);">
+            <div class="flex justify-between items-center">
+                <a href="index.html">
+                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-16 md:h-20 w-auto">
                 </a>
-            </div>
-            <div class="hidden md:flex flex-grow justify-center items-center space-x-8 font-semibold">
-                <a href="index.html" class="nav-link">Main</a>
-                <a href="safestroke-programs.html" class="nav-link active">Programs</a>
-                <a href="safestroke-pricing.html" class="nav-link">Pricing</a>
-                <a href="safestroke-aboutus.html" class="nav-link">About Us</a>
-                <a href="safestroke-reviews.html" class="nav-link">Reviews</a>
-                <a href="safestroke-location.html" class="nav-link">Our Location</a>
-            </div>
-            <div class="hidden md:flex flex-shrink-0">
-                <a href="safestroke-booking.html" class="btn-primary">Book Free Lesson</a>
-            </div>
-            <div class="md:hidden flex items-center">
-                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" class="nav-link">Main</a>
+                    <a href="safestroke-programs.html" class="nav-link active">Programs</a>
+                    <a href="safestroke-pricing.html" class="nav-link">Pricing</a>
+                    <a href="safestroke-aboutus.html" class="nav-link">About Us</a>
+                    <a href="safestroke-reviews.html" class="nav-link">Reviews</a>
+                    <a href="safestroke-location.html" class="nav-link">Our Location</a>
+                </div>
+                
+                <div class="hidden md:block">
+                    <a href="safestroke-booking.html" class="btn btn-primary">Book Free Lesson</a>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden p-2">
+                    <svg class="icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="md:hidden hidden bg-white px-6 pb-4 border-t">
-            <a href="index.html" class="block py-2">Main</a>
-            <a href="safestroke-programs.html" class="block py-2 font-semibold">Programs</a>
-            <a href="safestroke-pricing.html" class="block py-2">Pricing</a>
-            <a href="safestroke-aboutus.html" class="block py-2">About Us</a>
-            <a href="safestroke-reviews.html" class="block py-2">Reviews</a>
-            <a href="safestroke-location.html" class="block py-2">Our Location</a>
-            <div class="mt-4 pt-4 border-t">
-                <a href="safestroke-booking.html" class="block w-full text-center btn-primary">Book Free Lesson</a>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t" style="border-color: var(--border-color);">
+            <div class="container py-4">
+                <nav class="flex flex-col gap-3">
+                    <a href="index.html" class="nav-link">Main</a>
+                    <a href="safestroke-programs.html" class="nav-link active">Programs</a>
+                    <a href="safestroke-pricing.html" class="nav-link">Pricing</a>
+                    <a href="safestroke-aboutus.html" class="nav-link">About Us</a>
+                    <a href="safestroke-reviews.html" class="nav-link">Reviews</a>
+                    <a href="safestroke-location.html" class="nav-link">Our Location</a>
+                    <div style="margin-top: var(--space-sm);">
+                        <a href="safestroke-booking.html" class="btn btn-primary w-full">Book Free Lesson</a>
+                    </div>
+                </nav>
             </div>
         </div>
     </nav>
 
-    <!-- 1. Page Header: Programs & Curriculum -->
-    <section class="header-section">
-        <div class="container-narrow py-16 relative z-10">
+    <!-- 1. Header Section -->
+    <section class="header-bg" style="padding-bottom: 80px;">
+        <div class="container section relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 <div class="lg:col-span-7">
-                    <h1 class="text-white mb-4">Programs & Curriculum</h1>
-                    <p class="lead-text text-white/95 mb-3">
-                        We help toddlers and kids build real water skills—breath control, body position, and calm confidence—taught in small groups by certified instructors.
+                    <!-- H1 and Lead -->
+                    <h1 class="text-white">Programs & Curriculum</h1>
+                    <p class="text-white/90 text-lg leading-relaxed" style="margin-bottom: var(--space-xs); max-width: 60ch;">
+                        We help toddlers and kids build real water skills—breath control, body position, 
+                        and calm confidence—taught in small groups by certified instructors.
                     </p>
-                    <p class="text-sm text-white/70 italic mb-6">
+                    <p class="text-white/70 text-sm italic" style="margin-bottom: var(--space-md);">
                         Most families see meaningful progress in 8–12 lessons (varies by age, comfort, and attendance).
                     </p>
                     
-                    <!-- At-a-glance chips -->
-                    <div class="mb-6">
-                        <p class="text-xs text-white/80 font-semibold mb-2">At a Glance</p>
+                    <!-- At a Glance Chips -->
+                    <div style="margin-bottom: var(--space-md);">
+                        <p class="text-white/70 text-xs font-semibold uppercase tracking-wide" style="margin-bottom: var(--space-xs);">
+                            At a Glance
+                        </p>
                         <div class="flex flex-wrap gap-2">
-                            <div class="info-chip">
-                                <span class="opacity-80">Ages:</span>&nbsp;<span class="font-semibold">3 months–12 years</span>
+                            <div class="chip chip-light">
+                                <span style="opacity: 0.7;">Ages:</span>&nbsp;<strong>3 months–12 years</strong>
                             </div>
-                            <div class="info-chip">
-                                <span class="opacity-80">Group size:</span>&nbsp;<span class="font-semibold">Small groups (3–4 per lane)</span>
+                            <div class="chip chip-light">
+                                <span style="opacity: 0.7;">Group size:</span>&nbsp;<strong>Small groups (3–4 per lane)</strong>
                             </div>
-                            <div class="info-chip">
-                                <span class="opacity-80">Lesson length:</span>&nbsp;<span class="font-semibold">30 minutes</span>
+                            <div class="chip chip-light">
+                                <span style="opacity: 0.7;">Lesson length:</span>&nbsp;<strong>30 minutes</strong>
                             </div>
-                            <div class="info-chip">
-                                <span class="opacity-80">Approach:</span>&nbsp;<span class="font-semibold">Skills-first, safety-first</span>
+                            <div class="chip chip-light">
+                                <span style="opacity: 0.7;">Approach:</span>&nbsp;<strong>Skills-first, safety-first</strong>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Jump-to chips -->
-                    <div class="mb-7">
-                        <p class="text-xs text-white/80 font-semibold mb-2">Jump to Program</p>
+                    <!-- Jump to Program Chips -->
+                    <div style="margin-bottom: var(--space-lg);">
+                        <p class="text-white/70 text-xs font-semibold uppercase tracking-wide" style="margin-bottom: var(--space-xs);">
+                            Jump to Program
+                        </p>
                         <div class="hidden sm:flex flex-wrap gap-2">
-                            <a href="#droplet" class="level-chip" data-section="droplet">
+                            <a href="#droplet" class="chip chip-interactive" data-section="droplet">
                                 Droplet — Parent & Child (3–24 months)
                             </a>
-                            <a href="#splashlet" class="level-chip" data-section="splashlet">
+                            <a href="#splashlet" class="chip chip-interactive" data-section="splashlet">
                                 Splashlet — Ages 2–3
                             </a>
-                            <a href="#strokelet-l1" class="level-chip" data-section="strokelet-l1">
+                            <a href="#strokelet-l1" class="chip chip-interactive" data-section="strokelet-l1">
                                 Strokelet L1 — Ages 3–12, beginners or water-shy
                             </a>
-                            <a href="#strokelet-l2" class="level-chip" data-section="strokelet-l2">
+                            <a href="#strokelet-l2" class="chip chip-interactive" data-section="strokelet-l2">
                                 Strokelet L2 — Ages 3–12, comfortable & skill-ready
                             </a>
                         </div>
-                        <div class="sm:hidden mobile-scroll">
-                            <a href="#droplet" class="level-chip" data-section="droplet">
+                        <div class="sm:hidden scroll-x">
+                            <a href="#droplet" class="chip chip-interactive" data-section="droplet">
                                 Droplet — Parent & Child (3–24 months)
                             </a>
-                            <a href="#splashlet" class="level-chip" data-section="splashlet">
+                            <a href="#splashlet" class="chip chip-interactive" data-section="splashlet">
                                 Splashlet — Ages 2–3
                             </a>
-                            <a href="#strokelet-l1" class="level-chip" data-section="strokelet-l1">
-                                Strokelet L1 — Ages 3–12, beginners or water-shy
+                            <a href="#strokelet-l1" class="chip chip-interactive" data-section="strokelet-l1">
+                                Strokelet L1 — Ages 3–12, beginners
                             </a>
-                            <a href="#strokelet-l2" class="level-chip" data-section="strokelet-l2">
-                                Strokelet L2 — Ages 3–12, comfortable & skill-ready
+                            <a href="#strokelet-l2" class="chip chip-interactive" data-section="strokelet-l2">
+                                Strokelet L2 — Ages 3–12, skill-ready
                             </a>
                         </div>
                     </div>
                     
                     <!-- CTAs -->
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 mb-6">
-                        <a href="safestroke-booking.html" class="btn-primary" onclick="trackEvent('FreeTrialCTA', 'programs-header')">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4" style="margin-bottom: var(--space-md);">
+                        <a href="safestroke-booking.html" class="btn btn-primary" onclick="trackEvent('FreeTrialCTA', 'programs-header')">
                             Book Free Trial →
                         </a>
-                        <a href="#schedule" class="btn-secondary">
+                        <a href="#schedule" class="btn btn-secondary">
                             See levels & schedule
                         </a>
                     </div>
                     
-                    <!-- Social proof -->
+                    <!-- Social Proof -->
                     <div class="text-white/90 text-sm font-medium">
                         ⭐⭐⭐⭐⭐ 5.0/5 from 5 local families
-                        <!-- TODO: Replace with dynamic review count when available -->
+                        <!-- TODO: Replace with dynamic review count -->
                     </div>
                 </div>
                 
+                <!-- Image Column -->
                 <div class="lg:col-span-5">
                     <img src="safestroke-images/suhkickboardfront.jpg" 
                          alt="Instructor smiling with young swimmer during a lesson, demonstrating calm, safe instruction"
-                         class="w-full rounded-xl border border-white/10 shadow-xl"
-                         style="aspect-ratio: 4/3; object-fit: cover; object-position: center top;">
+                         class="img-program" 
+                         style="box-shadow: var(--shadow-lg);">
                 </div>
             </div>
         </div>
         
-        <!-- Wave divider -->
+        <!-- Wave Divider -->
         <div class="wave-divider">
             <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
                 <path d="M0,20 C288,60 576,60 864,30 C1152,0 1296,0 1440,20 L1440,60 L0,60 Z" 
-                      fill="#f9fafb"></path>
+                      fill="var(--gray-50)"></path>
             </svg>
         </div>
     </section>
 
     <!-- 2. Level Placement Guide -->
-    <section class="section-padding bg-gray-50">
-        <div class="container-narrow">
-            <h2 class="text-center mb-2">Level Placement Guide</h2>
-            <p class="text-center text-gray-600 mb-8">Not sure where to start? Use this quick guide.</p>
-            
-            <div class="max-w-3xl mx-auto bg-white rounded-xl p-6 shadow-sm">
-                <div class="space-y-4">
-                    <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                        <div>
-                            <span class="font-semibold">Under 2 years or needs a parent in water</span> → 
-                            <a href="#droplet" class="text-blue-600 hover:underline font-medium">Droplet</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                        <div>
-                            <span class="font-semibold">Age 2–3, not ready without parent</span> → 
-                            <a href="#splashlet" class="text-blue-600 hover:underline font-medium">Splashlet</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                        <div>
-                            <span class="font-semibold">Age 3+ and water-shy or learning basics</span> → 
-                            <a href="#strokelet-l1" class="text-blue-600 hover:underline font-medium">Strokelet L1</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                        <div>
-                            <span class="font-semibold">Age 3+ and comfortable face-in, ready for skills & short swims</span> → 
-                            <a href="#strokelet-l2" class="text-blue-600 hover:underline font-medium">Strokelet L2</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <p class="text-sm text-gray-600 mb-2">
-                        <strong>Note:</strong> We confirm placement at your first lesson and adjust as needed.
+    <section class="section bg-gray-50">
+        <div class="container">
+            <div class="max-w-3xl mx-auto">
+                <div class="card">
+                    <h2 class="text-center">Level Placement Guide</h2>
+                    <p class="text-center text-gray-600" style="margin-bottom: var(--space-md);">
+                        Not sure where to start? Use this quick guide.
                     </p>
-                    <p class="text-sm text-gray-600">
-                        Still unsure? <a href="tel:973-820-1153" class="text-blue-600 hover:underline font-medium">Call or text 973-820-1153</a>
-                    </p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <svg class="icon-sm text-blue-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                            <p class="text-sm">
+                                <strong>Under 2 years or needs a parent in water</strong> → 
+                                <a href="#droplet" class="text-blue-600 hover:underline font-semibold">Droplet</a>
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <svg class="icon-sm text-blue-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                            <p class="text-sm">
+                                <strong>Age 2–3, not ready without parent</strong> → 
+                                <a href="#splashlet" class="text-blue-600 hover:underline font-semibold">Splashlet</a>
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <svg class="icon-sm text-blue-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                            <p class="text-sm">
+                                <strong>Age 3+ and water-shy or learning basics</strong> → 
+                                <a href="#strokelet-l1" class="text-blue-600 hover:underline font-semibold">Strokelet L1</a>
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <svg class="icon-sm text-blue-500 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                            <p class="text-sm">
+                                <strong>Age 3+ and comfortable face-in, ready for skills & short swims</strong> → 
+                                <a href="#strokelet-l2" class="text-blue-600 hover:underline font-semibold">Strokelet L2</a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--border-color);">
+                        <p class="text-sm text-gray-600 text-center">
+                            <strong>Note:</strong> We confirm placement at your first lesson and adjust as needed.
+                        </p>
+                        <p class="text-sm text-gray-600 text-center">
+                            Still unsure? <a href="tel:973-820-1153" class="text-blue-600 hover:underline font-semibold">
+                                Call or text 973-820-1153
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. Strokelets (Ages 3-12) -->
-    <section id="schedule" class="section-padding scroll-mt-20">
-        <div class="container-narrow">
-            <h2 class="text-center mb-2">Strokelets</h2>
-            <p class="text-center text-gray-600 mb-8">Ages 3–12</p>
+    <!-- 3. Strokelets Section -->
+    <section id="schedule" class="section scroll-mt-20">
+        <div class="container">
+            <h2 class="text-center">Strokelets</h2>
+            <p class="text-center text-gray-600" style="margin-bottom: var(--space-lg);">Ages 3–12</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="margin-bottom: var(--space-lg);">
                 <!-- Strokelet L1 Card -->
-                <div id="strokelet-l1" class="program-card scroll-mt-20">
-                    <div>
-                        <span class="card-tag">Level 1</span>
-                        <h3 class="mb-2">Strokelet L1 (Bubble Buddies)</h3>
-                        <p class="text-sm text-gray-600 mb-1">Ages 3–12 | 3:1 Swimmer-to-Instructor</p>
-                        <p class="text-sm font-semibold text-blue-600 mb-4">Best for: Beginners or water-shy</p>
-                    </div>
+                <div id="strokelet-l1" class="card scroll-mt-24">
+                    <span class="card-tag">Level 1</span>
+                    <h3>Strokelet L1 (Bubble Buddies)</h3>
+                    <p class="text-sm text-gray-600">Ages 3–12 | 3:1 Swimmer-to-Instructor</p>
+                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                        Best for: Beginners or water-shy
+                    </p>
                     
-                    <div class="mb-4">
-                        <p class="font-medium mb-2">You'll see them learn:</p>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <p class="font-medium text-sm" style="margin-bottom: var(--space-xs);">You'll see them learn:</p>
+                        <ul class="list-check">
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Breath control & calm water comfort
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Supported back/front floats; supported kicks
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Safe wall holds & gentle submersion when ready
                             </li>
                         </ul>
                     </div>
                     
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-600">
-                            <strong>Goal in ~8–12 lessons:</strong> short, calm independent swims; safe entries and returns to wall
-                        </p>
-                    </div>
+                    <p class="text-sm text-gray-600" style="margin-bottom: var(--space-md);">
+                        <strong>Goal in ~8–12 lessons:</strong> short, calm independent swims; safe entries and returns to wall
+                    </p>
                     
                     <div class="mt-auto">
-                        <a href="safestroke-booking.html" class="btn-primary w-full" onclick="trackEvent('BookLessonsCTA', 'strokelet-l1')">
+                        <a href="safestroke-booking.html" class="btn btn-primary w-full" 
+                           onclick="trackEvent('BookLessonsCTA', 'strokelet-l1')">
                             Book Lessons
                         </a>
                     </div>
                 </div>
                 
                 <!-- Strokelet L2 Card -->
-                <div id="strokelet-l2" class="program-card scroll-mt-20">
-                    <div>
-                        <span class="card-tag">Level 2</span>
-                        <h3 class="mb-2">Strokelet L2 (Stroke Starters)</h3>
-                        <p class="text-sm text-gray-600 mb-1">Ages 3–12 | 3:1 Swimmer-to-Instructor</p>
-                        <p class="text-sm font-semibold text-blue-600 mb-4">Best for: Comfortable in water & skill-ready</p>
-                    </div>
+                <div id="strokelet-l2" class="card scroll-mt-24">
+                    <span class="card-tag">Level 2</span>
+                    <h3>Strokelet L2 (Stroke Starters)</h3>
+                    <p class="text-sm text-gray-600">Ages 3–12 | 3:1 Swimmer-to-Instructor</p>
+                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                        Best for: Comfortable in water & skill-ready
+                    </p>
                     
-                    <div class="mb-4">
-                        <p class="font-medium mb-2">You'll see them learn:</p>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <p class="font-medium text-sm" style="margin-bottom: var(--space-xs);">You'll see them learn:</p>
+                        <ul class="list-check">
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                Controlled breath, floating, and kicking with body line
+                                Controlled breath, floating, kicking with body line
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Streamlined push-offs; intro to front crawl arms
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Rollover breathing & safe returns to wall
                             </li>
                         </ul>
                     </div>
                     
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-600">
-                            <strong>Goal in ~8–12 lessons:</strong> consistent short independent swims; early stroke patterns
-                        </p>
-                    </div>
+                    <p class="text-sm text-gray-600" style="margin-bottom: var(--space-md);">
+                        <strong>Goal in ~8–12 lessons:</strong> consistent short independent swims; early stroke patterns
+                    </p>
                     
                     <div class="mt-auto">
-                        <a href="safestroke-booking.html" class="btn-primary w-full" onclick="trackEvent('BookLessonsCTA', 'strokelet-l2')">
+                        <a href="safestroke-booking.html" class="btn btn-primary w-full" 
+                           onclick="trackEvent('BookLessonsCTA', 'strokelet-l2')">
                             Book Lessons
                         </a>
                     </div>
@@ -702,19 +787,19 @@
             </div>
             
             <!-- L1 vs L2 Comparison -->
-            <div class="bg-blue-50 rounded-xl p-6">
-                <h3 class="mb-4">L1 vs L2: What's the difference?</h3>
-                <div class="space-y-3 text-sm">
-                    <div class="flex items-start gap-3">
-                        <span class="font-semibold text-blue-600 min-w-[80px]">Comfort:</span>
+            <div style="background: var(--light-blue); border-radius: var(--radius); padding: var(--space-md);">
+                <h3 style="margin-bottom: var(--space-sm);">L1 vs L2: What's the difference?</h3>
+                <div class="space-y-2">
+                    <div class="flex gap-3 text-sm">
+                        <span class="font-semibold text-blue-600" style="min-width: 80px;">Comfort:</span>
                         <span>L1 builds calm water comfort; L2 builds skillful independence</span>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <span class="font-semibold text-blue-600 min-w-[80px]">Skills:</span>
+                    <div class="flex gap-3 text-sm">
+                        <span class="font-semibold text-blue-600" style="min-width: 80px;">Skills:</span>
                         <span>L1 = supported floats & kicks; L2 = streamline, arms, rollover breathing</span>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <span class="font-semibold text-blue-600 min-w-[80px]">Outcome:</span>
+                    <div class="flex gap-3 text-sm">
+                        <span class="font-semibold text-blue-600" style="min-width: 80px;">Outcome:</span>
                         <span>L1 = first short swims; L2 = consistent short swims with form</span>
                     </div>
                 </div>
@@ -723,97 +808,97 @@
     </section>
 
     <!-- 4. Water Acclimation Classes -->
-    <section class="section-padding bg-gray-50">
-        <div class="container-narrow">
-            <p class="text-center text-sm font-semibold text-blue-600 mb-2">For children under 3 years</p>
-            <h2 class="text-center mb-8">Water Acclimation Classes</h2>
+    <section class="section bg-gray-50">
+        <div class="container">
+            <p class="text-center text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-xs);">
+                For children under 3 years
+            </p>
+            <h2 class="text-center">Water Acclimation Classes</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 <!-- Droplet Card -->
-                <div id="droplet" class="program-card scroll-mt-20">
-                    <div>
-                        <h3 class="mb-2">Droplet — Parent & Child</h3>
-                        <p class="text-sm text-gray-600 mb-1">3–24 months</p>
-                        <p class="text-sm font-semibold text-blue-600 mb-4">8:1 Family-to-Instructor</p>
-                    </div>
+                <div id="droplet" class="card scroll-mt-24">
+                    <h3>Droplet — Parent & Child</h3>
+                    <p class="text-sm text-gray-600">3–24 months | 8:1 Family-to-Instructor</p>
+                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                        Parent joins in water
+                    </p>
                     
-                    <div class="mb-4">
-                        <p class="font-medium mb-2">You'll work on (with your child):</p>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <p class="font-medium text-sm" style="margin-bottom: var(--space-xs);">You'll work on (with your child):</p>
+                        <ul class="list-check">
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Safe submersion readiness and breath cues
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Supported back/front floats; gentle kicks; bubbles
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Parent handling for safety and fun
                             </li>
                         </ul>
                     </div>
                     
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-600">
-                            <strong>Goal:</strong> faster water comfort for baby and parent; safe, positive water experiences
-                        </p>
-                    </div>
+                    <p class="text-sm text-gray-600" style="margin-bottom: var(--space-md);">
+                        <strong>Goal:</strong> faster water comfort for baby and parent; safe, positive water experiences
+                    </p>
                     
                     <div class="mt-auto">
-                        <a href="safestroke-booking.html" class="btn-primary w-full" onclick="trackEvent('BookLessonsCTA', 'droplet')">
+                        <a href="safestroke-booking.html" class="btn btn-primary w-full" 
+                           onclick="trackEvent('BookLessonsCTA', 'droplet')">
                             Book Lessons
                         </a>
                     </div>
                 </div>
                 
                 <!-- Splashlet Card -->
-                <div id="splashlet" class="program-card scroll-mt-20">
-                    <div>
-                        <h3 class="mb-2">Splashlet</h3>
-                        <p class="text-sm text-gray-600 mb-1">Ages 2–3</p>
-                        <p class="text-sm font-semibold text-blue-600 mb-4">4:1 Swimmer-to-Instructor</p>
-                    </div>
+                <div id="splashlet" class="card scroll-mt-24">
+                    <h3>Splashlet</h3>
+                    <p class="text-sm text-gray-600">Ages 2–3 | 4:1 Swimmer-to-Instructor</p>
+                    <p class="text-sm font-semibold text-blue-600" style="margin-bottom: var(--space-sm);">
+                        Parent observes poolside
+                    </p>
                     
-                    <div class="mb-4">
-                        <p class="font-medium mb-2">You'll see them learn:</p>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <div style="margin-bottom: var(--space-sm);">
+                        <p class="font-medium text-sm" style="margin-bottom: var(--space-xs);">You'll see them learn:</p>
+                        <ul class="list-check">
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                Breath control, supported floats, short propulsion to safety
+                                Breath control, supported floats, short propulsion
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Foundational body position and bubbles
                             </li>
-                            <li class="flex items-start gap-2">
-                                <svg class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <li>
+                                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Guided movement with games and songs
                             </li>
                         </ul>
                     </div>
                     
-                    <div class="mb-6">
-                        <p class="text-sm text-gray-600">
-                            <strong>Goal:</strong> strong comfort around water and a base for Strokelets
-                        </p>
-                    </div>
+                    <p class="text-sm text-gray-600" style="margin-bottom: var(--space-md);">
+                        <strong>Goal:</strong> strong comfort around water and a base for Strokelets
+                    </p>
                     
                     <div class="mt-auto">
-                        <a href="safestroke-booking.html" class="btn-primary w-full" onclick="trackEvent('BookLessonsCTA', 'splashlet')">
+                        <a href="safestroke-booking.html" class="btn btn-primary w-full" 
+                           onclick="trackEvent('BookLessonsCTA', 'splashlet')">
                             Book Lessons
                         </a>
                     </div>
@@ -823,30 +908,30 @@
     </section>
 
     <!-- 5. Progress & Outcomes -->
-    <section class="section-padding">
-        <div class="container-narrow">
-            <h2 class="text-center mb-8">Progress & Outcomes</h2>
+    <section class="section">
+        <div class="container">
+            <h2 class="text-center">Progress & Outcomes</h2>
             
             <div class="max-w-4xl mx-auto">
                 <div class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
-                        <h3 class="text-sm font-semibold mb-1">Weeks 1–3</h3>
+                        <p class="font-semibold text-sm">Weeks 1–3</p>
                         <p class="text-xs text-gray-600">Water comfort, breath cues, safe wall habits</p>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
-                        <h3 class="text-sm font-semibold mb-1">Weeks 4–8</h3>
-                        <p class="text-xs text-gray-600">Supported to short independent swims; stable floats and kicks</p>
+                        <p class="font-semibold text-sm">Weeks 4–8</p>
+                        <p class="text-xs text-gray-600">Supported to short independent swims</p>
                     </div>
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
-                        <h3 class="text-sm font-semibold mb-1">Weeks 9–12</h3>
-                        <p class="text-xs text-gray-600">Reliable back float & breath control; beginning stroke patterns</p>
+                        <p class="font-semibold text-sm">Weeks 9–12</p>
+                        <p class="text-xs text-gray-600">Reliable float & beginning stroke patterns</p>
                     </div>
                 </div>
                 
-                <p class="text-center text-sm text-gray-600 mt-6 italic">
+                <p class="text-center text-sm text-gray-600 italic">
                     Every child progresses at their own pace. Consistent attendance matters.
                 </p>
             </div>
@@ -854,111 +939,127 @@
     </section>
 
     <!-- 6. FAQs -->
-    <section class="section-padding bg-gray-50">
-        <div class="container-narrow">
-            <h2 class="text-center mb-8">Frequently Asked Questions</h2>
+    <section class="section bg-gray-50">
+        <div class="container">
+            <h2 class="text-center">Frequently Asked Questions</h2>
             
             <div class="max-w-3xl mx-auto">
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Which level should I choose?
-                    </h3>
-                    <p class="text-sm text-gray-700">Use our Level Placement Guide above, or call us at 973-820-1153. We'll confirm placement at your first lesson and adjust if needed.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        What if my child cries or is anxious?
-                    </h3>
-                    <p class="text-sm text-gray-700">It's normal! Our instructors are trained to handle anxiety with patience and play. Most kids warm up within a few lessons. We never force submersion.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Do parents go in the water?
-                    </h3>
-                    <p class="text-sm text-gray-700">Only for Droplet (3–24 months). All other programs have parents poolside for observation and support.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        What should we bring?
-                    </h3>
-                    <p class="text-sm text-gray-700">Swimsuit, towel, and goggles (optional for beginners). Children not potty-trained need swim diapers. We provide kickboards and other equipment.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Make-ups & cancellations?
-                    </h3>
-                    <p class="text-sm text-gray-700">We offer make-up lessons with 24-hour notice. See our full policy at booking or contact us for details.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Hygiene & safety?
-                    </h3>
-                    <p class="text-sm text-gray-700">All instructors are certified. We maintain small ratios (3-4:1 for most classes), regular water testing, and follow strict safety protocols.</p>
-                </div>
-                
-                <div class="faq-item">
-                    <h3 class="faq-question">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        How fast will my child progress?
-                    </h3>
-                    <p class="text-sm text-gray-700">Most families see meaningful progress in 8–12 lessons. Every child is unique—consistency and comfort matter more than speed.</p>
+                <div class="space-y-4">
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Which level should I choose?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            Use our Level Placement Guide above, or call us at 973-820-1153. We'll confirm placement at your first lesson.
+                        </p>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            What if my child cries or is anxious?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            It's normal! Our instructors handle anxiety with patience and play. Most kids warm up within a few lessons.
+                        </p>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Do parents go in the water?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            Only for Droplet (3–24 months). All other programs have parents poolside for observation and support.
+                        </p>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            What should we bring?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            Swimsuit, towel, and goggles (optional for beginners). Children not potty-trained need swim diapers.
+                        </p>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Make-ups & cancellations?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            We offer make-up lessons with 24-hour notice. See our full policy at booking.
+                        </p>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Hygiene & safety?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            All instructors are certified. We maintain small ratios and follow strict safety protocols.
+                        </p>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-md);">
+                        <h3 class="flex items-center gap-2">
+                            <svg class="icon-sm text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            How fast will my child progress?
+                        </h3>
+                        <p class="text-sm text-gray-700">
+                            Most families see meaningful progress in 8–12 lessons. Every child is unique—consistency matters more than speed.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 7. Reviews Strip -->
-    <section class="section-padding">
-        <div class="container-narrow">
-            <h2 class="text-center mb-8">What Parents Say</h2>
+    <section class="section">
+        <div class="container">
+            <h2 class="text-center">What Parents Say</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="review-card">
-                    <div class="flex mb-2">
-                        <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-2">"My daughter went from tears to smiles in just 3 lessons. The instructors are patient and truly care about each child's comfort."</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="card" style="padding: var(--space-md);">
+                    <div class="text-yellow-400" style="margin-bottom: var(--space-xs);">⭐⭐⭐⭐⭐</div>
+                    <p class="text-sm text-gray-700" style="margin-bottom: var(--space-xs);">
+                        "My daughter went from tears to smiles in just 3 lessons. The instructors truly care."
+                    </p>
                     <p class="text-xs text-gray-500 font-medium">— Sarah M., Clifton</p>
                 </div>
                 
-                <div class="review-card">
-                    <div class="flex mb-2">
-                        <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-2">"Small class sizes mean real attention. My son is swimming independently after just 10 lessons!"</p>
+                <div class="card" style="padding: var(--space-md);">
+                    <div class="text-yellow-400" style="margin-bottom: var(--space-xs);">⭐⭐⭐⭐⭐</div>
+                    <p class="text-sm text-gray-700" style="margin-bottom: var(--space-xs);">
+                        "Small class sizes mean real attention. My son is swimming independently after 10 lessons!"
+                    </p>
                     <p class="text-xs text-gray-500 font-medium">— David L., Passaic</p>
                 </div>
                 
-                <div class="review-card">
-                    <div class="flex mb-2">
-                        <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="text-sm text-gray-700 mb-2">"The Droplet program helped us both feel safe in the water. Now we're excited for swim time!"</p>
+                <div class="card" style="padding: var(--space-md);">
+                    <div class="text-yellow-400" style="margin-bottom: var(--space-xs);">⭐⭐⭐⭐⭐</div>
+                    <p class="text-sm text-gray-700" style="margin-bottom: var(--space-xs);">
+                        "The Droplet program helped us both feel safe. Now we're excited for swim time!"
+                    </p>
                     <p class="text-xs text-gray-500 font-medium">— Maria R., Nutley</p>
                 </div>
             </div>
@@ -966,39 +1067,49 @@
     </section>
 
     <!-- 8. Final CTA -->
-    <section class="section-padding" style="background: linear-gradient(135deg, var(--deep-navy), #00253D);">
-        <div class="container-narrow text-center text-white">
-            <span class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
+    <section class="section" style="background: linear-gradient(135deg, var(--deep-navy), #00253D); position: relative; overflow: hidden;">
+        <div class="container text-center">
+            <span class="inline-block bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full" 
+                  style="margin-bottom: var(--space-sm);">
                 New Families
             </span>
             
-            <h2 class="text-white mb-2">Start with a FREE Trial</h2>
-            <p class="text-white/90 mb-6">No credit card required for your first lesson.</p>
+            <h2 class="text-white">Start with a FREE Trial</h2>
+            <p class="text-white/90" style="margin-bottom: var(--space-lg);">
+                No credit card required for your first lesson.
+            </p>
             
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
-                <div class="flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8" 
+                 style="margin-bottom: var(--space-lg);">
+                <div class="flex items-center gap-2 text-white">
                     <span class="text-2xl">📅</span>
                     <span>Pick your time</span>
                 </div>
                 <span class="hidden sm:block text-white/50">·</span>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 text-white">
                     <span class="text-2xl">👋</span>
                     <span>Meet your instructor</span>
                 </div>
                 <span class="hidden sm:block text-white/50">·</span>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 text-white">
                     <span class="text-2xl">🏊</span>
                     <span>See real progress</span>
                 </div>
             </div>
             
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
-                <a href="safestroke-booking.html" class="btn-primary" style="background: white; color: var(--deep-navy);" onclick="trackEvent('FreeTrialCTA', 'programs-bottom')">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4" 
+                 style="margin-bottom: var(--space-md);">
+                <a href="safestroke-booking.html" class="btn btn-primary" 
+                   style="background: white; color: var(--deep-navy);"
+                   onclick="trackEvent('FreeTrialCTA', 'programs-bottom')">
                     Book Free Trial →
                 </a>
-                <div class="text-white/90">
-                    Prefer to call? <a href="tel:973-820-1153" class="font-semibold underline">973-820-1153</a>
-                </div>
+                <p class="text-white/90">
+                    Prefer to call? 
+                    <a href="tel:973-820-1153" class="font-semibold underline" aria-label="Call SafeStroke at 973-820-1153">
+                        973-820-1153
+                    </a>
+                </p>
             </div>
             
             <p class="text-sm text-white/70">
@@ -1008,58 +1119,59 @@
     </section>
 
     <!-- Footer -->
-    <footer style="background: linear-gradient(135deg, var(--deep-navy), #0B3856);" class="text-white pt-16 pb-8">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+    <footer style="background: linear-gradient(135deg, var(--deep-navy), #0B3856);" class="text-white">
+        <div class="container section">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8" style="margin-bottom: var(--space-lg);">
                 <div class="text-center md:text-left">
-                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-12 w-auto mb-4 mx-auto md:mx-0 opacity-90">
+                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" 
+                         class="h-12 w-auto mb-4 mx-auto md:mx-0 opacity-90">
                     <p class="text-sm opacity-80">Clifton's premier swim academy</p>
                 </div>
                 
                 <div class="text-center md:text-left">
-                    <h3 class="font-bold mb-4">Programs</h3>
+                    <h3 class="font-semibold mb-4">Programs</h3>
                     <ul class="space-y-2 text-sm opacity-80">
-                        <li><a href="#droplet" class="hover:text-blue-300">Droplet (3-24 months)</a></li>
-                        <li><a href="#splashlet" class="hover:text-blue-300">Splashlet (2-3 years)</a></li>
-                        <li><a href="#strokelet-l1" class="hover:text-blue-300">Strokelet (3-12 years)</a></li>
+                        <li><a href="#droplet" class="hover:text-blue-300 transition-colors">Droplet (3-24 months)</a></li>
+                        <li><a href="#splashlet" class="hover:text-blue-300 transition-colors">Splashlet (2-3 years)</a></li>
+                        <li><a href="#strokelet-l1" class="hover:text-blue-300 transition-colors">Strokelet (3-12 years)</a></li>
                     </ul>
                 </div>
                 
                 <div class="text-center md:text-left">
-                    <h3 class="font-bold mb-4">Information</h3>
+                    <h3 class="font-semibold mb-4">Information</h3>
                     <ul class="space-y-2 text-sm opacity-80">
-                        <li><a href="safestroke-aboutus.html" class="hover:text-blue-300">About Us</a></li>
-                        <li><a href="safestroke-reviews.html" class="hover:text-blue-300">Reviews</a></li>
-                        <li><a href="safestroke-location.html" class="hover:text-blue-300">Location</a></li>
+                        <li><a href="safestroke-aboutus.html" class="hover:text-blue-300 transition-colors">About Us</a></li>
+                        <li><a href="safestroke-reviews.html" class="hover:text-blue-300 transition-colors">Reviews</a></li>
+                        <li><a href="safestroke-location.html" class="hover:text-blue-300 transition-colors">Location</a></li>
                     </ul>
                 </div>
                 
                 <div class="text-center md:text-left">
-                    <h3 class="font-bold mb-4">Contact</h3>
+                    <h3 class="font-semibold mb-4">Contact</h3>
                     <ul class="space-y-2 text-sm opacity-80">
                         <li>199 Scoles Avenue<br>Clifton, NJ 07012</li>
-                        <li><a href="tel:973-820-1153" class="hover:text-blue-300">973-820-1153</a></li>
+                        <li><a href="tel:973-820-1153" class="hover:text-blue-300 transition-colors">973-820-1153</a></li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-white/20 pt-8 text-center">
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: var(--space-md);" class="text-center">
                 <p class="text-sm opacity-70">&copy; 2025 SafeStroke Swim Academy. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
         
         // Smooth scroll with header offset
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
@@ -1076,7 +1188,7 @@
             });
         });
         
-        // Active state for level chips based on scroll
+        // Active state for level chips
         const observerOptions = {
             root: null,
             rootMargin: '-25% 0px -65% 0px',
@@ -1086,7 +1198,7 @@
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    document.querySelectorAll('.level-chip').forEach(chip => {
+                    document.querySelectorAll('.chip-interactive').forEach(chip => {
                         chip.classList.remove('active');
                     });
                     
@@ -1101,12 +1213,10 @@
         // Observe sections
         ['droplet', 'splashlet', 'strokelet-l1', 'strokelet-l2'].forEach(id => {
             const section = document.getElementById(id);
-            if (section) {
-                sectionObserver.observe(section);
-            }
+            if (section) sectionObserver.observe(section);
         });
         
-        // Analytics tracking
+        // Analytics
         function trackEvent(action, placement) {
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Lead', {
@@ -1114,15 +1224,7 @@
                     content_category: placement
                 });
             }
-            console.log('Event tracked:', action, placement);
-        }
-        
-        // Respect reduce motion
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('*').forEach(el => {
-                el.style.animation = 'none';
-                el.style.transition = 'none';
-            });
+            console.log('Event:', action, placement);
         }
     </script>
 </body>
