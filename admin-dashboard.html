@@ -3,260 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeStroke Admin Dashboard</title>
+    <title>Admin Testing Dashboard - SafeStroke</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-active { background: #10b981; }
+        .status-inactive { background: #ef4444; }
+        .test-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .test-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen">
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
         <!-- Header -->
-        <div class="bg-blue-900 text-white p-6">
-            <div class="container mx-auto">
-                <h1 class="text-3xl font-bold">SafeStroke Admin Dashboard</h1>
-                <p class="text-blue-200 mt-2">Manage your booking system</p>
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h1 class="text-3xl font-bold mb-2">🔐 Admin Testing Dashboard</h1>
+            <p class="text-gray-600">Test the booking flow without real payments</p>
+        </div>
+        
+        <!-- Status Panel -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">System Status</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <span id="env-status" class="status-indicator"></span>
+                        <span class="font-semibold">Environment: </span>
+                        <span id="env-name" class="ml-2"></span>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <span id="admin-status" class="status-indicator"></span>
+                        <span class="font-semibold">Admin System: </span>
+                        <span id="admin-state" class="ml-2"></span>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <span id="session-status" class="status-indicator"></span>
+                        <span class="font-semibold">Session: </span>
+                        <span id="session-state" class="ml-2"></span>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Main Content -->
-        <div class="container mx-auto p-6">
-            <!-- Quick Actions -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Initialize Time Slots -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold mb-4">Initialize Time Slots</h2>
-                    <p class="text-gray-600 mb-4">Generate time slots for your schedule</p>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Start Date</label>
-                            <input type="date" id="init-start-date" value="2025-10-05" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">End Date</label>
-                            <input type="date" id="init-end-date" value="2026-01-05" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
-                        </div>
-                        <button onclick="initializeTimeSlots()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Generate Time Slots
-                        </button>
-                    </div>
-                    <div id="init-result" class="mt-4 text-sm"></div>
-                </div>
-
-                <!-- Test Package Creation -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold mb-4">Create Test Package</h2>
-                    <p class="text-gray-600 mb-4">Create a test package for testing bookings</p>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Program</label>
-                            <select id="test-program" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
-                                <option value="Droplet">Droplet</option>
-                                <option value="Splashlet">Splashlet</option>
-                                <option value="Strokelet">Strokelet</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Lessons</label>
-                            <select id="test-lessons" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
-                                <option value="4">4 Lessons</option>
-                                <option value="6">6 Lessons</option>
-                                <option value="8">8 Lessons</option>
-                            </select>
-                        </div>
-                        <button onclick="createTestPackage()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                            Create Test Package
-                        </button>
-                    </div>
-                    <div id="test-result" class="mt-4 text-sm"></div>
-                </div>
-
-                <!-- View Statistics -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold mb-4">System Statistics</h2>
-                    <p class="text-gray-600 mb-4">Current system overview</p>
-                    <button onclick="loadStatistics()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-4">
-                        Load Statistics
-                    </button>
-                    <div id="stats-result" class="space-y-2 text-sm"></div>
-                </div>
-            </div>
-
-            <!-- Database Setup Instructions -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-                <h2 class="text-xl font-bold mb-4">Setup Instructions</h2>
-                <ol class="list-decimal list-inside space-y-2 text-gray-700">
-                    <li><strong>Database Setup:</strong> Run the SQL scripts in Supabase:
-                        <ul class="list-disc list-inside ml-6 mt-2">
-                            <li>First run <code class="bg-gray-100 px-2 py-1 rounded">database-schema-complete.sql</code></li>
-                            <li>Then run <code class="bg-gray-100 px-2 py-1 rounded">generate-time-slots.sql</code> (optional, or use the button above)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Stripe Webhook:</strong> Configure webhook endpoint in Stripe Dashboard:
-                        <ul class="list-disc list-inside ml-6 mt-2">
-                            <li>Endpoint URL: <code class="bg-gray-100 px-2 py-1 rounded">https://your-site.netlify.app/.netlify/functions/stripe-webhook</code></li>
-                            <li>Events to listen: <code class="bg-gray-100 px-2 py-1 rounded">payment_intent.succeeded</code>, <code class="bg-gray-100 px-2 py-1 rounded">payment_intent.payment_failed</code></li>
-                            <li>Add webhook secret to environment variables as <code class="bg-gray-100 px-2 py-1 rounded">STRIPE_WEBHOOK_SECRET</code></li>
-                        </ul>
-                    </li>
-                    <li><strong>Environment Variables:</strong> Ensure all are set in Netlify:
-                        <ul class="list-disc list-inside ml-6 mt-2">
-                            <li><code class="bg-gray-100 px-2 py-1 rounded">STRIPE_SECRET_KEY</code></li>
-                            <li><code class="bg-gray-100 px-2 py-1 rounded">STRIPE_PUBLISHABLE_KEY</code></li>
-                            <li><code class="bg-gray-100 px-2 py-1 rounded">STRIPE_WEBHOOK_SECRET</code></li>
-                            <li><code class="bg-gray-100 px-2 py-1 rounded">SUPABASE_URL</code></li>
-                            <li><code class="bg-gray-100 px-2 py-1 rounded">SUPABASE_SERVICE_KEY</code></li>
-                        </ul>
-                    </li>
-                    <li><strong>Test the System:</strong> Use the "Create Test Package" feature above to generate a test package code</li>
-                </ol>
-            </div>
-
-            <!-- Recent Bookings -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Recent Activity</h2>
-                <button onclick="loadRecentActivity()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
-                    Refresh Activity
+        
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button onclick="activateAdminMode()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg">
+                    Activate Admin Mode
                 </button>
-                <div id="activity-result" class="overflow-x-auto"></div>
+                <button onclick="deactivateAdminMode()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg">
+                    Deactivate Admin Mode
+                </button>
+                <button onclick="clearAllData()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-4 rounded-lg">
+                    Clear All Data
+                </button>
+                <button onclick="showInstructions()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg">
+                    Show Instructions
+                </button>
+            </div>
+        </div>
+        
+        <!-- Test Scenarios -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Test Scenarios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Test Card 1 -->
+                <div class="test-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200" 
+                     onclick="testPackageFlow()">
+                    <h3 class="font-bold text-lg mb-2">📦 Package Flow</h3>
+                    <p class="text-sm text-gray-600 mb-4">Test full package purchase and scheduling</p>
+                    <div class="text-xs space-y-1">
+                        <p>✓ Program selection</p>
+                        <p>✓ Package choice</p>
+                        <p>✓ Payment bypass</p>
+                        <p>✓ Calendar booking</p>
+                    </div>
+                </div>
+                
+                <!-- Test Card 2 -->
+                <div class="test-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200" 
+                     onclick="testSingleLesson()">
+                    <h3 class="font-bold text-lg mb-2">🎯 Single Lesson</h3>
+                    <p class="text-sm text-gray-600 mb-4">Test free single lesson booking</p>
+                    <div class="text-xs space-y-1">
+                        <p>✓ FIRST-FREE code</p>
+                        <p>✓ Program selection</p>
+                        <p>✓ Direct scheduling</p>
+                        <p>✓ No payment needed</p>
+                    </div>
+                </div>
+                
+                <!-- Test Card 3 -->
+                <div class="test-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200" 
+                     onclick="testReturningCustomer()">
+                    <h3 class="font-bold text-lg mb-2">🔄 Returning Customer</h3>
+                    <p class="text-sm text-gray-600 mb-4">Test with existing package code</p>
+                    <div class="text-xs space-y-1">
+                        <p>✓ Package code entry</p>
+                        <p>✓ Validation check</p>
+                        <p>✓ Calendar access</p>
+                        <p>✓ Lesson booking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Credentials -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Test Credentials</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Master Code</h3>
+                    <code class="bg-yellow-100 px-2 py-1 rounded text-sm">ADMIN-TEST-2025</code>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Admin Emails</h3>
+                    <ul class="text-sm space-y-1">
+                        <li><code>mattjpiacentini@gmail.com</code></li>
+                        <li><code>admin@safestrokeswim.com</code></li>
+                        <li><code>*@test.local</code> (any email)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructions Modal (Hidden by default) -->
+        <div id="instructions-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-lg max-w-2xl max-h-[80vh] overflow-y-auto p-6">
+                <h2 class="text-2xl font-bold mb-4">📖 Testing Instructions</h2>
+                
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <h3 class="font-bold mb-2">Method 1: Quick Activation (Keyboard)</h3>
+                        <ol class="list-decimal list-inside space-y-1 text-gray-600">
+                            <li>Go to the booking page</li>
+                            <li>Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></li>
+                            <li>Enter code: <code>ADMIN-TEST-2025</code></li>
+                            <li>Enter admin email</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-bold mb-2">Method 2: Through Booking Flow</h3>
+                        <ol class="list-decimal list-inside space-y-1 text-gray-600">
+                            <li>Start any booking flow</li>
+                            <li>Enter <code>ADMIN-TEST-2025</code> as promo code</li>
+                            <li>Use an admin email when prompted</li>
+                            <li>All payments will be bypassed</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-bold mb-2">What to Test</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600">
+                            <li>Package selection and pricing</li>
+                            <li>Email validation</li>
+                            <li>Payment bypass (should be instant)</li>
+                            <li>Package code generation</li>
+                            <li>Calendar functionality</li>
+                            <li>Time slot selection</li>
+                            <li>Booking confirmation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-50 border border-red-200 p-3 rounded-lg">
+                        <p class="text-red-800">
+                            <strong>⚠️ Important:</strong> This is for testing only. 
+                            Never share the admin code publicly. All test bookings 
+                            should be marked as such in the database.
+                        </p>
+                    </div>
+                </div>
+                
+                <button onclick="hideInstructions()" class="mt-6 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Close
+                </button>
             </div>
         </div>
     </div>
-
+    
     <script>
-        // Initialize time slots
-        async function initializeTimeSlots() {
-            const startDate = document.getElementById('init-start-date').value;
-            const endDate = document.getElementById('init-end-date').value;
-            const resultDiv = document.getElementById('init-result');
+        // Check environment and status
+        function checkStatus() {
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+            const isTest = hostname.includes('test') || hostname.includes('staging');
+            const isProduction = hostname.includes('safestrokeswim.com') && !isTest;
             
-            resultDiv.innerHTML = '<div class="text-blue-600">Generating time slots...</div>';
+            // Environment
+            const envStatus = document.getElementById('env-status');
+            const envName = document.getElementById('env-name');
             
-            try {
-                const response = await fetch('/.netlify/functions/initialize-time-slots', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ startDate, endDate })
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    resultDiv.innerHTML = `<div class="text-green-600">✓ ${result.message}</div>`;
-                } else {
-                    resultDiv.innerHTML = `<div class="text-red-600">✗ Error: ${result.error}</div>`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="text-red-600">✗ Failed: ${error.message}</div>`;
+            if (isLocal) {
+                envStatus.className = 'status-indicator status-active';
+                envName.textContent = 'Local Development';
+            } else if (isTest) {
+                envStatus.className = 'status-indicator status-active';
+                envName.textContent = 'Test/Staging';
+            } else if (isProduction) {
+                envStatus.className = 'status-indicator status-inactive';
+                envName.textContent = 'Production';
+            } else {
+                envStatus.className = 'status-indicator status-active';
+                envName.textContent = 'Unknown (Admin Allowed)';
+            }
+            
+            // Admin System
+            const adminStatus = document.getElementById('admin-status');
+            const adminState = document.getElementById('admin-state');
+            
+            const adminEnabled = localStorage.getItem('enableAdminSystem') === 'true';
+            if (adminEnabled) {
+                adminStatus.className = 'status-indicator status-active';
+                adminState.textContent = 'Enabled';
+            } else {
+                adminStatus.className = 'status-indicator status-inactive';
+                adminState.textContent = 'Disabled';
+            }
+            
+            // Session
+            const sessionStatus = document.getElementById('session-status');
+            const sessionState = document.getElementById('session-state');
+            
+            const sessionActive = sessionStorage.getItem('adminMode') === 'true';
+            if (sessionActive) {
+                sessionStatus.className = 'status-indicator status-active';
+                sessionState.textContent = 'Active';
+            } else {
+                sessionStatus.className = 'status-indicator status-inactive';
+                sessionState.textContent = 'Inactive';
             }
         }
-
-        // Create test package
-        async function createTestPackage() {
-            const program = document.getElementById('test-program').value;
-            const lessons = parseInt(document.getElementById('test-lessons').value);
-            const resultDiv = document.getElementById('test-result');
-            
-            resultDiv.innerHTML = '<div class="text-blue-600">Creating test package...</div>';
-            
-            try {
-                const response = await fetch('/.netlify/functions/create-test-package', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        program,
-                        lessons,
-                        adminKey: 'safestroke-admin-2025'
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    resultDiv.innerHTML = `
-                        <div class="text-green-600">
-                            <div>✓ Test package created!</div>
-                            <div class="font-mono bg-gray-100 p-2 rounded mt-2">${result.package.code}</div>
-                            <div class="text-xs mt-2">Use this code to test booking</div>
-                        </div>
-                    `;
-                } else {
-                    resultDiv.innerHTML = `<div class="text-red-600">✗ Error: ${result.error}</div>`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="text-red-600">✗ Failed: ${error.message}</div>`;
+        
+        // Quick Actions
+        function activateAdminMode() {
+            localStorage.setItem('enableAdminSystem', 'true');
+            sessionStorage.setItem('adminMode', 'true');
+            sessionStorage.setItem('adminEmail', 'mattjpiacentini@gmail.com');
+            alert('Admin mode activated! Redirecting to booking page...');
+            window.location.href = 'safestroke-booking.html?admin=true';
+        }
+        
+        function deactivateAdminMode() {
+            localStorage.removeItem('enableAdminSystem');
+            sessionStorage.removeItem('adminMode');
+            sessionStorage.removeItem('adminEmail');
+            alert('Admin mode deactivated');
+            checkStatus();
+        }
+        
+        function clearAllData() {
+            if (confirm('This will clear all stored data. Continue?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                alert('All data cleared');
+                checkStatus();
             }
         }
-
-        // Load statistics
-        async function loadStatistics() {
-            const resultDiv = document.getElementById('stats-result');
-            resultDiv.innerHTML = '<div class="text-blue-600">Running system health check...</div>';
-            
-            try {
-                const response = await fetch('/.netlify/functions/system-health');
-                const health = await response.json();
-                
-                let statusColor = health.summary?.ready ? 'green' : 'yellow';
-                let statusText = health.summary?.ready ? 'System Ready' : 'Setup Required';
-                
-                resultDiv.innerHTML = `
-                    <div class="space-y-2">
-                        <div class="text-${statusColor}-600 font-bold">Status: ${statusText}</div>
-                        <div><strong>Stripe:</strong> ${health.services?.stripe?.connected ? '✓ Connected' : '✗ Not connected'}</div>
-                        <div><strong>Database:</strong> ${health.services?.supabase?.connected ? '✓ Connected' : '✗ Not connected'}</div>
-                        <div><strong>Webhook:</strong> ${health.services?.webhook?.configured ? '✓ Configured' : '✗ Not configured'}</div>
-                        <div><strong>Time Slots:</strong> ${health.database?.time_slots?.total || 0} total</div>
-                        <div><strong>Packages:</strong> ${health.database?.packages?.total || 0} total</div>
-                        <div><strong>Bookings:</strong> ${health.database?.bookings?.total || 0} total</div>
-                        ${health.summary?.issues?.length > 0 ? `
-                            <div class="mt-2 p-2 bg-yellow-50 rounded text-sm">
-                                <strong>Issues:</strong>
-                                <ul class="list-disc list-inside">
-                                    ${health.summary.issues.map(issue => `<li>${issue}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            } catch (error) {
-                resultDiv.innerHTML = `<div class="text-red-600">✗ Health check failed: ${error.message}</div>`;
-            }
+        
+        function showInstructions() {
+            document.getElementById('instructions-modal').classList.remove('hidden');
         }
-
-        // Load recent activity
-        async function loadRecentActivity() {
-            const resultDiv = document.getElementById('activity-result');
-            resultDiv.innerHTML = '<div class="text-blue-600">Loading recent activity...</div>';
-            
-            // This would need a backend function to fetch recent bookings
-            // For now, showing placeholder
-            resultDiv.innerHTML = `
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="4">
-                                No recent activity to display
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            `;
+        
+        function hideInstructions() {
+            document.getElementById('instructions-modal').classList.add('hidden');
         }
-
-        // Load initial data
-        document.addEventListener('DOMContentLoaded', () => {
-            loadStatistics();
-            loadRecentActivity();
+        
+        // Test Scenarios
+        function testPackageFlow() {
+            sessionStorage.setItem('testScenario', 'package');
+            activateAdminMode();
+        }
+        
+        function testSingleLesson() {
+            sessionStorage.setItem('testScenario', 'single');
+            activateAdminMode();
+        }
+        
+        function testReturningCustomer() {
+            const testCode = prompt('Enter a test package code (or leave blank for ADMIN-SPL-4L-TEST):');
+            sessionStorage.setItem('testPackageCode', testCode || 'ADMIN-SPL-4L-TEST');
+            sessionStorage.setItem('testScenario', 'returning');
+            activateAdminMode();
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkStatus();
+            
+            // Auto-refresh status every 5 seconds
+            setInterval(checkStatus, 5000);
         });
     </script>
 </body>

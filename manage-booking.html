@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Your Booking | SafeStroke Swim Academy</title>
+    <meta name="description" content="Manage, reschedule, or cancel your swim lesson booking at SafeStroke Swim Academy.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --brand-blue: #2284B8;
+            --brand-navy: #0B3856;
+            --brand-sky: #E9F5FC;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-orange: #F59E0B;
+        }
+        
+        * {
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            color: var(--brand-navy);
+            background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            min-height: 100vh;
+        }
+        
+        .brand-blue { color: var(--brand-blue); }
+        .brand-blue-bg { 
+            background: linear-gradient(135deg, #2284B8 0%, #1976a3 100%);
+            box-shadow: 0 4px 15px rgba(34, 132, 184, 0.3);
+        }
+        .brand-blue-bg:hover {
+            background: linear-gradient(135deg, #1976a3 0%, #15628a 100%);
+            box-shadow: 0 6px 20px rgba(34, 132, 184, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link { transition: color 0.3s; position: relative; }
+        .nav-link.active { font-weight: 700; color: #2284B8; }
+        .nav-link:not(.active):hover { color: #2284B8; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #2284B8, #1976a3);
+            transition: width 0.3s ease-in-out;
+            border-radius: 1px;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .status-confirmed {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .status-cancelled {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .status-rescheduled {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        
+        .time-slot {
+            padding: 8px 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .time-slot:hover:not(.disabled) {
+            border-color: var(--brand-blue);
+            background-color: var(--brand-sky);
+        }
+        
+        .time-slot.selected {
+            background-color: var(--brand-blue);
+            color: white;
+            border-color: var(--brand-blue);
+        }
+        
+        .time-slot.disabled {
+            background-color: #F3F4F6;
+            color: #9CA3AF;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid var(--brand-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="bg-gray-900 text-white text-center py-2 text-sm font-medium tracking-wider">
+        199 Scoles Ave, Clifton NJ | <a href="tel:973-820-1153" class="font-bold hover:underline">Call or Text 973-820-1153</a>
+    </div>
+
+    <!-- Header -->
+    <nav class="bg-white sticky top-0 z-50 shadow-lg rounded-b-2xl">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <!-- Logo (Left) -->
+            <div class="flex-shrink-0 md:flex-grow-0">
+                <a href="index.html" class="flex items-center">
+                    <img src="safestroke-images/safestroke_logo.png" alt="SafeStroke Logo" class="h-20 w-auto">
+                </a>
+            </div>
+
+            <!-- Centered Navigation Links for Desktop -->
+            <div class="hidden md:flex flex-grow justify-center items-center space-x-8 font-semibold">
+                <a href="index.html" class="nav-link">Main</a>
+                <a href="safestroke-programs.html" class="nav-link">Programs</a>
+                <a href="safestroke-pricing.html" class="nav-link">Pricing</a>
+                <a href="safestroke-aboutus.html" class="nav-link">About Us</a>
+                <a href="safestroke-reviews.html" class="nav-link">Reviews</a>
+                <a href="safestroke-location.html" class="nav-link">Our Location</a>
+            </div>
+            
+            <!-- Book Now Button (Right, Desktop) -->
+            <div class="hidden md:flex flex-shrink-0">
+                <a href="safestroke-booking.html" class="brand-blue-bg hover:bg-blue-600 text-white font-bold py-2.5 px-7 rounded-full text-md transition duration-300 transform hover:scale-105">Book Free Lesson</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white px-6 pb-4 border-t border-gray-100 rounded-b-2xl">
+            <a href="index.html" class="block py-2 text-gray-800">Main</a>
+            <a href="safestroke-programs.html" class="block py-2 text-gray-800">Programs</a>
+            <a href="safestroke-pricing.html" class="block py-2 text-gray-800">Pricing</a>
+            <a href="safestroke-aboutus.html" class="block py-2 text-gray-800">About Us</a>
+            <a href="safestroke-reviews.html" class="block py-2 text-gray-800">Reviews</a>
+            <a href="safestroke-location.html" class="block py-2 text-gray-800">Our Location</a>
+            <div class="mt-4 pt-4 border-t">
+                <a href="safestroke-booking.html" class="block w-full text-center brand-blue-bg hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full text-md transition duration-300">Book Free Lesson</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-12 md:py-16 min-h-screen">
+        <div class="container mx-auto px-4 max-w-4xl">
+            
+            <!-- Step 1: Lookup Section -->
+            <div id="lookup-section" class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                <h1 class="text-3xl font-bold mb-6 text-center">Manage Your Booking</h1>
+                
+                <div class="max-w-md mx-auto">
+                    <p class="text-gray-600 mb-6 text-center">
+                        Enter your booking ID or the email address used for booking
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Booking ID or Email
+                            </label>
+                            <input 
+                                type="text" 
+                                id="lookup-input"
+                                placeholder="e.g., SS-2025-001234 or your@email.com"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+                        
+                        <button 
+                            onclick="lookupBooking()"
+                            class="w-full brand-blue-bg text-white font-bold py-3 rounded-full transition"
+                        >
+                            Look Up Booking
+                        </button>
+                    </div>
+                    
+                    <div id="lookup-error" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                        <p class="font-semibold">Booking not found</p>
+                        <p class="text-sm">Please check your booking ID or email and try again.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Booking Details (Initially Hidden) -->
+            <div id="booking-details" class="hidden bg-white rounded-2xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-start mb-6">
+                    <h2 class="text-2xl font-bold">Your Booking Details</h2>
+                    <span id="status-badge" class="status-badge status-confirmed">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        Confirmed
+                    </span>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-700 mb-3">Lesson Information</h3>
+                        <div class="space-y-2">
+                            <p><span class="text-gray-600">Booking ID:</span> <span id="booking-id" class="font-mono font-semibold">SS-2025-001234</span></p>
+                            <p><span class="text-gray-600">Program:</span> <span id="booking-program" class="font-semibold">Strokelet</span></p>
+                            <p><span class="text-gray-600">Type:</span> <span id="booking-type" class="font-semibold">Single Lesson</span></p>
+                            <p><span class="text-gray-600">Date:</span> <span id="booking-date" class="font-semibold">Monday, January 20, 2025</span></p>
+                            <p><span class="text-gray-600">Time:</span> <span id="booking-time" class="font-semibold">3:00 PM - 3:30 PM</span></p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-gray-700 mb-3">Contact Information</h3>
+                        <div class="space-y-2">
+                            <p><span class="text-gray-600">Parent Name:</span> <span id="parent-name" class="font-semibold">Jane Doe</span></p>
+                            <p><span class="text-gray-600">Child Name:</span> <span id="child-name" class="font-semibold">Johnny Doe</span></p>
+                            <p><span class="text-gray-600">Email:</span> <span id="parent-email" class="font-semibold">jane@example.com</span></p>
+                            <p><span class="text-gray-600">Phone:</span> <span id="parent-phone" class="font-semibold">(973) 555-0123</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Policy Reminder -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-yellow-600 mt-1 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div class="text-sm">
+                            <p class="font-semibold text-yellow-800 mb-1">Cancellation & Reschedule Policy</p>
+                            <p class="text-yellow-700">Changes must be made at least 24 hours before your scheduled lesson. Same-day changes cannot be accommodated.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <button 
+                        onclick="showRescheduleOptions()"
+                        id="reschedule-btn"
+                        class="brand-blue-bg text-white font-bold py-3 px-6 rounded-full transition flex items-center justify-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        Reschedule Lesson
+                    </button>
+                    
+                    <button 
+                        onclick="showCancellationConfirm()"
+                        id="cancel-btn"
+                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full transition flex items-center justify-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        Cancel Lesson
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Reschedule Options (Initially Hidden) -->
+            <div id="reschedule-section" class="hidden bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold mb-6">Select New Date & Time</h2>
+                
+                <!-- Calendar View -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-4">Available Dates</h3>
+                    <div id="calendar-container" class="grid grid-cols-7 gap-2">
+                        <!-- Calendar will be dynamically generated -->
+                    </div>
+                </div>
+                
+                <!-- Time Slots -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-4">Available Times</h3>
+                    <div id="time-slots" class="grid grid-cols-3 md:grid-cols-4 gap-3">
+                        <!-- Time slots will be dynamically generated -->
+                    </div>
+                </div>
+                
+                <!-- Selected Summary -->
+                <div id="reschedule-summary" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <p class="font-semibold text-blue-900">New Lesson Time:</p>
+                    <p id="new-datetime" class="text-blue-700"></p>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex gap-4">
+                    <button 
+                        onclick="cancelReschedule()"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded-full transition"
+                    >
+                        Cancel Changes
+                    </button>
+                    <button 
+                        onclick="confirmReschedule()"
+                        id="confirm-reschedule-btn"
+                        disabled
+                        class="flex-1 brand-blue-bg text-white font-bold py-3 rounded-full transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Confirm Reschedule
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Cancellation Confirmation (Initially Hidden) -->
+            <div id="cancel-section" class="hidden bg-white rounded-2xl shadow-lg p-8">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Cancel This Lesson?</h2>
+                    <p class="text-gray-600">This action cannot be undone.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <p class="font-semibold mb-2">Lesson to Cancel:</p>
+                    <p class="text-gray-700"><span id="cancel-program"></span> - <span id="cancel-datetime"></span></p>
+                </div>
+                
+                <div id="cancellation-policy-notice" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                    <!-- Policy notice will be inserted here based on timing -->
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <button 
+                        onclick="cancelCancellation()"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded-full transition"
+                    >
+                        Keep My Lesson
+                    </button>
+                    <button 
+                        onclick="confirmCancellation()"
+                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-full transition"
+                    >
+                        Yes, Cancel Lesson
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Message (Initially Hidden) -->
+            <div id="success-message" class="hidden bg-white rounded-2xl shadow-lg p-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2" id="success-title">Success!</h2>
+                    <p class="text-gray-600 mb-6" id="success-text">Your changes have been saved.</p>
+                    
+                    <div class="space-y-3">
+                        <a href="safestroke-booking.html" class="block brand-blue-bg text-white font-bold py-3 rounded-full transition">
+                            Book Another Lesson
+                        </a>
+                        <a href="index.html" class="block text-blue-600 hover:text-blue-700 font-semibold">
+                            Return to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Sample booking data (in production, this would come from your database)
+        const sampleBookings = {
+            'SS-2025-001234': {
+                id: 'SS-2025-001234',
+                program: 'Strokelet',
+                type: 'single',
+                date: '2025-01-20',
+                time: '15:00',
+                duration: 30,
+                status: 'confirmed',
+                parentName: 'Jane Doe',
+                childName: 'Johnny Doe',
+                childAge: 6,
+                email: 'jane@example.com',
+                phone: '(973) 555-0123',
+                rescheduleCount: 0,
+                rescheduleLimit: 1
+            },
+            'jane@example.com': {
+                id: 'SS-2025-001234',
+                program: 'Strokelet',
+                type: 'single',
+                date: '2025-01-20',
+                time: '15:00',
+                duration: 30,
+                status: 'confirmed',
+                parentName: 'Jane Doe',
+                childName: 'Johnny Doe',
+                childAge: 6,
+                email: 'jane@example.com',
+                phone: '(973) 555-0123',
+                rescheduleCount: 0,
+                rescheduleLimit: 1
+            }
+        };
+
+        let currentBooking = null;
+        let selectedDate = null;
+        let selectedTime = null;
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Check for booking ID in URL parameters
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingId = urlParams.get('id');
+            if (bookingId) {
+                document.getElementById('lookup-input').value = bookingId;
+                lookupBooking();
+            }
+        });
+
+        function lookupBooking() {
+            const input = document.getElementById('lookup-input').value.trim();
+            
+            if (!input) {
+                showLookupError();
+                return;
+            }
+
+            // In production, this would be an API call
+            const booking = sampleBookings[input] || sampleBookings[input.toLowerCase()];
+            
+            if (booking) {
+                currentBooking = booking;
+                displayBookingDetails(booking);
+                document.getElementById('lookup-section').classList.add('hidden');
+                document.getElementById('booking-details').classList.remove('hidden');
+                document.getElementById('lookup-error').classList.add('hidden');
+            } else {
+                showLookupError();
+            }
+        }
+
+        function showLookupError() {
+            document.getElementById('lookup-error').classList.remove('hidden');
+        }
+
+        function displayBookingDetails(booking) {
+            // Update all the booking detail fields
+            document.getElementById('booking-id').textContent = booking.id;
+            document.getElementById('booking-program').textContent = booking.program;
+            document.getElementById('booking-type').textContent = booking.type === 'single' ? 'Single Lesson' : 
+                                                                  booking.type === 'package' ? 'Package Lesson' : 'Free Trial';
+            
+            const date = new Date(booking.date + 'T' + booking.time);
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('booking-date').textContent = date.toLocaleDateString('en-US', dateOptions);
+            
+            const endTime = new Date(date.getTime() + booking.duration * 60000);
+            document.getElementById('booking-time').textContent = 
+                `${formatTime(booking.time)} - ${formatTime(endTime.toTimeString().slice(0,5))}`;
+            
+            document.getElementById('parent-name').textContent = booking.parentName;
+            document.getElementById('child-name').textContent = `${booking.childName} (Age ${booking.childAge})`;
+            document.getElementById('parent-email').textContent = booking.email;
+            document.getElementById('parent-phone').textContent = booking.phone;
+            
+            // Update status badge
+            const statusBadge = document.getElementById('status-badge');
+            statusBadge.className = `status-badge status-${booking.status}`;
+            statusBadge.innerHTML = getStatusBadgeContent(booking.status);
+            
+            // Check if within 24 hours
+            const now = new Date();
+            const lessonDate = new Date(booking.date + 'T' + booking.time);
+            const hoursUntilLesson = (lessonDate - now) / (1000 * 60 * 60);
+            
+            if (hoursUntilLesson < 24) {
+                document.getElementById('reschedule-btn').disabled = true;
+                document.getElementById('reschedule-btn').classList.add('opacity-50', 'cursor-not-allowed');
+                document.getElementById('cancel-btn').disabled = true;
+                document.getElementById('cancel-btn').classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function getStatusBadgeContent(status) {
+            const icons = {
+                confirmed: '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                cancelled: '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',
+                rescheduled: '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>'
+            };
+            
+            const labels = {
+                confirmed: 'Confirmed',
+                cancelled: 'Cancelled',
+                rescheduled: 'Rescheduled'
+            };
+            
+            return `${icons[status]} ${labels[status]}`;
+        }
+
+        function formatTime(time) {
+            const [hour, minute] = time.split(':');
+            const h = parseInt(hour);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+            return `${displayHour}:${minute} ${ampm}`;
+        }
+
+        function showRescheduleOptions() {
+            document.getElementById('booking-details').classList.add('hidden');
+            document.getElementById('reschedule-section').classList.remove('hidden');
+            generateCalendar();
+        }
+
+        function generateCalendar() {
+            const container = document.getElementById('calendar-container');
+            container.innerHTML = '';
+            
+            // Generate next 30 days
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const dayElement = document.createElement('button');
+                dayElement.className = 'p-3 border rounded-lg text-center hover:bg-blue-50 transition';
+                
+                // Check if date is at least 24 hours away
+                const tomorrow = new Date();
+                tomorrow.setHours(tomorrow.getHours() + 24);
+                
+                if (date < tomorrow || date.getDay() === 0 || date.getDay() === 6) {
+                    dayElement.className += ' opacity-50 cursor-not-allowed';
+                    dayElement.disabled = true;
+                } else {
+                    dayElement.onclick = () => selectDate(date);
+                }
+                
+                dayElement.innerHTML = `
+                    <div class="text-xs text-gray-600">${date.toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                    <div class="text-lg font-semibold">${date.getDate()}</div>
+                `;
+                
+                container.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            generateTimeSlots(date);
+        }
+
+        function generateTimeSlots(date) {
+            const container = document.getElementById('time-slots');
+            container.innerHTML = '';
+            
+            // Available time slots (in production, this would come from your API)
+            const slots = [
+                '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30'
+            ];
+            
+            slots.forEach(time => {
+                const slot = document.createElement('button');
+                slot.className = 'time-slot';
+                slot.textContent = formatTime(time);
+                slot.onclick = () => selectTime(time);
+                
+                // Randomly disable some slots for demo
+                if (Math.random() > 0.7) {
+                    slot.classList.add('disabled');
+                    slot.disabled = true;
+                }
+                
+                container.appendChild(slot);
+            });
+        }
+
+        function selectTime(time) {
+            selectedTime = time;
+            
+            // Update UI
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            // Show summary
+            const summary = document.getElementById('reschedule-summary');
+            const newDatetime = document.getElementById('new-datetime');
+            
+            const dateStr = selectedDate.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            newDatetime.textContent = `${dateStr} at ${formatTime(time)}`;
+            summary.classList.remove('hidden');
+            
+            // Enable confirm button
+            document.getElementById('confirm-reschedule-btn').disabled = false;
+        }
+
+        function cancelReschedule() {
+            document.getElementById('reschedule-section').classList.add('hidden');
+            document.getElementById('booking-details').classList.remove('hidden');
+            selectedDate = null;
+            selectedTime = null;
+        }
+
+        function confirmReschedule() {
+            // In production, this would send an API request
+            console.log('Rescheduling to:', selectedDate, selectedTime);
+            
+            // Update the booking
+            currentBooking.date = selectedDate.toISOString().split('T')[0];
+            currentBooking.time = selectedTime;
+            currentBooking.status = 'rescheduled';
+            currentBooking.rescheduleCount++;
+            
+            // Show success message
+            showSuccess('Lesson Rescheduled!', 'Your lesson has been successfully rescheduled. A confirmation email has been sent.');
+            
+            // Send email (in production)
+            sendRescheduleEmail();
+        }
+
+        function showCancellationConfirm() {
+            document.getElementById('booking-details').classList.add('hidden');
+            document.getElementById('cancel-section').classList.remove('hidden');
+            
+            // Update cancellation details
+            document.getElementById('cancel-program').textContent = currentBooking.program;
+            const date = new Date(currentBooking.date + 'T' + currentBooking.time);
+            const dateStr = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('cancel-datetime').textContent = `${dateStr} at ${formatTime(currentBooking.time)}`;
+            
+            // Check cancellation policy
+            const now = new Date();
+            const lessonDate = new Date(currentBooking.date + 'T' + currentBooking.time);
+            const hoursUntilLesson = (lessonDate - now) / (1000 * 60 * 60);
+            
+            const policyNotice = document.getElementById('cancellation-policy-notice');
+            if (hoursUntilLesson >= 24) {
+                if (currentBooking.type === 'single') {
+                    policyNotice.innerHTML = `
+                        <p class="font-semibold text-green-800 mb-1">✓ Full Credit Available</p>
+                        <p class="text-green-700">You'll receive a full credit to use for a future booking.</p>
+                    `;
+                } else if (currentBooking.type === 'package') {
+                    policyNotice.innerHTML = `
+                        <p class="font-semibold text-green-800 mb-1">✓ Makeup Lesson Available</p>
+                        <p class="text-green-700">This lesson will be added to your makeup lesson bank.</p>
+                    `;
+                }
+            } else {
+                policyNotice.innerHTML = `
+                    <p class="font-semibold text-red-800 mb-1">⚠ Within 24-Hour Window</p>
+                    <p class="text-red-700">This lesson cannot be refunded or rescheduled due to our 24-hour policy.</p>
+                `;
+            }
+        }
+
+        function cancelCancellation() {
+            document.getElementById('cancel-section').classList.add('hidden');
+            document.getElementById('booking-details').classList.remove('hidden');
+        }
+
+        function confirmCancellation() {
+            // In production, this would send an API request
+            console.log('Cancelling booking:', currentBooking.id);
+            
+            // Update the booking
+            currentBooking.status = 'cancelled';
+            
+            // Show success message
+            const now = new Date();
+            const lessonDate = new Date(currentBooking.date + 'T' + currentBooking.time);
+            const hoursUntilLesson = (lessonDate - now) / (1000 * 60 * 60);
+            
+            if (hoursUntilLesson >= 24) {
+                showSuccess('Lesson Cancelled', 'Your lesson has been cancelled. A credit has been added to your account for future use.');
+            } else {
+                showSuccess('Lesson Cancelled', 'Your lesson has been cancelled. No credit is available due to the 24-hour policy.');
+            }
+            
+            // Send email (in production)
+            sendCancellationEmail();
+        }
+
+        function showSuccess(title, text) {
+            document.getElementById('reschedule-section').classList.add('hidden');
+            document.getElementById('cancel-section').classList.add('hidden');
+            document.getElementById('booking-details').classList.add('hidden');
+            document.getElementById('success-message').classList.remove('hidden');
+            
+            document.getElementById('success-title').textContent = title;
+            document.getElementById('success-text').textContent = text;
+        }
+
+        function sendRescheduleEmail() {
+            // In production, this would trigger your email automation
+            console.log('Sending reschedule confirmation email to:', currentBooking.email);
+        }
+
+        function sendCancellationEmail() {
+            // In production, this would trigger your email automation
+            console.log('Sending cancellation confirmation email to:', currentBooking.email);
+        }
+    </script>
+</body>
+</html>
