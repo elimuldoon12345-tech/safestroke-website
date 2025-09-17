@@ -35,6 +35,197 @@
     <!-- End Meta Pixel Code -->
     <style>
         body { font-family: 'Outfit', sans-serif; color: #00253D; }
+        
+        /* Program Header Specific Styles */
+        .program-header-section {
+            background: linear-gradient(135deg, #0B3856 0%, #00253D 50%, #0B3856 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .program-header-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(34, 132, 184, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        /* Typography refinements */
+        .program-h1 {
+            font-size: 3rem;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        @media (min-width: 768px) {
+            .program-h1 {
+                font-size: 3.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .program-h1 {
+                font-size: 4rem;
+            }
+        }
+        
+        /* Chip styles */
+        .glance-chip {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        
+        .glance-chip:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .program-selector-chip {
+            background: rgba(255, 255, 255, 0.95);
+            color: #0B3856;
+            padding: 0.625rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        .program-selector-chip:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .program-selector-chip:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+        }
+        
+        .program-selector-chip.active {
+            background: white;
+            border-color: #2284B8;
+            color: #2284B8;
+            font-weight: 600;
+        }
+        
+        /* Primary CTA */
+        .primary-cta {
+            background: linear-gradient(135deg, #2284B8 0%, #1c6fa0 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.875rem 2rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(34, 132, 184, 0.3);
+            font-size: 1rem;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .primary-cta:hover {
+            background: linear-gradient(135deg, #1c6fa0 0%, #15628a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 132, 184, 0.4);
+        }
+        
+        .primary-cta:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Secondary link */
+        .secondary-link {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+        }
+        
+        .secondary-link:hover {
+            color: white;
+            text-decoration-thickness: 2px;
+        }
+        
+        /* Hide mobile chips on desktop */
+        .program-chips-mobile {
+            display: none;
+        }
+        
+        /* Hide desktop chips on mobile */
+        @media (max-width: 640px) {
+            .program-chips-desktop {
+                display: none;
+            }
+            
+            .program-chips-mobile {
+                display: flex;
+                gap: 0.5rem;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .program-chips-mobile::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .program-chips-mobile::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 2px;
+            }
+            
+            .program-chips-mobile::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 2px;
+            }
+            
+            .program-selector-chip {
+                scroll-snap-align: start;
+            }
+        }
+        
+        /* Wave divider */
+        .wave-divider {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            line-height: 0;
+        }
+        
+        .wave-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 60px;
+        }
+        
+        @media (min-width: 768px) {
+            .wave-divider svg {
+                height: 80px;
+            }
+        }
         .dark-section { 
             background-color: #00253D; 
             color: white;
@@ -416,67 +607,95 @@
     <!-- Main Content -->
     <main>
         <!-- Programs & Curriculum Header Section -->
-        <section class="relative overflow-hidden" style="background: linear-gradient(135deg, #0B3856 0%, #00253D 50%, #0B3856 100%);">
-            <!-- Subtle blue depth overlay -->
-            <div class="absolute inset-0 opacity-30" style="background: radial-gradient(circle at 20% 50%, rgba(34, 132, 184, 0.3) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(34, 132, 184, 0.2) 0%, transparent 40%);"></div>
-            
-            <div class="container mx-auto px-6 py-16 md:py-20 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <!-- Left Column: Content & Controls -->
-                    <div class="order-2 lg:order-1">
+        <section class="program-header-section">
+            <div class="container mx-auto px-6 py-12 md:py-16 lg:py-20 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    <!-- Left Column: Content & Controls (54-58% width) -->
+                    <div class="lg:col-span-7 order-2 lg:order-1" style="max-width: 70ch;">
                         <!-- H1 -->
-                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Programs & Curriculum</h1>
+                        <h1 class="program-h1 text-white mb-4">Programs & Curriculum</h1>
                         
                         <!-- Lead Text -->
-                        <p class="text-lg text-white/90 mb-3 leading-relaxed">
+                        <p class="text-lg text-white/95 mb-2 leading-relaxed">
                             We help toddlers and kids build real water skills—breath control, body position, and calm confidence—taught in small groups by certified instructors.
                         </p>
                         
                         <!-- Muted Note -->
-                        <p class="text-sm text-white/60 mb-8 italic">
+                        <p class="text-sm text-white/70 mb-6 italic leading-relaxed">
                             Most families see meaningful progress in 8–12 lessons (varies by age, comfort, and attendance).
                         </p>
                         
                         <!-- At-a-glance Chips -->
-                        <div class="mb-8">
-                            <h3 class="text-white/80 text-sm font-semibold uppercase tracking-wider mb-3">At a Glance</h3>
+                        <div class="mb-6">
+                            <h3 class="text-white/80 text-xs font-semibold tracking-wide mb-2.5">At a Glance</h3>
                             <div class="flex flex-wrap gap-2">
-                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
-                                    <span class="opacity-70">Ages:</span> <span class="font-semibold">3 months–12 years</span>
+                                <div class="glance-chip text-white">
+                                    <span class="opacity-80">Ages:</span> <span class="font-semibold">3 months–12 years</span>
                                 </div>
-                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
-                                    <span class="opacity-70">Group size:</span> <span class="font-semibold">Small groups (3–4 per lane)</span>
+                                <div class="glance-chip text-white">
+                                    <span class="opacity-80">Group size:</span> <span class="font-semibold">Small groups (3–4 per lane)</span>
                                 </div>
-                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
-                                    <span class="opacity-70">Lesson length:</span> <span class="font-semibold">30 minutes</span>
+                                <div class="glance-chip text-white">
+                                    <span class="opacity-80">Lesson length:</span> <span class="font-semibold">30 minutes</span>
                                 </div>
-                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
-                                    <span class="opacity-70">Approach:</span> <span class="font-semibold">Skills-first, safety-first</span>
+                                <div class="glance-chip text-white">
+                                    <span class="opacity-80">Approach:</span> <span class="font-semibold">Skills-first, safety-first</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Program Selector Chips -->
-                        <div class="mb-8">
-                            <h3 class="text-white/80 text-sm font-semibold uppercase tracking-wider mb-3">Jump to Program</h3>
-                            <div class="flex flex-wrap gap-2">
+                        <div class="mb-7">
+                            <h3 class="text-white/80 text-xs font-semibold tracking-wide mb-2.5">Jump to Program</h3>
+                            <div class="flex flex-wrap gap-2 program-chips-desktop">
                                 <a href="#droplet" 
-                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   class="program-selector-chip"
+                                   data-section="droplet"
                                    aria-label="Jump to Droplet section">
                                     Droplet — Parent & Child (3–24 months)
                                 </a>
                                 <a href="#splashlet" 
-                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   class="program-selector-chip"
+                                   data-section="splashlet"
                                    aria-label="Jump to Splashlet section">
                                     Splashlet — Ages 2–3
                                 </a>
                                 <a href="#strokelet-l1" 
-                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   class="program-selector-chip"
+                                   data-section="strokelet-l1"
                                    aria-label="Jump to Strokelet L1 section">
                                     Strokelet L1 — Ages 3–12, beginners or water-shy
                                 </a>
                                 <a href="#strokelet-l2" 
-                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   class="program-selector-chip"
+                                   data-section="strokelet-l2"
+                                   aria-label="Jump to Strokelet L2 section">
+                                    Strokelet L2 — Ages 3–12, comfortable & skill-ready
+                                </a>
+                            </div>
+                            <!-- Mobile horizontal scroll container -->
+                            <div class="program-chips-mobile">
+                                <a href="#droplet" 
+                                   class="program-selector-chip"
+                                   data-section="droplet"
+                                   aria-label="Jump to Droplet section">
+                                    Droplet — Parent & Child (3–24 months)
+                                </a>
+                                <a href="#splashlet" 
+                                   class="program-selector-chip"
+                                   data-section="splashlet"
+                                   aria-label="Jump to Splashlet section">
+                                    Splashlet — Ages 2–3
+                                </a>
+                                <a href="#strokelet-l1" 
+                                   class="program-selector-chip"
+                                   data-section="strokelet-l1"
+                                   aria-label="Jump to Strokelet L1 section">
+                                    Strokelet L1 — Ages 3–12, beginners or water-shy
+                                </a>
+                                <a href="#strokelet-l2" 
+                                   class="program-selector-chip"
+                                   data-section="strokelet-l2"
                                    aria-label="Jump to Strokelet L2 section">
                                     Strokelet L2 — Ages 3–12, comfortable & skill-ready
                                 </a>
@@ -484,49 +703,44 @@
                         </div>
                         
                         <!-- CTAs -->
-                        <div class="flex flex-col sm:flex-row items-start gap-4 mb-6">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 mb-6">
                             <a href="safestroke-booking.html" 
-                               class="inline-block bg-[#2284B8] hover:bg-[#1976a3] text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                               class="primary-cta">
                                 Book Free Trial →
                             </a>
                             <a href="#schedule" 
-                               class="inline-block text-white/90 hover:text-white font-semibold py-3 transition-colors duration-300 underline underline-offset-4 decoration-1 hover:decoration-2">
+                               class="secondary-link">
                                 See levels & schedule
                             </a>
                         </div>
                         
                         <!-- Social Proof -->
-                        <div class="text-white/60 text-sm">
+                        <div class="text-white/90 text-sm font-medium">
                             ⭐⭐⭐⭐⭐ 5.0/5 from 5 local families
                             <!-- TODO: Replace with dynamic review count when available -->
                         </div>
                     </div>
                     
-                    <!-- Right Column: Image -->
-                    <div class="order-1 lg:order-2">
+                    <!-- Right Column: Image (42-46% width) -->
+                    <div class="lg:col-span-5 order-1 lg:order-2">
                         <div class="relative">
                             <img src="safestroke-images/suhkickboardfront.jpg" 
                                  alt="Instructor smiling with young swimmer during a lesson, demonstrating calm, safe instruction."
-                                 class="w-full h-auto rounded-2xl border-2 border-white/10 shadow-2xl object-cover"
-                                 style="max-height: 500px; object-position: center;">
+                                 class="w-full h-auto rounded-2xl border border-white/10 shadow-xl object-cover"
+                                 style="aspect-ratio: 4/3; object-position: center top;">
                             <!-- Subtle glow effect -->
-                            <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#0B3856]/20 to-transparent pointer-events-none"></div>
+                            <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#0B3856]/10 via-transparent to-transparent pointer-events-none"></div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Wave Divider -->
-            <div class="absolute bottom-0 left-0 right-0 overflow-hidden leading-[0]">
-                <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px] md:h-[120px]">
-                    <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" 
-                          opacity=".25" 
-                          class="fill-gray-50"></path>
-                    <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,11.51,87.09,7.61,31.54-4.38,60.69-16.84,86.51-34.42C1250,39.52,1277.11,15.78,1310,15.78V0Z" 
-                          opacity=".5" 
-                          class="fill-gray-50"></path>
-                    <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" 
-                          class="fill-gray-50"></path>
+            <!-- Clean Wave Divider -->
+            <div class="wave-divider">
+                <svg viewBox="0 0 1440 60" preserveAspectRatio="none">
+                    <path d="M0,20 C288,60 576,60 864,30 C1152,0 1296,0 1440,20 L1440,60 L0,60 Z" 
+                          fill="#f9fafb" 
+                          fill-opacity="1"></path>
                 </svg>
             </div>
         </section>
@@ -700,10 +914,60 @@
     </footer>
     
     <script>
+        // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Smooth scroll with header offset for program chips
+        document.querySelectorAll('.program-selector-chip').forEach(chip => {
+            chip.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    const headerHeight = document.querySelector('nav').offsetHeight;
+                    const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Active state for program chips based on scroll position
+        const observerOptions = {
+            root: null,
+            rootMargin: '-25% 0px -65% 0px',
+            threshold: 0
+        };
+        
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Remove active class from all chips
+                    document.querySelectorAll('.program-selector-chip').forEach(chip => {
+                        chip.classList.remove('active');
+                    });
+                    
+                    // Add active class to corresponding chip
+                    const sectionId = entry.target.id;
+                    document.querySelectorAll(`[data-section="${sectionId}"]`).forEach(chip => {
+                        chip.classList.add('active');
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        // Observe program sections
+        ['droplet', 'splashlet', 'strokelet-l1', 'strokelet-l2', 'schedule'].forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+                sectionObserver.observe(section);
+            }
         });
     </script>
 </body>
