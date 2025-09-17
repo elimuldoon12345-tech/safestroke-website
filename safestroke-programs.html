@@ -415,23 +415,124 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Top Banner Section -->
-        <section class="dark-section py-20">
-            <div class="container mx-auto px-6">
-                <div class="flex flex-col md:flex-row items-center gap-12">
-                    <div class="md:w-1/2 text-center md:text-left">
-                        <h1 class="text-5xl md:text-6xl font-black">Programs & Curriculum</h1>
-                        <p class="mt-4 text-lg max-w-xl opacity-90">Our swim classes at SafeStroke Swim Academy focus on steady, skill-driven progress — blending personalized instruction with small group dynamics to help each swimmer grow in confidence, safety, and technique week after week.</p>
+        <!-- Programs & Curriculum Header Section -->
+        <section class="relative overflow-hidden" style="background: linear-gradient(135deg, #0B3856 0%, #00253D 50%, #0B3856 100%);">
+            <!-- Subtle blue depth overlay -->
+            <div class="absolute inset-0 opacity-30" style="background: radial-gradient(circle at 20% 50%, rgba(34, 132, 184, 0.3) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(34, 132, 184, 0.2) 0%, transparent 40%);"></div>
+            
+            <div class="container mx-auto px-6 py-16 md:py-20 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <!-- Left Column: Content & Controls -->
+                    <div class="order-2 lg:order-1">
+                        <!-- H1 -->
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Programs & Curriculum</h1>
+                        
+                        <!-- Lead Text -->
+                        <p class="text-lg text-white/90 mb-3 leading-relaxed">
+                            We help toddlers and kids build real water skills—breath control, body position, and calm confidence—taught in small groups by certified instructors.
+                        </p>
+                        
+                        <!-- Muted Note -->
+                        <p class="text-sm text-white/60 mb-8 italic">
+                            Most families see meaningful progress in 8–12 lessons (varies by age, comfort, and attendance).
+                        </p>
+                        
+                        <!-- At-a-glance Chips -->
+                        <div class="mb-8">
+                            <h3 class="text-white/80 text-sm font-semibold uppercase tracking-wider mb-3">At a Glance</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
+                                    <span class="opacity-70">Ages:</span> <span class="font-semibold">3 months–12 years</span>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
+                                    <span class="opacity-70">Group size:</span> <span class="font-semibold">Small groups (3–4 per lane)</span>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
+                                    <span class="opacity-70">Lesson length:</span> <span class="font-semibold">30 minutes</span>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-white">
+                                    <span class="opacity-70">Approach:</span> <span class="font-semibold">Skills-first, safety-first</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Program Selector Chips -->
+                        <div class="mb-8">
+                            <h3 class="text-white/80 text-sm font-semibold uppercase tracking-wider mb-3">Jump to Program</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="#droplet" 
+                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   aria-label="Jump to Droplet section">
+                                    Droplet — Parent & Child (3–24 months)
+                                </a>
+                                <a href="#splashlet" 
+                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   aria-label="Jump to Splashlet section">
+                                    Splashlet — Ages 2–3
+                                </a>
+                                <a href="#strokelet-l1" 
+                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   aria-label="Jump to Strokelet L1 section">
+                                    Strokelet L1 — Ages 3–12, beginners or water-shy
+                                </a>
+                                <a href="#strokelet-l2" 
+                                   class="program-chip bg-white/90 hover:bg-white text-[#0B3856] rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+                                   aria-label="Jump to Strokelet L2 section">
+                                    Strokelet L2 — Ages 3–12, comfortable & skill-ready
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- CTAs -->
+                        <div class="flex flex-col sm:flex-row items-start gap-4 mb-6">
+                            <a href="safestroke-booking.html" 
+                               class="inline-block bg-[#2284B8] hover:bg-[#1976a3] text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                Book Free Trial →
+                            </a>
+                            <a href="#schedule" 
+                               class="inline-block text-white/90 hover:text-white font-semibold py-3 transition-colors duration-300 underline underline-offset-4 decoration-1 hover:decoration-2">
+                                See levels & schedule
+                            </a>
+                        </div>
+                        
+                        <!-- Social Proof -->
+                        <div class="text-white/60 text-sm">
+                            ⭐⭐⭐⭐⭐ 5.0/5 from 5 local families
+                            <!-- TODO: Replace with dynamic review count when available -->
+                        </div>
                     </div>
-                    <div class="md:w-1/2">
-                        <img src="safestroke-images/suhkickboardfront.jpg" alt="Instructor teaching a child in the pool" class="rounded-xl shadow-2xl">
+                    
+                    <!-- Right Column: Image -->
+                    <div class="order-1 lg:order-2">
+                        <div class="relative">
+                            <img src="safestroke-images/suhkickboardfront.jpg" 
+                                 alt="Instructor smiling with young swimmer during a lesson, demonstrating calm, safe instruction."
+                                 class="w-full h-auto rounded-2xl border-2 border-white/10 shadow-2xl object-cover"
+                                 style="max-height: 500px; object-position: center;">
+                            <!-- Subtle glow effect -->
+                            <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#0B3856]/20 to-transparent pointer-events-none"></div>
+                        </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Wave Divider -->
+            <div class="absolute bottom-0 left-0 right-0 overflow-hidden leading-[0]">
+                <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px] md:h-[120px]">
+                    <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" 
+                          opacity=".25" 
+                          class="fill-gray-50"></path>
+                    <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,11.51,87.09,7.61,31.54-4.38,60.69-16.84,86.51-34.42C1250,39.52,1277.11,15.78,1310,15.78V0Z" 
+                          opacity=".5" 
+                          class="fill-gray-50"></path>
+                    <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" 
+                          class="fill-gray-50"></path>
+                </svg>
             </div>
         </section>
 
         <!-- Strokelets Section -->
-        <section class="py-24 strokelets-section wave-pattern">
+        <section id="strokelet-l1" class="py-24 strokelets-section wave-pattern scroll-mt-20">
             <div class="container mx-auto px-6 text-center relative z-10">
                 <!-- Decorative corners -->
                 <div class="corner-decoration top-left"></div>
@@ -469,7 +570,7 @@
                         </div>
                     </div>
                     <!-- Stroke Starters -->
-                    <div class="p-8 rounded-xl shadow-xl flex flex-col text-left program-card">
+                    <div id="strokelet-l2" class="p-8 rounded-xl shadow-xl flex flex-col text-left program-card scroll-mt-20">
                         <div class="shield-title-container">
                             <img src="safestroke-images/strokelet-shield.png" alt="Strokelet Shield" class="w-16 h-16 shield-icon">
                             <h3 class="shield-title">Stroke Starters</h3>
@@ -487,7 +588,7 @@
         </section>
 
         <!-- Water Acclimation Section -->
-        <section class="py-24 wave-pattern" style="background: linear-gradient(180deg, #5cb0d8 0%, #4a9cc9 50%, #3a8bba 100%); position: relative; overflow: hidden;">
+        <section id="schedule" class="py-24 wave-pattern scroll-mt-20" style="background: linear-gradient(180deg, #5cb0d8 0%, #4a9cc9 50%, #3a8bba 100%); position: relative; overflow: hidden;">
             <div class="container mx-auto px-6 text-center relative z-10">
                 <div class="inline-block bg-gradient-to-r from-white/90 to-white/80 text-blue-900 text-sm font-bold px-4 py-2 rounded-full mb-4 shadow-md backdrop-blur">
                     For Children Under 3 years
@@ -495,7 +596,7 @@
                 <h2 class="text-4xl font-black mb-16 text-white drop-shadow-lg">Water Acclimation Classes</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     <!-- Droplet -->
-                    <div class="p-8 rounded-xl shadow-xl flex flex-col text-left program-card">
+                    <div id="droplet" class="p-8 rounded-xl shadow-xl flex flex-col text-left program-card">
                         <div class="shield-title-container">
                             <img src="safestroke-images/droplet-shield.png" alt="Droplet Shield" class="w-16 h-16 shield-icon">
                             <h3 class="shield-title">Droplet</h3>
@@ -511,7 +612,7 @@
                         </div>
                     </div>
                     <!-- Splashlet -->
-                    <div class="p-8 rounded-xl shadow-xl flex flex-col text-left program-card">
+                    <div id="splashlet" class="p-8 rounded-xl shadow-xl flex flex-col text-left program-card">
                         <div class="shield-title-container">
                             <img src="safestroke-images/splashlet-shield.png" alt="Splashlet Shield" class="w-16 h-16 shield-icon">
                             <h3 class="shield-title">Splashlet</h3>
