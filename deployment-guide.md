@@ -29,6 +29,11 @@ This is your complete custom checkout and booking system for SafeStroke Swim Aca
    SUPABASE_ANON_KEY=eyJ... (already set)
    SUPABASE_SERVICE_KEY=eyJ... (already set)
    STRIPE_WEBHOOK_SECRET=whsec_... (get from Stripe after setting up webhook)
+   ENABLE_BOOKING_SIMULATOR=false (enable locally when testing the simulator)
+   SIMULATOR_ADMIN_EMAILS=admin@example.com (comma-separated list of allowed admins)
+   SIMULATOR_SUPPRESS_NOTIFICATIONS=true (keeps simulator bookings from emailing by default)
+   SIMULATOR_ALLOW_IN_PROD=false (keeps production locked unless explicitly overridden)
+   SIMULATOR_SHARED_SECRET=safestroke-admin-2025 (override to your own secure value)
    ```
 
 ### 3. Stripe Webhook Setup
@@ -67,6 +72,13 @@ Option B: Via SQL (already done if you ran generate-time-slots.sql)
    - You'll receive a package code
    - Use the code to book lessons
 
+### 7. Enable the Admin Booking Simulator (optional)
+1. Flip the environment variables listed above so that `ENABLE_BOOKING_SIMULATOR=true` for the environment you want to test.
+2. Provide a comma-separated list of approved admin emails in `SIMULATOR_ADMIN_EMAILS` and share the `SIMULATOR_SHARED_SECRET` out of band.
+3. Issue a POST request to `/.netlify/functions/simulate-booking` with the same payload structure as the live `book-time-slot` endpoint plus simulator fields (e.g., `outcome`, `lessonsTotal`).
+4. For local testing you can use `function-tester.html` or `function-tester` scripts to call the new endpoint.
+5. When finished, set `ENABLE_BOOKING_SIMULATOR` back to `false` for production safety.
+
 ## File Structure
 
 ### Core Files
@@ -83,6 +95,7 @@ Option B: Via SQL (already done if you ran generate-time-slots.sql)
 - `validate-package.js` - Validates package codes
 - `get-time-slots.js` - Retrieves available time slots
 - `book-time-slot.js` - Books a specific time slot
+- `simulate-booking.js` - Creates admin-only simulated bookings for QA
 - `stripe-webhook.js` - Handles Stripe payment confirmations
 - `initialize-time-slots.js` - Generates time slots programmatically
 
