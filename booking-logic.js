@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMobileMenu();
     initializeBookingFlow();
     initializePaymentSystem();
-    initializePromoCode();
+    // initializePromoCode(); // Temporarily disabled for testing
     testNetlifyFunction();
 });
 
