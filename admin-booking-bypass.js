@@ -31,52 +31,418 @@
     // Check if admin mode is active
     window.isAdminMode = false;
     window.adminBypassActive = false;
-    
-    // Store original functions
-    const originalCreatePayment = window.fetch;
-    
-    // Override fetch to intercept payment creation
+
+    // Mapping for appointment type IDs so mocked responses mirror production
+    const ADMIN_APPOINTMENT_TYPE_IDS = {
+        'Droplet': 81908979,
+        'Splashlet': 81908997,
+        'Strokelet': 81909020
+    };
+
+    // Map short prefixes used in generated codes back to full program names
+    const ADMIN_PROGRAM_PREFIXES = {
+        'DRO': 'Droplet',
+        'SPL': 'Splashlet',
+        'STR': 'Strokelet'
+    };
+
+    // In-memory store for faux packages created while the bypass is active
+    const adminPackageStore = new Map();
+
+    // Store original fetch implementation
+    const originalFetch = window.fetch;
+
+    // Override fetch to intercept booking-related requests during admin bypass
     window.fetch = function(...args) {
-        const [url, options] = args;
-        
-        // Check if this is a payment creation request
-        if (url && url.includes('/create-payment') && window.adminBypassActive) {
-            console.log('🔐 Admin bypass: Intercepting payment creation');
-            
-            // Return a mock successful payment response
-            return Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve({
-                    clientSecret: 'admin_test_secret_' + Date.now(),
-                    packageCode: generateAdminPackageCode()
-                })
-            });
+        const context = this;
+        const [resource, options] = args;
+        const url = typeof resource === 'string' ? resource : resource?.url || '';
+
+        if (window.adminBypassActive && url) {
+            if (url.includes('/create-payment')) {
+                console.log('🔐 Admin bypass: Intercepting payment creation');
+
+                const packageCode = generateAdminPackageCode();
+
+                return Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve({
+                        clientSecret: 'admin_test_secret_' + Date.now(),
+                        packageCode
+                    })
+                });
+            }
+
+            if (url.includes('stripe.com')) {
+                console.log('🔐 Admin bypass: Mocking Stripe payment');
+
+                return Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve({
+                        status: 'succeeded',
+                        payment_method: 'admin_test'
+                    })
+                });
+            }
+
+            if (url.includes('/.netlify/functions/validate-package')) {
+                return handleAdminValidateRequest(url, args, context);
+            }
+
+            if (url.includes('/.netlify/functions/book-time-slot')) {
+                return handleAdminBookRequest(resource, options, args, context);
+            }
         }
-        
-        // Check if this is a payment confirmation request
-        if (url && url.includes('stripe.com') && window.adminBypassActive) {
-            console.log('🔐 Admin bypass: Mocking Stripe payment');
-            
-            // Return successful payment confirmation
-            return Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve({
-                    status: 'succeeded',
-                    payment_method: 'admin_test'
-                })
-            });
-        }
-        
-        // For all other requests, use the original fetch
-        return originalCreatePayment.apply(this, args);
+
+        return originalFetch.apply(context, args);
     };
     
-    // Generate admin package code
+    // Generate admin package code and seed faux package state for later validation
     function generateAdminPackageCode() {
-        const program = window.selectedProgram || 'TEST';
-        const lessons = window.selectedPackage?.lessons || 1;
+        const program = getProgramFromSelection('Splashlet');
+        const lessons = getSelectedLessonsCount();
         const timestamp = Date.now().toString(36).toUpperCase();
-        return `ADMIN-${program.substring(0, 3).toUpperCase()}-${lessons}L-${timestamp}`;
+        const programPrefix = (program || 'Splashlet').substring(0, 3).toUpperCase();
+        const packageCode = `ADMIN-${programPrefix}-${lessons}L-${timestamp}`;
+
+        initializeAdminPackageState(packageCode, program, lessons);
+
+        return packageCode;
+    }
+
+    function handleAdminValidateRequest(url, originalArgs, context) {
+        try {
+            const parsedUrl = new URL(url, window.location.origin);
+            const codeParam = parsedUrl.searchParams.get('code') || '';
+            const normalizedCode = codeParam.toUpperCase();
+
+            if (!normalizedCode.startsWith('ADMIN-')) {
+                return originalFetch.apply(context, originalArgs);
+            }
+
+            const packageState = ensureAdminPackageState(normalizedCode);
+
+            if (!packageState) {
+                return Promise.resolve(createMockResponse({
+                    valid: false,
+                    error: 'Admin package not initialized'
+                }, 400));
+            }
+
+            console.log('🔐 Admin bypass: Mocking package validation', normalizedCode, packageState);
+
+            return Promise.resolve(createMockResponse({
+                valid: true,
+                program: packageState.program,
+                lessons_total: packageState.lessonsTotal,
+                lessons_remaining: packageState.lessonsRemaining,
+                appointmentTypeID: packageState.appointmentTypeID,
+                customer: packageState.customer || null
+            }, 200));
+        } catch (error) {
+            console.error('Admin bypass validate-package error:', error);
+            return Promise.resolve(createMockResponse({
+                valid: false,
+                error: 'Admin bypass validation failed'
+            }, 500));
+        }
+    }
+
+    function handleAdminBookRequest(resource, options, originalArgs, context) {
+        const isRequestObject = typeof Request !== 'undefined' && resource instanceof Request;
+        const requestInit = options || (isRequestObject ? {} : undefined);
+        let requestBody = requestInit?.body;
+
+        if (!requestBody && isRequestObject) {
+            // Unable to safely read the body from a Request object without consuming it
+            return originalFetch.apply(context, originalArgs);
+        }
+
+        if (!requestBody) {
+            return originalFetch.apply(context, originalArgs);
+        }
+
+        let payload = null;
+
+        if (typeof requestBody === 'string') {
+            try {
+                payload = JSON.parse(requestBody);
+            } catch (error) {
+                console.warn('Admin bypass: Failed to parse booking payload. Falling back to real fetch.', error);
+                return originalFetch.apply(context, originalArgs);
+            }
+        } else if (requestBody instanceof FormData) {
+            payload = Object.fromEntries(requestBody.entries());
+        } else if (typeof requestBody === 'object') {
+            payload = requestBody;
+        }
+
+        if (!payload || !payload.packageCode) {
+            return originalFetch.apply(context, originalArgs);
+        }
+
+        const normalizedCode = String(payload.packageCode).toUpperCase();
+
+        if (!normalizedCode.startsWith('ADMIN-')) {
+            return originalFetch.apply(context, originalArgs);
+        }
+
+        const missingFields = ['packageCode', 'timeSlotId', 'studentName', 'customerName', 'customerEmail']
+            .filter(field => !payload[field]);
+
+        if (missingFields.length > 0) {
+            return Promise.resolve(createMockResponse({
+                error: 'Missing required fields',
+                missingFields
+            }, 400));
+        }
+
+        const packageState = ensureAdminPackageState(normalizedCode);
+
+        if (!packageState) {
+            return Promise.resolve(createMockResponse({
+                error: 'Admin package not initialized'
+            }, 400));
+        }
+
+        if (packageState.lessonsRemaining <= 0) {
+            return Promise.resolve(createMockResponse({
+                error: 'This package has no remaining lessons'
+            }, 400));
+        }
+
+        packageState.bookings = packageState.bookings || [];
+        const duplicateBooking = packageState.bookings.find(booking =>
+            String(booking.timeSlotId) === String(payload.timeSlotId) &&
+            (booking.studentName || '').toLowerCase() === String(payload.studentName || '').toLowerCase()
+        );
+
+        if (duplicateBooking) {
+            return Promise.resolve(createMockResponse({
+                error: 'This student is already booked for this time slot'
+            }, 400));
+        }
+
+        const bookingId = `ADMIN-BOOKING-${Date.now()}`;
+        const createdAt = new Date().toISOString();
+        const timeSlotDetails = buildAdminTimeSlotDetails(payload.timeSlotId, packageState.program);
+
+        const bookingRecord = {
+            id: bookingId,
+            time_slot_id: payload.timeSlotId,
+            package_code: normalizedCode,
+            student_name: payload.studentName,
+            student_age: payload.studentAge || payload.studentBirthdate || null,
+            customer_email: payload.customerEmail,
+            customer_name: payload.customerName,
+            customer_phone: payload.customerPhone || null,
+            status: 'confirmed',
+            notes: payload.notes || '',
+            created_at: createdAt,
+            timeSlot: timeSlotDetails
+        };
+
+        packageState.lessonsRemaining = Math.max(0, packageState.lessonsRemaining - 1);
+        packageState.bookings.push({
+            bookingId,
+            timeSlotId: payload.timeSlotId,
+            studentName: payload.studentName,
+            createdAt
+        });
+
+        const payloadCustomer = buildCustomerFromPayload(payload);
+        if (payloadCustomer) {
+            packageState.customer = Object.assign(packageState.customer || {}, payloadCustomer);
+        } else if (!packageState.customer) {
+            packageState.customer = buildAdminCustomerInfo();
+        }
+
+        console.log('🔐 Admin bypass: Mocking time slot booking', {
+            code: normalizedCode,
+            lessonsRemaining: packageState.lessonsRemaining
+        });
+
+        return Promise.resolve(createMockResponse({
+            success: true,
+            bookingId,
+            lessonsRemaining: packageState.lessonsRemaining,
+            booking: bookingRecord
+        }, 200));
+    }
+
+    function createMockResponse(body, status = 200) {
+        const isString = typeof body === 'string';
+
+        return {
+            ok: status >= 200 && status < 300,
+            status,
+            headers: {
+                get: () => null
+            },
+            json: () => Promise.resolve(isString ? safeJsonParse(body) : JSON.parse(JSON.stringify(body))),
+            text: () => Promise.resolve(isString ? String(body) : JSON.stringify(body))
+        };
+    }
+
+    function safeJsonParse(value) {
+        if (typeof value !== 'string') {
+            return value;
+        }
+
+        try {
+            return JSON.parse(value);
+        } catch (error) {
+            return value;
+        }
+    }
+
+    function initializeAdminPackageState(code, program, lessons) {
+        const normalizedCode = (code || '').toUpperCase();
+        const normalizedProgram = program || getProgramFromSelection('Splashlet');
+        const lessonCount = Math.max(1, parseInt(lessons, 10) || 1);
+        const appointmentTypeID = ADMIN_APPOINTMENT_TYPE_IDS[normalizedProgram] || null;
+
+        const packageState = {
+            code: normalizedCode,
+            program: normalizedProgram,
+            lessonsTotal: lessonCount,
+            lessonsRemaining: lessonCount,
+            appointmentTypeID,
+            customer: buildAdminCustomerInfo(),
+            bookings: [],
+            createdAt: Date.now()
+        };
+
+        adminPackageStore.set(normalizedCode, packageState);
+
+        return packageState;
+    }
+
+    function ensureAdminPackageState(code) {
+        if (!code) return null;
+
+        const normalizedCode = code.toUpperCase();
+
+        if (!normalizedCode.startsWith('ADMIN-')) {
+            return null;
+        }
+
+        if (!adminPackageStore.has(normalizedCode)) {
+            const parsed = parseAdminPackageCode(normalizedCode);
+            const program = getProgramFromSelection(parsed.program || 'Splashlet');
+            const lessons = getSelectedLessonsCount(parsed.lessons || 1);
+
+            return initializeAdminPackageState(normalizedCode, program, lessons);
+        }
+
+        const packageState = adminPackageStore.get(normalizedCode);
+
+        if (!packageState.appointmentTypeID) {
+            packageState.appointmentTypeID = ADMIN_APPOINTMENT_TYPE_IDS[packageState.program] || null;
+        }
+
+        if (!packageState.customer) {
+            const customerInfo = buildAdminCustomerInfo();
+            if (customerInfo) {
+                packageState.customer = customerInfo;
+            }
+        }
+
+        return packageState;
+    }
+
+    function parseAdminPackageCode(code) {
+        const parts = code.split('-');
+        const prefix = parts[1] || '';
+        const lessonsPart = parts[2] || '';
+
+        let lessons = parseInt(lessonsPart.replace(/[^0-9]/g, ''), 10);
+        if (Number.isNaN(lessons)) {
+            lessons = 1;
+        }
+
+        const program = ADMIN_PROGRAM_PREFIXES[prefix] || null;
+
+        return { prefix, program, lessons };
+    }
+
+    function getProgramFromSelection(fallbackProgram) {
+        return window.selectedProgram ||
+               window.selectedPackage?.program ||
+               window.singleLessonProgram ||
+               fallbackProgram ||
+               'Splashlet';
+    }
+
+    function getSelectedLessonsCount(fallbackLessons) {
+        const lessonsFromPackage = window.selectedPackage?.lessons;
+
+        if (typeof lessonsFromPackage === 'number' && lessonsFromPackage > 0) {
+            return lessonsFromPackage;
+        }
+
+        const parsedLessons = parseInt(lessonsFromPackage, 10);
+        if (!Number.isNaN(parsedLessons) && parsedLessons > 0) {
+            return parsedLessons;
+        }
+
+        if (typeof fallbackLessons === 'number' && fallbackLessons > 0) {
+            return fallbackLessons;
+        }
+
+        if (window.bookingMode === 'single' || window.singleLessonProgram) {
+            return 1;
+        }
+
+        return 1;
+    }
+
+    function buildAdminCustomerInfo() {
+        const email = window.customerEmail || window.tempBookingData?.customerEmail || null;
+        const name = window.tempBookingData?.customerName || window.customerName || null;
+        const phone = window.tempBookingData?.customerPhone || window.customerPhone || null;
+
+        if (email || name || phone) {
+            return {
+                email: email || null,
+                name: name || null,
+                phone: phone || null
+            };
+        }
+
+        return null;
+    }
+
+    function buildCustomerFromPayload(payload) {
+        if (!payload) return null;
+
+        const email = payload.customerEmail || null;
+        const name = payload.customerName || null;
+        const phone = payload.customerPhone || null;
+
+        if (email || name || phone) {
+            return { email, name, phone };
+        }
+
+        return null;
+    }
+
+    function buildAdminTimeSlotDetails(timeSlotId, program) {
+        const slot = window.selectedTimeSlot;
+
+        if (slot && String(slot.id) === String(timeSlotId)) {
+            return {
+                id: slot.id,
+                date: slot.date,
+                time: slot.time,
+                program: program || getProgramFromSelection(program)
+            };
+        }
+
+        return {
+            id: timeSlotId,
+            program: program || getProgramFromSelection(program)
+        };
     }
     
     // Check if email is admin email
