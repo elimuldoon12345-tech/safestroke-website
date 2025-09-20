@@ -176,6 +176,23 @@
                             </div>
                             
                             <form id="payment-form">
+                                <!-- Promo Code Section -->
+                                <div class="mb-6 p-4 bg-gray-100 rounded-lg">
+                                    <label for="promo-code" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Promo Code (Optional)
+                                    </label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="promo-code" name="promo-code"
+                                               class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                               placeholder="Enter promo code">
+                                        <button type="button" id="apply-promo"
+                                                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-medium">
+                                            Apply
+                                        </button>
+                                    </div>
+                                    <div id="promo-status" class="mt-2 text-sm hidden"></div>
+                                </div>
+
                                 <div id="payment-element">
                                     <!-- Stripe payment form will go here -->
                                 </div>

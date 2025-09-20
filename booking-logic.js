@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMobileMenu();
     initializeBookingFlow();
     initializePaymentSystem();
+    initializePromoCode();
     testNetlifyFunction();
 });
 
@@ -324,47 +325,13 @@ function setupPaymentForm() {
     }, 100);
 }
 
-function setupPaymentFormInternal() {
-    console.log('Setting up payment form (internal)...');
-
-    // Show payment summary
-    document.getElementById('payment-summary').innerHTML = `
-        <h3 class="text-xl font-bold mb-4">Payment Summary</h3>
-        <div class="bg-gray-50 p-4 rounded-lg">
-            <p><strong>Program:</strong> ${selectedPackage.program}</p>
-            <p><strong>Package:</strong> ${selectedPackage.lessons} lessons</p>
-            <p><strong>Total:</strong> ${selectedPackage.price}</p>
-        </div>
-    `;
-
-    // Show a simple payment form that will create payment intent when clicked
-    // Don't create Stripe Elements yet - we need clientSecret first
-    const paymentElementDiv = document.getElementById('payment-element');
-    paymentElementDiv.innerHTML = `
-        <div class="text-center py-8">
-            <p class="text-gray-600 mb-4">Click the button below to proceed with payment</p>
-            <div class="bg-blue-50 p-4 rounded-lg">
-                <p class="text-sm text-blue-800">Secure payment powered by Stripe</p>
-            </div>
-        </div>
-    `;
-
-    // Set up form submission - this will create payment intent first
-    const form = document.getElementById('payment-form');
-    
-    // Remove any existing listeners
-    form.removeEventListener('submit', handlePaymentSubmission);
-    
-    // Add the event listener
-    form.addEventListener('submit', handlePaymentSubmission);
-    
-    console.log('Payment form event listener attached');
-}
+function setupPaymentFormInternal() {    console.log('Setting up payment form (internal)...');    // Store original price for promo code calculations    originalPrice = selectedPackage.price;    discountedPrice = originalPrice;    // Update payment summary with promo code support    updatePaymentSummary();    // Show a simple payment form that will create payment intent when clicked    // Don't create Stripe Elements yet - we need clientSecret first    const paymentElementDiv = document.getElementById('payment-element');    paymentElementDiv.innerHTML = `        <div class="text-center py-8">            <p class="text-gray-600 mb-4">Click the button below to proceed with payment</p>            <div class="bg-blue-50 p-4 rounded-lg">                <p class="text-sm text-blue-800">Secure payment powered by Stripe</p>            </div>        </div>    `;    // Set up form submission    const form = document.getElementById('payment-form');    form.addEventListener('submit', handlePaymentSubmission);    showSection('payment-section');    updateStepIndicators(3);}
 
 async function handlePaymentSubmission(event) {
     event.preventDefault();
     
     console.log('Payment form submitted, preventing default behavior');
+// Check for admin promo code first    if (appliedPromoCode === 'ADMIN') {        console.log('Admin promo code detected - bypassing payment');        await handleAdminBypass();        return;    }
     
     const submitButton = document.getElementById('pay-button');
     const paymentDiv = document.getElementById('payment-element');
@@ -663,4 +630,172 @@ function showSection(sectionId) {
         const elToShow = document.getElementById(sectionId);
         if (elToShow) elToShow.classList.remove('hidden');
     }
+}
+
+// --- Promo Code System ---
+let appliedPromoCode = null;
+let originalPrice = 0;
+let discountedPrice = 0;
+
+function initializePromoCode() {
+    const applyButton = document.getElementById('apply-promo');
+    const promoInput = document.getElementById('promo-code');
+    
+    if (applyButton && promoInput) {
+        applyButton.addEventListener('click', applyPromoCode);
+        promoInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applyPromoCode();
+            }
+        });
+    }
+}
+
+function applyPromoCode() {
+    const promoInput = document.getElementById('promo-code');
+    const promoStatus = document.getElementById('promo-status');
+    const code = promoInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        showPromoStatus('Please enter a promo code', 'error');
+        return;
+    }
+    
+    if (code === 'ADMIN') {
+        appliedPromoCode = code;
+        discountedPrice = 0;
+        showPromoStatus('✅ Admin code applied! Payment bypassed for testing.', 'success');
+        updatePaymentSummary();
+        updatePaymentButton();
+    } else {
+        showPromoStatus('❌ Invalid promo code', 'error');
+        appliedPromoCode = null;
+        discountedPrice = originalPrice;
+        updatePaymentSummary();
+        updatePaymentButton();
+    }
+}
+
+function showPromoStatus(message, type) {
+    const promoStatus = document.getElementById('promo-status');
+    promoStatus.textContent = message;
+    promoStatus.className = `mt-2 text-sm ${type === 'success' ? 'text-green-600' : 'text-red-600'}`;
+    promoStatus.classList.remove('hidden');
+}
+
+function updatePaymentSummary() {
+    const summaryElement = document.getElementById('payment-summary');
+    if (!summaryElement || !selectedPackage) return;
+    
+    const originalTotal = originalPrice || selectedPackage.price;
+    const finalPrice = appliedPromoCode === 'ADMIN' ? 0 : originalTotal;
+    
+    let promoHtml = '';
+    if (appliedPromoCode === 'ADMIN') {
+        promoHtml = `
+            <div class="flex justify-between text-green-600">
+                <span>Admin Discount (${appliedPromoCode}):</span>
+                <span>-$${originalTotal}</span>
+            </div>
+        `;
+    }
+    
+    summaryElement.innerHTML = `
+        <h3 class="text-xl font-bold mb-4">Payment Summary</h3>
+        <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+            <div class="flex justify-between">
+                <span><strong>Program:</strong> ${selectedPackage.program}</span>
+            </div>
+            <div class="flex justify-between">
+                <span><strong>Package:</strong> ${selectedPackage.lessons} lessons</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Subtotal:</span>
+                <span>$${originalTotal}</span>
+            </div>
+            ${promoHtml}
+            <div class="border-t pt-2 flex justify-between font-bold text-lg">
+                <span>Total:</span>
+                <span class="${finalPrice === 0 ? 'text-green-600' : ''}">$${finalPrice}</span>
+            </div>
+        </div>
+    `;
+}
+
+function updatePaymentButton() {
+    const payButton = document.getElementById('pay-button');
+    if (!payButton) return;
+
+    if (appliedPromoCode === 'ADMIN') {
+        payButton.textContent = '🧪 Complete Test Booking (No Payment)';
+        payButton.classList.add('bg-green-600', 'hover:bg-green-700');
+        payButton.classList.remove('brand-blue-bg', 'hover:bg-blue-600');
+    } else {
+        payButton.textContent = 'Complete Payment';
+        payButton.classList.add('brand-blue-bg', 'hover:bg-blue-600');
+        payButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+    }
+}
+
+async function handleAdminBypass() {
+    console.log('Processing admin bypass - creating $0 package');
+
+    const submitButton = document.getElementById('pay-button');
+    const originalText = submitButton.textContent;
+
+    try {
+        // Update button to show processing
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing Test Booking...';
+
+        // Generate a unique package code for admin test
+        const packageCode = generateAdminPackageCode();
+
+        // Create the package directly in Supabase with $0 payment
+        const response = await fetch('/.netlify/functions/create-admin-package', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                code: packageCode,
+                program: selectedPackage.program,
+                lessons: selectedPackage.lessons,
+                amount: 0, // $0 for admin test
+                isTest: true
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.error) {
+            throw new Error(result.error);
+        }
+
+        console.log('Admin test package created successfully:', result);
+
+        // Show success and move to booking step
+        showSuccessSection(packageCode);
+        updateStepIndicators(4);
+
+    } catch (error) {
+        console.error('Admin bypass error:', error);
+        alert('Failed to create test booking. Error: ' + error.message);
+
+        // Reset button
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+    }
+}
+
+function generateAdminPackageCode() {
+    const prefix = selectedPackage.program.toUpperCase().substring(0, 3);
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.random().toString(36).substring(2, 5).toUpperCase();
+    return `${prefix}-${selectedPackage.lessons}L-${timestamp}-${random}-TEST`;
 }
