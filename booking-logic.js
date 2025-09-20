@@ -780,8 +780,7 @@ async function handleAdminBypass() {
         console.log('Admin test package created successfully:', result);
 
         // Show success and move to booking step
-        showSuccessSection(packageCode);
-        updateStepIndicators(4);
+        showPaymentSuccess(packageCode);
 
     } catch (error) {
         console.error('Admin bypass error:', error);
